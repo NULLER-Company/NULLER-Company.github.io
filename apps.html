@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приложения — NULLER</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+    <canvas id="matrixCanvas"></canvas>
+    <div class="particles" id="particles"></div>
+
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">N</div>
+            <div class="nav-logo-text"><span>NULLER</span></div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="apps.html" class="active">Приложения</a></li>
+            <li><a href="index.html#about">О нас</a></li>
+            <li><a href="index.html#team">Команда</a></li>
+            <li><a href="https://t.me/" target="_blank" class="nav-cta">Telegram →</a></li>
+        </ul>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Меню">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <div class="page-header">
+        <div class="section-label">// Каталог</div>
+        <div class="line-decoration"></div>
+        <h1>Наши <span>приложения</span></h1>
+        <p>Выберите нужное приложение и перейдите на страницу загрузки</p>
+        <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Поиск приложений...">
+        </div>
+    </div>
+
+    <section class="apps-section">
+        <div class="apps-grid" id="appsGrid">
+
+            <a href="download.html" class="app-card fade-in">
+                <div class="app-card-header">
+                    <div class="app-icon">🛡</div>
+                    <div class="app-info">
+                        <div class="app-name">Название приложения 1</div>
+                        <div class="app-version">v1.0.0 • Windows</div>
+                    </div>
+                </div>
+                <div class="app-desc">Краткое описание приложения. Что оно делает.</div>
+                <div class="app-card-footer">
+                    <div class="app-tags">
+                        <span class="app-tag">утилита</span>
+                        <span class="app-tag">бесплатно</span>
+                    </div>
+                    <span class="app-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="download.html" class="app-card fade-in">
+                <div class="app-card-header">
+                    <div class="app-icon">⚡</div>
+                    <div class="app-info">
+                        <div class="app-name">Название приложения 2</div>
+                        <div class="app-version">v2.1.0 • Cross-platform</div>
+                    </div>
+                </div>
+                <div class="app-desc">Краткое описание приложения. Что оно делает.</div>
+                <div class="app-card-footer">
+                    <div class="app-tags">
+                        <span class="app-tag">инструмент</span>
+                        <span class="app-tag">бесплатно</span>
+                    </div>
+                    <span class="app-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="download.html" class="app-card fade-in">
+                <div class="app-card-header">
+                    <div class="app-icon">🔧</div>
+                    <div class="app-info">
+                        <div class="app-name">Название приложения 3</div>
+                        <div class="app-version">v0.9.5 • Android</div>
+                    </div>
+                </div>
+                <div class="app-desc">Краткое описание приложения. Что оно делает.</div>
+                <div class="app-card-footer">
+                    <div class="app-tags">
+                        <span class="app-tag">мобильное</span>
+                        <span class="app-tag">beta</span>
+                    </div>
+                    <span class="app-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="download.html" class="app-card fade-in">
+                <div class="app-card-header">
+                    <div class="app-icon">📱</div>
+                    <div class="app-info">
+                        <div class="app-name">Название приложения 4</div>
+                        <div class="app-version">v1.3.0 • Windows</div>
+                    </div>
+                </div>
+                <div class="app-desc">Краткое описание приложения. Что оно делает.</div>
+                <div class="app-card-footer">
+                    <div class="app-tags">
+                        <span class="app-tag">утилита</span>
+                    </div>
+                    <span class="app-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="download.html" class="app-card fade-in">
+                <div class="app-card-header">
+                    <div class="app-icon">🌐</div>
+                    <div class="app-info">
+                        <div class="app-name">Название приложения 5</div>
+                        <div class="app-version">v3.0.0 • Web</div>
+                    </div>
+                </div>
+                <div class="app-desc">Краткое описание приложения. Что оно делает.</div>
+                <div class="app-card-footer">
+                    <div class="app-tags">
+                        <span class="app-tag">веб</span>
+                        <span class="app-tag">бесплатно</span>
+                    </div>
+                    <span class="app-arrow">→</span>
+                </div>
+            </a>
+
+            <a href="download.html" class="app-card fade-in">
+                <div class="app-card-header">
+                    <div class="app-icon">🚀</div>
+                    <div class="app-info">
+                        <div class="app-name">Название приложения 6</div>
+                        <div class="app-version">v1.0.0 • Windows/Linux</div>
+                    </div>
+                </div>
+                <div class="app-desc">Краткое описание приложения. Что оно делает.</div>
+                <div class="app-card-footer">
+                    <div class="app-tags">
+                        <span class="app-tag">новое</span>
+                    </div>
+                    <span class="app-arrow">→</span>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-logo"><span>NULLER</span> Company</div>
+                <span class="footer-copy">© 2024</span>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Главная</a>
+                <a href="apps.html">Приложения</a>
+                <a href="https://t.me/" target="_blank">Telegram</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

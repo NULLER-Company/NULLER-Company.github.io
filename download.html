@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скачать — NULLER</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+    <canvas id="matrixCanvas"></canvas>
+    <div class="particles" id="particles"></div>
+
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">N</div>
+            <div class="nav-logo-text"><span>NULLER</span></div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="apps.html" class="active">Приложения</a></li>
+            <li><a href="index.html#about">О нас</a></li>
+            <li><a href="index.html#team">Команда</a></li>
+            <li><a href="https://t.me/" target="_blank" class="nav-cta">Telegram →</a></li>
+        </ul>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Меню">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <div class="breadcrumb fade-in">
+        <a href="index.html">Главная</a>
+        <span>/</span>
+        <a href="apps.html">Приложения</a>
+        <span>/</span>
+        <span class="current">Название приложения</span>
+    </div>
+
+    <div class="download-page">
+
+        <a href="apps.html" class="back-link fade-in">← Назад к приложениям</a>
+
+        <div class="dl-header fade-in">
+            <div class="dl-icon">🛡</div>
+            <div class="dl-info">
+                <h1 class="dl-name">Название приложения</h1>
+                <div class="dl-version">v1.0.0 • Stable Release</div>
+                <p class="dl-short-desc">Краткое описание приложения. Одно-два предложения о том, что оно делает.</p>
+                <div class="dl-meta">
+                    <div class="dl-meta-item">📦 Размер: <span class="val">12.5 MB</span></div>
+                    <div class="dl-meta-item">💻 Платформа: <span class="val">Windows 10/11</span></div>
+                    <div class="dl-meta-item">📅 Обновлено: <span class="val">01.01.2024</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dl-button-section fade-in">
+            <a href="#" class="dl-button" id="downloadBtn">⬇ Скачать приложение</a>
+            <p class="dl-size">Размер файла: 12.5 MB • Формат: .exe</p>
+            <div class="dl-warning">
+                <span>⚠️</span>
+                <span>Скачивайте приложения только с официального сайта NULLER Company.</span>
+            </div>
+        </div>
+
+        <div class="dl-section fade-in">
+            <h2 class="dl-section-title">// Описание</h2>
+            <div class="dl-section-content">
+                <p>Подробное описание приложения. Расскажите о функциях и возможностях.</p>
+                <p>Дополнительная информация.</p>
+            </div>
+        </div>
+
+        <div class="dl-section fade-in">
+            <h2 class="dl-section-title">// Скриншоты</h2>
+            <div class="screenshots">
+                <div class="screenshot-placeholder">скриншот 1</div>
+                <div class="screenshot-placeholder">скриншот 2</div>
+                <div class="screenshot-placeholder">скриншот 3</div>
+            </div>
+        </div>
+
+        <div class="dl-section fade-in">
+            <h2 class="dl-section-title">// Информация</h2>
+            <table class="info-table">
+                <tr><td>Версия</td><td>1.0.0</td></tr>
+                <tr><td>Размер</td><td>12.5 MB</td></tr>
+                <tr><td>Платформа</td><td>Windows 10 / 11 (64-bit)</td></tr>
+                <tr><td>Язык</td><td>Русский, English</td></tr>
+                <tr><td>Лицензия</td><td>Бесплатно</td></tr>
+                <tr><td>Разработчик</td><td>NULLER Company</td></tr>
+                <tr><td>Последнее обновление</td><td>01.01.2024</td></tr>
+            </table>
+        </div>
+
+        <div class="dl-section fade-in">
+            <h2 class="dl-section-title">// Инструкция по установке</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number"></div>
+                    <div class="step-content">
+                        <h4>Скачайте файл</h4>
+                        <p>Нажмите кнопку «Скачать» и сохраните файл на ваш компьютер.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number"></div>
+                    <div class="step-content">
+                        <h4>Запустите установщик</h4>
+                        <p>Откройте скачанный файл. Если появится предупреждение Windows, нажмите «Подробнее» → «Выполнить в любом случае».</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number"></div>
+                    <div class="step-content">
+                        <h4>Следуйте инструкции</h4>
+                        <p>Выберите папку для установки и следуйте указаниям мастера установки.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number"></div>
+                    <div class="step-content">
+                        <h4>Готово!</h4>
+                        <p>Приложение установлено. Запустите его через ярлык на рабочем столе.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dl-section fade-in">
+            <h2 class="dl-section-title">// Системные требования</h2>
+            <table class="info-table">
+                <tr><td>ОС</td><td>Windows 10 / 11 (64-bit)</td></tr>
+                <tr><td>Процессор</td><td>Любой современный x64</td></tr>
+                <tr><td>ОЗУ</td><td>2 GB минимум</td></tr>
+                <tr><td>Место на диске</td><td>50 MB</td></tr>
+            </table>
+        </div>
+
+        <div class="dl-section fade-in">
+            <h2 class="dl-section-title">// Список изменений</h2>
+            <div class="dl-section-content">
+                <div class="code-block">v1.0.0 (01.01.2024)
++ Первый релиз
++ Основной функционал
++ Описание изменений</div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-logo"><span>NULLER</span> Company</div>
+                <span class="footer-copy">© 2024</span>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Главная</a>
+                <a href="apps.html">Приложения</a>
+                <a href="https://t.me/" target="_blank">Telegram</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

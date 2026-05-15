@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NULLER Company</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+    <canvas id="matrixCanvas"></canvas>
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">N</div>
+            <div class="nav-logo-text"><span>NULLER</span></div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Главная</a></li>
+            <li><a href="apps.html">Приложения</a></li>
+            <li><a href="#about">О нас</a></li>
+            <li><a href="#team">Команда</a></li>
+            <li><a href="https://t.me/" target="_blank" class="nav-cta">Telegram →</a></li>
+        </ul>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Меню">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <div class="hero-badge-dot"></div>
+                <span>// NULLER COMPANY — ACTIVE</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="highlight">NULLER</span>
+            </h1>
+            <div class="hero-subtitle-code">
+                <span>$</span> <span id="typingText"></span><span class="typing-cursor"></span>
+            </div>
+            <p class="hero-description">
+                Ваше описание компании. Расскажите, чем вы занимаетесь и что делает вас уникальными.
+            </p>
+            <div class="hero-buttons">
+                <a href="apps.html" class="btn-primary">⬇ Приложения</a>
+                <a href="#about" class="btn-secondary">Подробнее</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats-bar fade-in">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number" data-target="10">0</div>
+                <div class="stat-label">Проектов</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="5">0</div>
+                <div class="stat-label">Сотрудников</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="1000">0</div>
+                <div class="stat-label">Пользователей</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="24">0</div>
+                <div class="stat-label">7 / Поддержка</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <section class="section" id="features">
+        <div class="section-header fade-in">
+            <div class="section-label">// Возможности</div>
+            <div class="line-decoration"></div>
+            <h2 class="section-title">Что мы делаем</h2>
+            <p class="section-desc">Краткое описание ваших направлений деятельности</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🛡</div>
+                <h3 class="feature-title">Заголовок 1</h3>
+                <p class="feature-desc">Описание первого направления деятельности.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Заголовок 2</h3>
+                <p class="feature-desc">Описание второго направления деятельности.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🔧</div>
+                <h3 class="feature-title">Заголовок 3</h3>
+                <p class="feature-desc">Описание третьего направления деятельности.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📱</div>
+                <h3 class="feature-title">Заголовок 4</h3>
+                <p class="feature-desc">Описание четвёртого направления деятельности.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🌐</div>
+                <h3 class="feature-title">Заголовок 5</h3>
+                <p class="feature-desc">Описание пятого направления деятельности.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🚀</div>
+                <h3 class="feature-title">Заголовок 6</h3>
+                <p class="feature-desc">Описание шестого направления деятельности.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="section" id="about">
+        <div class="about-grid">
+            <div class="about-terminal fade-in">
+                <div class="terminal-header">
+                    <div class="terminal-dot red"></div>
+                    <div class="terminal-dot yellow"></div>
+                    <div class="terminal-dot green"></div>
+                    <span class="terminal-title">nuller@terminal ~</span>
+                </div>
+                <div class="terminal-body">
+                    <div class="terminal-line" style="animation-delay:0.2s">
+                        <span class="prompt">$</span> <span class="command">cat about.txt</span>
+                    </div>
+                    <div class="terminal-line" style="animation-delay:0.6s">
+                        <span class="output">Компания: NULLER Company</span>
+                    </div>
+                    <div class="terminal-line" style="animation-delay:0.9s">
+                        <span class="output">Основана: 2024</span>
+                    </div>
+                    <div class="terminal-line" style="animation-delay:1.2s">
+                        <span class="output">Миссия: ваш текст</span>
+                    </div>
+                    <div class="terminal-line" style="animation-delay:1.5s">
+                        <span class="output">Статус: Active ✓</span>
+                    </div>
+                    <div class="terminal-line" style="animation-delay:1.8s">
+                        <span class="prompt">$</span> <span class="command">_</span>
+                    </div>
+                </div>
+            </div>
+            <div class="about-text fade-in">
+                <div class="section-label">// О компании</div>
+                <h3>Мы — <span>NULLER</span></h3>
+                <p>Ваш текст о компании. Расскажите историю создания, цели и ценности.</p>
+                <p>Дополнительный текст с подробностями.</p>
+                <div class="about-tags">
+                    <span class="about-tag"># тег1</span>
+                    <span class="about-tag"># тег2</span>
+                    <span class="about-tag"># тег3</span>
+                    <span class="about-tag"># тег4</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team -->
+    <section class="section" id="team">
+        <div class="section-header fade-in">
+            <div class="section-label">// Команда</div>
+            <div class="line-decoration"></div>
+            <h2 class="section-title">Наша команда</h2>
+            <p class="section-desc">Люди, стоящие за NULLER</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card fade-in">
+                <div class="team-avatar">N</div>
+                <div class="team-name">Имя Фамилия</div>
+                <div class="team-role">// Основатель & CEO</div>
+            </div>
+            <div class="team-card fade-in">
+                <div class="team-avatar">D</div>
+                <div class="team-name">Имя Фамилия</div>
+                <div class="team-role">// Разработчик</div>
+            </div>
+            <div class="team-card fade-in">
+                <div class="team-avatar">A</div>
+                <div class="team-name">Имя Фамилия</div>
+                <div class="team-role">// Дизайнер</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-box fade-in">
+            <div class="section-label">// Присоединяйтесь</div>
+            <h2>Готовы начать?</h2>
+            <p>Подписывайтесь на наш Telegram-канал и скачивайте приложения</p>
+            <div class="cta-buttons">
+                <a href="apps.html" class="btn-primary">Приложения →</a>
+                <a href="https://t.me/" target="_blank" class="btn-secondary">Telegram</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-logo"><span>NULLER</span> Company</div>
+                <span class="footer-copy">© 2024. Все права защищены.</span>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Главная</a>
+                <a href="apps.html">Приложения</a>
+                <a href="https://t.me/" target="_blank">Telegram</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
