@@ -6,10 +6,10 @@
 }
 
 :root {
-    --bg-primary: #0d3d0d;
-    --bg-secondary: #0a2f0a;
-    --bg-card: #0f4a0f;
-    --bg-card-hover: #126012;
+    --bg-primary: #051a05;
+    --bg-secondary: #031203;
+    --bg-card: #082508;
+    --bg-card-hover: #0a3a0a;
     --green-primary: #00ff00;
     --green-secondary: #00cc00;
     --green-dark: #009900;
@@ -91,7 +91,7 @@ h1, h2, h3, h4, h5, h6 {
     100% { opacity: 0; transform: translateY(-10vh) scale(1); }
 }
 
-/* ===== CURSOR GLOW (исправлен) ===== */
+/* ===== CURSOR GLOW ===== */
 .cursor-glow {
     position: fixed;
     top: 0;
@@ -118,7 +118,6 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 1;
 }
 
-/* На мобильных свечение не нужно */
 @media (hover: none), (pointer: coarse) {
     .cursor-glow { display: none; }
 }
@@ -133,7 +132,7 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(13, 61, 13, 0.85);
+    background: rgba(5, 26, 5, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-color);
@@ -141,16 +140,37 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar.scrolled {
-    background: rgba(10, 47, 10, 0.97);
+    background: rgba(3, 18, 3, 0.97);
     box-shadow: 0 4px 30px rgba(0,255,0,0.08);
 }
 
-.nav-logo {
+.nav-logo-icon {
+    width: 38px; height: 38px;
+    border: 2px solid var(--yellow-primary);
+    border-radius: 8px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    z-index: 1001;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--yellow-primary);
+    background: rgba(255, 235, 59, 0.05);
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.nav-logo-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.nav-logo:hover .nav-logo-icon {
+    box-shadow: 0 0 20px rgba(255, 235, 59, 0.4);
+    transform: scale(1.05);
 }
 
 .nav-logo-icon {
@@ -577,7 +597,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     gap: 8px;
     padding: 14px 18px;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.4);
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -670,8 +690,10 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(-4px);
 }
 
+/* === АВАТАРКА — теперь поддерживает картинки === */
 .team-avatar {
-    width: 72px; height: 72px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--green-dark), var(--yellow-primary));
     margin: 0 auto 16px;
@@ -679,9 +701,26 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: center;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 700;
     color: var(--bg-primary);
+    overflow: hidden;
+    position: relative;
+    border: 2px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.team-card:hover .team-avatar {
+    border-color: var(--yellow-primary);
+    box-shadow: 0 0 25px rgba(255, 235, 59, 0.3);
+}
+
+.team-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
 }
 
 .team-name {
@@ -1091,7 +1130,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .code-block {
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.5);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 16px;
@@ -1223,7 +1262,7 @@ h1, h2, h3, h4, h5, h6 {
         left: 0;
         right: 0;
         flex-direction: column;
-        background: rgba(10, 47, 10, 0.98);
+        background: rgba(3, 18, 3, 0.98);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         padding: 20px;
@@ -1329,7 +1368,6 @@ h1, h2, h3, h4, h5, h6 {
         gap: 16px;
     }
 
-    /* APPS PAGE MOBILE */
     .page-header {
         padding: 110px 16px 40px;
     }
@@ -1347,7 +1385,6 @@ h1, h2, h3, h4, h5, h6 {
         padding: 24px;
     }
 
-    /* DOWNLOAD PAGE MOBILE */
     .breadcrumb {
         padding: 90px 16px 0;
         font-size: 12px;
@@ -1435,7 +1472,178 @@ h1, h2, h3, h4, h5, h6 {
     .terminal-body { padding: 14px; font-size: 11px; }
 }
 
-/* ===== LANDSCAPE PHONES ===== */
 @media (max-width: 900px) and (orientation: landscape) {
     .hero { min-height: auto; padding-top: 100px; padding-bottom: 50px; }
+}
+
+/* ===== ИКОНКА ПРИЛОЖЕНИЯ (поддержка картинок) ===== */
+.app-icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    background: rgba(255, 235, 59, 0.12);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.app-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 14px;
+}
+
+.app-card:hover .app-icon {
+    border-color: var(--yellow-primary);
+    box-shadow: 0 0 20px rgba(255, 235, 59, 0.2);
+}
+
+/* ===== ИКОНКА НА СТРАНИЦЕ СКАЧИВАНИЯ (поддержка картинок) ===== */
+.dl-icon {
+    width: 80px; height: 80px;
+    border-radius: 18px;
+    background: rgba(255, 235, 59, 0.12);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.dl-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 18px;
+}
+
+/* ===== СКРИНШОТЫ (настоящие картинки) ===== */
+.screenshots {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.screenshot {
+    aspect-ratio: 16/10;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: block;
+}
+
+.screenshot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.screenshot:hover {
+    border-color: var(--yellow-primary);
+    box-shadow: 0 8px 30px rgba(255, 235, 59, 0.15);
+    transform: translateY(-4px);
+}
+
+.screenshot:hover img {
+    transform: scale(1.05);
+}
+
+/* Заглушка если нет скриншота */
+.screenshot-placeholder {
+    aspect-ratio: 16/10;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green-primary);
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* ===== МОДАЛЬНОЕ ОКНО ДЛЯ СКРИНШОТОВ ===== */
+.screenshot-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    cursor: zoom-out;
+    animation: fadeInModal 0.3s ease;
+}
+
+.screenshot-modal.open {
+    display: flex;
+}
+
+.screenshot-modal img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 60px rgba(0, 255, 0, 0.2);
+    animation: zoomIn 0.3s ease;
+}
+
+.screenshot-modal-close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--border-color);
+    color: var(--green-primary);
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.screenshot-modal-close:hover {
+    background: var(--yellow-primary);
+    color: var(--bg-primary);
+    border-color: var(--yellow-primary);
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+/* Адаптив скриншотов */
+@media (max-width: 600px) {
+    .screenshots {
+        grid-template-columns: 1fr;
+    }
+    .screenshot-modal {
+        padding: 16px;
+    }
 }
