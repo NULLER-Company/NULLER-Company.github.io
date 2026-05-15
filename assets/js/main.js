@@ -149,11 +149,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const typingEl = document.getElementById('typingText');
     if (typingEl) {
         const phrases = [
-            'initializing NULLER systems...',
-            'loading applications...',
-            'connecting to server...',
-            'access granted ✓',
-            'welcome to NULLER Company'
+            'Инициализация системы...',
+            'Загрузка...',
+            'Соединение с сервером...',
+            'Вход разрешён!',
+            'Добро пожаловать!'
         ];
         let phraseIdx = 0, charIdx = 0, isDeleting = false;
 
@@ -248,4 +248,51 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+        // ===== МОДАЛЬНОЕ ОКНО ДЛЯ СКРИНШОТОВ =====
+    const screenshots = document.querySelectorAll('.screenshot');
+    if (screenshots.length) {
+        // Создаём модалку
+        const modal = document.createElement('div');
+        modal.className = 'screenshot-modal';
+        modal.innerHTML = `
+            <button class="screenshot-modal-close" aria-label="Закрыть">✕</button>
+            <img src="" alt="Скриншот">
+        `;
+        document.body.appendChild(modal);
+
+        const modalImg = modal.querySelector('img');
+        const modalClose = modal.querySelector('.screenshot-modal-close');
+
+        // Открытие при клике на скриншот
+        screenshots.forEach(function (item) {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                const fullSrc = this.getAttribute('href');
+                modalImg.src = fullSrc;
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Закрытие по клику на крестик
+        modalClose.addEventListener('click', function (e) {
+            e.stopPropagation();
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+
+        // Закрытие по клику на фон
+        modal.addEventListener('click', function () {
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+
+        // Закрытие по Esc
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modal.classList.contains('open')) {
+                modal.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        });
+    }
 });
