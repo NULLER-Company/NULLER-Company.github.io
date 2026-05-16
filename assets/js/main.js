@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const timer = setInterval(function () {
                         current += increment;
                         if (current >= target) {
-                            entry.target.textContent = target + '+';
+                            entry.target.textContent = target + '';
                             clearInterval(timer);
                         } else {
                             entry.target.textContent = Math.floor(current);
