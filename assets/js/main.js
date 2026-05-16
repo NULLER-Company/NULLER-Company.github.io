@@ -189,9 +189,9 @@ document.addEventListener('DOMContentLoaded', function () {
         fadeEls.forEach(function (el) { observer.observe(el); });
     }
 
-    // ===== COUNTER ANIMATION =====
-    const counters = document.querySelectorAll('.stat-number');
-    if (counters.length) {
+    // ===== СТАТИЧНЫЕ СЧЁТЧИКИ (Проекты, Сотрудники) =====
+    const staticCounters = document.querySelectorAll('.stat-number[data-static="true"]');
+    if (staticCounters.length) {
         const counterObserver = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const timer = setInterval(function () {
                         current += increment;
                         if (current >= target) {
-                            entry.target.textContent = target + '';
+                            entry.target.textContent = target;
                             clearInterval(timer);
                         } else {
                             entry.target.textContent = Math.floor(current);
@@ -211,7 +211,106 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         }, { threshold: 0.5 });
-        counters.forEach(function (c) { counterObserver.observe(c); });
+        staticCounters.forEach(function (c) { counterObserver.observe(c); });
+    }
+    
+    // ===== ЖИВЫЕ СЧЁТЧИКИ ЧЕРЕЗ COUNTAPI =====
+    // Пространство имён счётчиков (твоё уникальное имя)
+    const NAMESPACE = 'nuller-company-2024';
+    const API_BASE = 'https://api.counterapi.dev/v1';
+    
+    // Универсальная функция для запросов
+    async function counterRequest(action, key) {
+        try {
+            const response = await fetch(`${API_BASE}/${NAMESPACE}/${key}/${action}`);
+            const data = await response.json();
+            return data.count || 0;
+        } catch (e) {
+            console.log('Ошибка счётчика:', e);
+            return null;
+        }
+    }
+    
+    // ===== СЧЁТЧИК ПОЛЬЗОВАТЕЛЕЙ В МИНУТУ =====
+    const usersEl = document.getElementById('usersPerMinute');
+    if (usersEl) {
+        // Генерируем "фейковый" базовый счётчик (от 1 до 4)
+        function getFakeUsers() {
+            // Хешируем текущую минуту чтобы число было одинаковым в течение всей минуты
+            const minute = Math.floor(Date.now() / 60000);
+            // Псевдослучайное число от 1 до 4
+            return (minute * 9301 + 49297) % 4 + 1;
+        }
+    
+        // Уникальный ID пользователя в этой сессии
+        let userSessionKey = sessionStorage.getItem('userMinuteKey');
+        let currentMinuteKey = 'users-minute-' + Math.floor(Date.now() / 60000);
+    
+        async function updateUsersCounter() {
+            const minuteKey = 'users-minute-' + Math.floor(Date.now() / 60000);
+    
+            // Если новая минута — регистрируем пользователя
+            if (userSessionKey !== minuteKey) {
+                userSessionKey = minuteKey;
+                sessionStorage.setItem('userMinuteKey', minuteKey);
+                await counterRequest('up', minuteKey);
+            }
+    
+            // Получаем реальное число пользователей за текущую минуту
+            const realUsers = await counterRequest('', minuteKey) || 0;
+            const fakeUsers = getFakeUsers();
+            const total = fakeUsers + realUsers;
+    
+            // Анимируем число
+            animateNumber(usersEl, parseInt(usersEl.textContent) || 0, total);
+        }
+    
+        // Запускаем сразу
+        updateUsersCounter();
+    
+        // Обновляем каждые 10 секунд
+        setInterval(updateUsersCounter, 10000);
+    }
+    
+    // ===== СЧЁТЧИК СКАЧИВАНИЙ =====
+    const downloadsEl = document.getElementById('totalDownloads');
+    if (downloadsEl) {
+        async function updateDownloadsCounter() {
+            const count = await counterRequest('', 'total-downloads');
+            if (count !== null) {
+                animateNumber(downloadsEl, parseInt(downloadsEl.textContent) || 0, count);
+            }
+        }
+    
+        updateDownloadsCounter();
+    
+        // Обновляем каждые 15 секунд
+        setInterval(updateDownloadsCounter, 15000);
+    }
+    
+    // Универсальная функция анимации числа
+    function animateNumber(element, from, to) {
+        if (from === to) {
+            element.textContent = to;
+            return;
+        }
+        const duration = 1000;
+        const steps = 30;
+        const stepValue = (to - from) / steps;
+        const stepTime = duration / steps;
+        let current = from;
+        let step = 0;
+    
+        const timer = setInterval(function () {
+            step++;
+            current += stepValue;
+            if (step >= steps) {
+                element.textContent = to;
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.floor(current);
+            }
+        }, stepTime);
     }
 
     // ===== DOWNLOAD BUTTON =====
