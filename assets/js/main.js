@@ -313,49 +313,62 @@ document.addEventListener('DOMContentLoaded', function () {
         }, stepTime);
     }
 
-    // ===== КНОПКА СКАЧИВАНИЯ С АВТО-СКАЧИВАНИЕМ И СЧЁТЧИКОМ =====
+    // ===== КНОПКА СКАЧИВАНИЯ С GOOGLE DRIVE И СЧЁТЧИКОМ =====
     const dlBtn = document.getElementById('downloadBtn');
     if (dlBtn) {
         dlBtn.addEventListener('click', async function (e) {
+            // Останавливаем стандартное действие — мы сами откроем ссылку
+            e.preventDefault();
+    
             const downloadUrl = this.getAttribute('href');
             const appName = this.getAttribute('data-app') || 'unknown';
     
-            // Если ссылка пустая или #, не отправляем счётчик
+            // Если ссылка пустая или #, показываем сообщение
             if (!downloadUrl || downloadUrl === '#') {
-                e.preventDefault();
                 alert('Файл для скачивания ещё не загружен');
                 return;
             }
     
             const originalText = this.innerHTML;
+            const originalBg = this.style.background;
+            const originalColor = this.style.color;
     
-            // 1) Регистрируем скачивание в общем счётчике
+            // 1) Меняем интерфейс — показываем что идёт обработка
+            this.innerHTML = '⏳ Подготовка скачивания...';
+            this.style.opacity = '0.7';
+            this.style.pointerEvents = 'none';
+    
+            // 2) Регистрируем скачивание в счётчиках
             try {
+                // Общий счётчик скачиваний
                 await fetch(`${API_BASE}/${NAMESPACE}/total-downloads/up`);
-                // Также регистрируем скачивание конкретного приложения
+    
+                // Отдельный счётчик для этого приложения
                 await fetch(`${API_BASE}/${NAMESPACE}/download-${appName}/up`);
+    
+                console.log('✓ Счётчик скачиваний обновлён');
             } catch (err) {
-                console.log('Не удалось обновить счётчик скачиваний');
+                console.log('⚠ Не удалось обновить счётчик:', err);
+                // Не страшно — продолжаем скачивание в любом случае
             }
     
-            // 2) Меняем интерфейс
-            this.innerHTML = '⏳ Подготовка...';
-            this.style.opacity = '0.7';
+            // 3) Показываем что скачивание начато
+            this.innerHTML = '✓ Скачивание начато!';
+            this.style.background = '#009900';
+            this.style.color = '#fff';
+            this.style.opacity = '1';
     
-            setTimeout(() => {
-                this.innerHTML = '✓ Скачивание начато!';
-                this.style.background = '#009900';
-                this.style.color = '#fff';
-                this.style.opacity = '1';
-            }, 800);
+            // 4) Запускаем скачивание (открываем в новой вкладке)
+            // Для Google Drive — это автоматически скачает файл
+            window.open(downloadUrl, '_blank');
     
+            // 5) Через 4 секунды возвращаем кнопку в исходное состояние
             setTimeout(() => {
                 this.innerHTML = originalText;
-                this.style.background = '';
-                this.style.color = '';
+                this.style.background = originalBg;
+                this.style.color = originalColor;
+                this.style.pointerEvents = '';
             }, 4000);
-    
-            // Браузер автоматически начнёт скачивание благодаря атрибуту download
         });
     }
 
