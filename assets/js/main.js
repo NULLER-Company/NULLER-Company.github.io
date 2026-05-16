@@ -313,24 +313,49 @@ document.addEventListener('DOMContentLoaded', function () {
         }, stepTime);
     }
 
-    // ===== DOWNLOAD BUTTON =====
+    // ===== КНОПКА СКАЧИВАНИЯ С АВТО-СКАЧИВАНИЕМ И СЧЁТЧИКОМ =====
     const dlBtn = document.getElementById('downloadBtn');
     if (dlBtn) {
-        dlBtn.addEventListener('click', function (e) {
+        dlBtn.addEventListener('click', async function (e) {
+            const downloadUrl = this.getAttribute('href');
+            const appName = this.getAttribute('data-app') || 'unknown';
+    
+            // Если ссылка пустая или #, не отправляем счётчик
+            if (!downloadUrl || downloadUrl === '#') {
+                e.preventDefault();
+                alert('Файл для скачивания ещё не загружен');
+                return;
+            }
+    
             const originalText = this.innerHTML;
-            this.innerHTML = '⏳ Загрузка начинается...';
+    
+            // 1) Регистрируем скачивание в общем счётчике
+            try {
+                await fetch(`${API_BASE}/${NAMESPACE}/total-downloads/up`);
+                // Также регистрируем скачивание конкретного приложения
+                await fetch(`${API_BASE}/${NAMESPACE}/download-${appName}/up`);
+            } catch (err) {
+                console.log('Не удалось обновить счётчик скачиваний');
+            }
+    
+            // 2) Меняем интерфейс
+            this.innerHTML = '⏳ Подготовка...';
             this.style.opacity = '0.7';
+    
             setTimeout(() => {
-                this.innerHTML = '✓ Загрузка началась!';
+                this.innerHTML = '✓ Скачивание начато!';
                 this.style.background = '#009900';
                 this.style.color = '#fff';
                 this.style.opacity = '1';
-            }, 1000);
+            }, 800);
+    
             setTimeout(() => {
                 this.innerHTML = originalText;
                 this.style.background = '';
                 this.style.color = '';
             }, 4000);
+    
+            // Браузер автоматически начнёт скачивание благодаря атрибуту download
         });
     }
 
