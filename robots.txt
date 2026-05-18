@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Указываем карту сайта
+Sitemap: https://nuller.ru/sitemap.xml
+
+# Запрещаем индексировать старый домен
+User-agent: *
+Disallow: /downloads/
+
+# Главный хост для Яндекса
+Host: nuller.ru
