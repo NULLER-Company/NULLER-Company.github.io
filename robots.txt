@@ -1,12 +1,40 @@
 User-agent: *
 Allow: /
+Disallow: /404.html
 
-# Указываем карту сайта
+# AI-боты — разрешаем индексацию
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+# Карта сайта
 Sitemap: https://nuller.ru/sitemap.xml
-
-# Запрещаем индексировать старый домен
-User-agent: *
-Disallow: /downloads/
 
 # Главный хост для Яндекса
 Host: nuller.ru
