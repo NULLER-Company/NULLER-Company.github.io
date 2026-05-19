@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Стать разработчиком — NULLER Company</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/logo.png">
+    <link rel="shortcut icon" href="/assets/images/logo.png">
+    <meta name="theme-color" content="#051a05">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+
+    <meta name="description" content="Стать разработчиком NULLER Company — подайте заявку и присоединяйтесь к команде.">
+    <meta name="keywords" content="NULLER, вакансии, разработчик, стать разработчиком, команда">
+    <meta name="author" content="NULLER Company">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Стать разработчиком — NULLER Company">
+    <meta property="og:description" content="Присоединяйтесь к команде NULLER Company.">
+    <meta property="og:image" content="https://nuller.ru/assets/images/preview.png">
+    <meta property="og:url" content="https://nuller.ru/join">
+    <meta property="og:site_name" content="NULLER Company">
+
+    <link rel="canonical" href="https://nuller.ru/join">
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+    <canvas id="matrixCanvas"></canvas>
+    <div class="particles" id="particles"></div>
+
+    <nav class="navbar" id="navbar">
+        <a href="/" class="nav-logo">
+            <div class="nav-logo-icon"><img src="/assets/images/logo.png" alt="NULLER"></div>
+            <div class="nav-logo-text"><span>NULLER</span></div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/">Главная</a></li>
+            <li><a href="/apps">Приложения</a></li>
+            <li><a href="/#about">О нас</a></li>
+            <li><a href="/#team">Команда</a></li>
+            <li><a href="/join" class="nav-join active">Стать разработчиком</a></li>
+            <li><a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="nav-cta">Telegram →</a></li>
+        </ul>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Меню"><span></span><span></span><span></span></button>
+    </nav>
+
+    <div class="page-header">
+        <div class="section-label">// Вакансии</div>
+        <div class="line-decoration"></div>
+        <h1>Стать <span>разработчиком</span></h1>
+        <p>Заполните анкету и присоединяйтесь к команде NULLER Company</p>
+    </div>
+
+    <section class="join-section">
+        <div class="join-form-container fade-in">
+            <form class="join-form" id="joinForm">
+
+                <div class="form-group">
+                    <label class="form-label">Фото профиля</label>
+                    <div class="avatar-upload" id="avatarUpload">
+                        <div class="avatar-preview" id="avatarPreview">
+                            <span class="avatar-placeholder">+</span>
+                            <img src="" alt="" id="avatarImg" style="display:none;">
+                        </div>
+                        <input type="file" id="avatarInput" accept="image/*" hidden>
+                        <span class="avatar-hint">Нажмите чтобы загрузить фото</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="joinName">Ваше имя / никнейм *</label>
+                    <input type="text" id="joinName" name="name" class="form-input" placeholder="Например: CoolDev42" required maxlength="50">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="joinBio">О себе *</label>
+                    <textarea id="joinBio" name="bio" class="form-input form-textarea" placeholder="Расскажите о себе, ваших навыках и опыте..." required maxlength="500" rows="4"></textarea>
+                    <span class="form-hint"><span id="bioCounter">0</span> / 500</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="joinSkills">Навыки</label>
+                    <input type="text" id="joinSkills" name="skills" class="form-input" placeholder="Python, C#, Unity, Дизайн..." maxlength="200">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ссылки на соц-сети</label>
+                    <div class="social-inputs">
+                        <div class="social-input-row">
+                            <span class="social-input-icon">TG</span>
+                            <input type="text" name="telegram" class="form-input" placeholder="@username или ссылка" maxlength="100">
+                        </div>
+                        <div class="social-input-row">
+                            <span class="social-input-icon">VK</span>
+                            <input type="text" name="vk" class="form-input" placeholder="Ссылка на VK" maxlength="100">
+                        </div>
+                        <div class="social-input-row">
+                            <span class="social-input-icon">GH</span>
+                            <input type="text" name="github" class="form-input" placeholder="Ссылка на GitHub" maxlength="100">
+                        </div>
+                        <div class="social-input-row">
+                            <span class="social-input-icon">DS</span>
+                            <input type="text" name="discord" class="form-input" placeholder="Discord username" maxlength="100">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="joinContact">Контакт для связи *</label>
+                    <input type="text" id="joinContact" name="contact" class="form-input" placeholder="Telegram, Email или другой способ связи" required maxlength="100">
+                </div>
+
+                <button type="submit" class="btn-primary join-submit" id="joinSubmit">Отправить заявку</button>
+                <div class="form-status" id="formStatus"></div>
+
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-logo"><span>NULLER</span> Company</div>
+                <span class="footer-copy">© 2026. Все права защищены.</span>
+            </div>
+            <div class="footer-links">
+                <a href="/">Главная</a>
+                <a href="/apps">Приложения</a>
+                <a href="/join">Стать разработчиком</a>
+                <a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer">Telegram</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/js/main.js"></script>
+</body>
+</html>
