@@ -4,26 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NULLER Company</title>
-    <link rel="icon" type="image/png" href="assets/images/logo.png">
-    <link rel="apple-touch-icon" href="assets/images/logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/images/logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/logo.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/images/logo.png">
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="assets/images/logo.png">
     <meta name="theme-color" content="#051a05">
-    <!-- ===== SEO МЕТА-ТЕГИ ===== -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+
     <meta name="description" content="NULLER Company — официальный сайт компании. Разработка игр, приложений и программ.">
     <meta name="keywords" content="NULLER, NULLER Company, игры, приложения, программы, MinePack, Scream, GECKO, скачать">
     <meta name="author" content="NULLER Company">
     <meta name="robots" content="index, follow">
-    
-    <!-- ===== ЯЗЫК И РЕГИОН ===== -->
     <meta name="language" content="Russian">
     <meta http-equiv="content-language" content="ru">
-    
-    <!-- ===== OPEN GRAPH (для соцсетей и Яндекса) ===== -->
+
     <meta property="og:type" content="website">
     <meta property="og:title" content="NULLER Company">
     <meta property="og:description" content="Официальный сайт компании NULLER. Разработка игр, приложений и программ.">
@@ -33,17 +28,12 @@
     <meta property="og:url" content="https://nuller.ru/">
     <meta property="og:site_name" content="NULLER Company">
     <meta property="og:locale" content="ru_RU">
-    
-    <!-- ===== TWITTER CARD ===== -->
+
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NULLER Company">
     <meta name="twitter:description" content="Официальный сайт компании NULLER">
     <meta name="twitter:image" content="https://nuller.ru/assets/images/preview.png">
-    
-    <!-- ===== ЯНДЕКС ===== -->
-    <meta name="yandex-verification" content="ПОКА_ОСТАВЬ_ПУСТЫМ">
-    
-    <!-- ===== КАНОНИЧЕСКАЯ ССЫЛКА (важно для SEO!) ===== -->
+
     <link rel="canonical" href="https://nuller.ru/">
 </head>
 <body>
@@ -65,7 +55,8 @@
             <li><a href="/apps">Приложения</a></li>
             <li><a href="#about">О нас</a></li>
             <li><a href="#team">Команда</a></li>
-            <li><a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" class="nav-cta">Telegram →</a></li>
+            <li><a href="/join" class="nav-join">Стать разработчиком</a></li>
+            <li><a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="nav-cta">Telegram →</a></li>
         </ul>
         <button class="mobile-toggle" id="mobileToggle" aria-label="Меню">
             <span></span><span></span><span></span>
@@ -89,7 +80,7 @@
                 NULLER Company - частная незарегистрированная компания, занимающаяся разработкой игр и приложений.
             </p>
             <div class="hero-buttons">
-                <a href="/apps" class="btn-primary">⬇ Приложения</a>
+                <a href="/apps" class="btn-primary">Приложения</a>
                 <a href="#about" class="btn-secondary">Подробнее</a>
             </div>
         </div>
@@ -117,83 +108,119 @@
         </div>
     </div>
 
-    <!-- Features -->
-    <section class="section" id="features">
+    <!-- News Carousel -->
+    <section class="section" id="news">
         <div class="section-header fade-in">
             <div class="section-label">// Новости</div>
             <div class="line-decoration"></div>
             <h2 class="section-title">НОВОСТИ NULLER</h2>
             <p class="section-desc">Новости NULLER обновляются от 1 дня до недели</p>
         </div>
-        <div class="features-grid">
-            <div class="feature-card fade-in">
-                <div class="feature-icon">😔</div>
-                <h3 class="feature-title">Компания потеряла разработчиков!</h3>
-                <p class="feature-desc">Компании срочно требуются разработчики!</p>
+
+        <div class="news-carousel fade-in">
+            <button class="news-arrow news-arrow-left" id="newsLeft" aria-label="Назад">‹</button>
+            <div class="news-track-wrapper">
+                <div class="news-track" id="newsTrack">
+
+                    <div class="news-card" data-news="0">
+                        <div class="news-card-image">
+                            <img src="assets/images/news/news-devs.png" alt="Требуются разработчики" loading="lazy">
+                        </div>
+                        <h3 class="news-card-title">Компания потеряла разработчиков!</h3>
+                        <p class="news-card-preview">Компании срочно требуются разработчики!</p>
+                    </div>
+
+                    <div class="news-card" data-news="1">
+                        <div class="news-card-image">
+                            <img src="assets/images/news/news-gecko.png" alt="Движок GECKO" loading="lazy">
+                        </div>
+                        <h3 class="news-card-title">Движок GECKO</h3>
+                        <p class="news-card-preview">Движок GECKO будет работать и в браузере, и на ПК. Скоро релиз!</p>
+                    </div>
+
+                    <div class="news-card" data-news="2">
+                        <div class="news-card-image">
+                            <img src="assets/images/news/news-site.png" alt="Обновление сайта" loading="lazy">
+                        </div>
+                        <h3 class="news-card-title">Масштабное обновление сайта</h3>
+                        <p class="news-card-preview">Мы обещали масштабное обновление сайта, и мы это сделали!</p>
+                    </div>
+
+                    <div class="news-card" data-news="3">
+                        <div class="news-card-image">
+                            <img src="assets/images/news/news-zerax.png" alt="ZERAX Company" loading="lazy">
+                        </div>
+                        <h3 class="news-card-title">ZERAX Company</h3>
+                        <p class="news-card-preview">Противоположная компания согласилась сотрудничать.</p>
+                    </div>
+
+                    <div class="news-card" data-news="4">
+                        <div class="news-card-image">
+                            <img src="assets/images/news/news-oldsite.png" alt="Старый сайт закрывается" loading="lazy">
+                        </div>
+                        <h3 class="news-card-title">NULLER сайт закрывается</h3>
+                        <p class="news-card-preview">Старый сайт NULLER закрывается и больше не будет играть роли официального.</p>
+                    </div>
+
+                    <div class="news-card" data-news="5">
+                        <div class="news-card-image">
+                            <img src="assets/images/news/news-safety.png" alt="Безопасность" loading="lazy">
+                        </div>
+                        <h3 class="news-card-title">Мы заботимся о Вас!</h3>
+                        <p class="news-card-preview">Мы публикуем на сайте только безопасные программы.</p>
+                    </div>
+
+                </div>
             </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon">⚡</div>
-                <h3 class="feature-title">Движок GECKO</h3>
-                <p class="feature-desc">Движок GECKO будет работать и в браузере, и на ПК. Движок будет поддерживать онлайн. Скоро релиз!</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon">👌</div>
-                <h3 class="feature-title">Масштабное обновление сайта</h3>
-                <p class="feature-desc">На нашем предыдущем сайте Мы обещали масштабное обновление сайта, и мы это сделали!</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon">♾️</div>
-                <h3 class="feature-title">ZERAX Company</h3>
-                <p class="feature-desc">Полностью противоположная компания, которую создал один из уволившихся разработчиков. Компания не проявляет признаков конкуренции, а наоборот согласилась сотрудничать.</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon">🌐</div>
-                <h3 class="feature-title">NULLER сайт закрывается</h3>
-                <p class="feature-desc">Старый сайт NULLER закрывается и больше не будет играть роли официального. Однако, сайт останется, как памятник всем разработчикам NULLER. Старый сайт: https://sites.google.com/view/nuller</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon">❤️</div>
-                <h3 class="feature-title">Мы заботимся о Вас!</h3>
-                <p class="feature-desc">Мы публикуем на сайте только безопасные программы проверенные модераторами. За безопасность Мы отвечаем!</p>
-            </div>
+            <button class="news-arrow news-arrow-right" id="newsRight" aria-label="Вперёд">›</button>
+            <div class="news-dots" id="newsDots"></div>
         </div>
     </section>
 
+    <!-- News Modal -->
+    <div class="news-modal" id="newsModal">
+        <div class="news-modal-overlay"></div>
+        <div class="news-modal-content">
+            <button class="news-modal-close" aria-label="Закрыть">✕</button>
+            <div class="news-modal-image" id="newsModalImage"></div>
+            <h2 class="news-modal-title" id="newsModalTitle"></h2>
+            <div class="news-modal-body" id="newsModalBody"></div>
+        </div>
+    </div>
+
     <!-- About -->
     <section class="section" id="about">
-        <div class="about-grid">
-            <div class="about-terminal fade-in">
-                <div class="terminal-header">
-                    <div class="terminal-dot red"></div>
-                    <div class="terminal-dot yellow"></div>
-                    <div class="terminal-dot green"></div>
-                    <span class="terminal-title">nuller@terminal ~</span>
+        <div class="section-header fade-in">
+            <div class="section-label">// О компании</div>
+            <div class="line-decoration"></div>
+            <h2 class="section-title">О КОМПАНИИ NULLER</h2>
+        </div>
+        <div class="about-new-grid fade-in">
+            <div class="about-info-card">
+                <div class="about-info-icon">
+                    <img src="assets/images/logo.png" alt="NULLER Logo" loading="lazy">
                 </div>
-                <div class="terminal-body">
-                    <div class="terminal-line" style="animation-delay:0.2s">
-                        <span class="prompt">$</span> <span class="command">О компании:</span>
+                <div class="about-info-details">
+                    <div class="about-info-row">
+                        <span class="about-info-label">Компания</span>
+                        <span class="about-info-value">NULLER Company</span>
                     </div>
-                    <div class="terminal-line" style="animation-delay:0.6s">
-                        <span class="output">Компания: NULLER Company</span>
+                    <div class="about-info-row">
+                        <span class="about-info-label">Основана</span>
+                        <span class="about-info-value">26.04.2026</span>
                     </div>
-                    <div class="terminal-line" style="animation-delay:0.9s">
-                        <span class="output">Основана: 26.04.2026</span>
+                    <div class="about-info-row">
+                        <span class="about-info-label">Миссия</span>
+                        <span class="about-info-value">Разработка приложений и игр</span>
                     </div>
-                    <div class="terminal-line" style="animation-delay:1.2s">
-                        <span class="output">Миссия: разработка приложений и игр</span>
-                    </div>
-                    <div class="terminal-line" style="animation-delay:1.5s">
-                        <span class="output">Статус: Действительно ✓</span>
-                    </div>
-                    <div class="terminal-line" style="animation-delay:1.8s">
-                        <span class="prompt">$</span> <span class="command">_</span>
+                    <div class="about-info-row">
+                        <span class="about-info-label">Статус</span>
+                        <span class="about-info-value about-status-active">Действительно ✓</span>
                     </div>
                 </div>
             </div>
-            <div class="about-text fade-in">
-                <div class="section-label">// О компании</div>
-                <h3>Компания <span>NULLER</span></h3>
-                <p>Компания NULLER - частная незарегистированная компания, которая занимается созданием игр и приложений. NULLER Company не является настоящей компанией, а представляет собой проект по производству игр и приложений.</p>
+            <div class="about-text-block">
+                <p>Компания NULLER - частная незарегистрированная компания, которая занимается созданием игр и приложений. NULLER Company не является настоящей компанией, а представляет собой проект по производству игр и приложений.</p>
                 <p>Все приложения, опубликованные на этом сайте являются полностью безопасными, если вы прочитали инструкцию.</p>
                 <div class="about-tags">
                     <span class="about-tag"># NULLER</span>
@@ -205,36 +232,53 @@
         </div>
     </section>
 
-        <!-- Team Fortress 2 -->
+    <!-- Team -->
     <section class="section" id="team">
         <div class="section-header fade-in">
             <div class="section-label">// Разработчики</div>
             <div class="line-decoration"></div>
-            <h2 class="section-title">VIP-разработчики</h2>
+            <h2 class="section-title">VIP-РАЗРАБОТЧИКИ</h2>
             <p class="section-desc">Разработчики NULLER высокого класса</p>
         </div>
         <div class="team-grid">
-            <div class="team-card fade-in">
+            <div class="team-card fade-in" data-member="vak5037">
                 <div class="team-avatar">
-                    <img src="assets/images/vak5037.png" alt="Vak5037">
+                    <img src="assets/images/vak5037.png" alt="Vak5037" loading="lazy">
                 </div>
                 <div class="team-name">Vak5037</div>
                 <div class="team-role">// Основатель</div>
             </div>
-            <div class="team-card fade-in">
+            <div class="team-card fade-in" data-member="redmik03">
                 <div class="team-avatar">
-                    <img src="assets/images/redmik03.png" alt="redmik03">
+                    <img src="assets/images/redmik03.png" alt="redmik03" loading="lazy">
                 </div>
                 <div class="team-name">redmik03</div>
                 <div class="team-role">// Рекламист</div>
             </div>
-            <div class="team-card fade-in">
+            <div class="team-card fade-in empty">
                 <div class="team-avatar">?</div>
                 <div class="team-name">empty</div>
                 <div class="team-role">// </div>
             </div>
         </div>
     </section>
+
+    <!-- Team Member Modal -->
+    <div class="member-modal" id="memberModal">
+        <div class="member-modal-overlay"></div>
+        <div class="member-modal-content">
+            <button class="member-modal-close" aria-label="Закрыть">✕</button>
+            <div class="member-profile">
+                <div class="member-cover" id="memberCover"></div>
+                <div class="member-avatar-large" id="memberAvatar"></div>
+                <h2 class="member-name-large" id="memberName"></h2>
+                <div class="member-role-large" id="memberRole"></div>
+                <div class="member-bio" id="memberBio"></div>
+                <div class="member-gallery" id="memberGallery"></div>
+                <div class="member-socials" id="memberSocials"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- CTA -->
     <section class="cta-section">
@@ -244,7 +288,7 @@
             <p>Подписывайтесь на наш Telegram-канал и скачивайте приложения</p>
             <div class="cta-buttons">
                 <a href="/apps" class="btn-primary">Приложения →</a>
-                <a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" class="btn-secondary">Telegram</a>
+                <a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="btn-secondary">Telegram</a>
             </div>
         </div>
     </section>
@@ -259,7 +303,8 @@
             <div class="footer-links">
                 <a href="/">Главная</a>
                 <a href="/apps">Приложения</a>
-                <a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank">Telegram</a>
+                <a href="/join">Стать разработчиком</a>
+                <a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer">Telegram</a>
             </div>
         </div>
     </footer>
