@@ -402,241 +402,283 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-        // ===== NEWS CAROUSEL — КРУГОВАЯ =====
-    var newsTrack = document.getElementById('newsTrack');
-    var newsDots = document.getElementById('newsDots');
-    var newsLeft = document.getElementById('newsLeft');
-    var newsRight = document.getElementById('newsRight');
-
-    if (newsTrack) {
-        var newsCards = newsTrack.querySelectorAll('.news-card');
-        var totalCards = newsCards.length;
-        var curCard = 0;
-
-        function getVisCards() {
-            if (window.innerWidth <= 600) return 1;
-            if (window.innerWidth <= 900) return 2;
-            return 3;
-        }
-
-        // Если всего 1 новость — прячем стрелки и точки, ничего не делаем
-        if (totalCards <= 1) {
-            if (newsLeft) newsLeft.style.display = 'none';
-            if (newsRight) newsRight.style.display = 'none';
-            if (newsDots) newsDots.style.display = 'none';
-            newsCards.forEach(function (card) {
-                card.style.minWidth = '100%';
-            });
-        } else {
-            // Больше 1 новости — круговая карусель
-
-            function updateCarousel() {
-                var vis = getVisCards();
-                var cardW = 100 / vis;
-
-                // Устанавливаем ширину каждой карточки
-                newsCards.forEach(function (card) {
-                    card.style.minWidth = cardW + '%';
-                });
-
-                // Нормализуем curCard по кругу
-                curCard = ((curCard % totalCards) + totalCards) % totalCards;
-
-                // Вычисляем смещение
-                var offset = curCard * cardW;
-                newsTrack.style.transform = 'translateX(-' + offset + '%)';
-
-                // Стрелки всегда активны (карусель круговая)
-                if (newsLeft) newsLeft.disabled = false;
-                if (newsRight) newsRight.disabled = false;
-
-                // Обновляем точки
-                if (newsDots) {
-                    newsDots.innerHTML = '';
-                    for (var i = 0; i < totalCards; i++) {
-                        var dot = document.createElement('button');
-                        dot.className = 'news-dot' + (i === curCard ? ' active' : '');
-                        dot.setAttribute('aria-label', 'Новость ' + (i + 1));
-                        (function (idx) {
-                            dot.addEventListener('click', function () {
-                                curCard = idx;
-                                newsTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)';
-                                updateCarousel();
-                            });
-                        })(i);
-                        newsDots.appendChild(dot);
+           // ===== NEWS CAROUSEL — БЕСШОВНАЯ КРУГОВАЯ =====
+        var newsTrack = document.getElementById('newsTrack');
+        var newsDots = document.getElementById('newsDots');
+        var newsLeft = document.getElementById('newsLeft');
+        var newsRight = document.getElementById('newsRight');
+    
+        if (newsTrack) {
+            var originalCards = Array.from(newsTrack.querySelectorAll('.news-card'));
+            var totalCards = originalCards.length;
+    
+            if (totalCards <= 1) {
+                // Одна новость — без карусели
+                if (newsLeft) newsLeft.style.display = 'none';
+                if (newsRight) newsRight.style.display = 'none';
+                if (newsDots) newsDots.style.display = 'none';
+                originalCards.forEach(function (c) { c.style.minWidth = '100%'; });
+            } else {
+                // === Карусель: всегда показываем 1 карточку по центру ===
+                var slideIndex = 0;
+                var isAnimating = false;
+                var allSlides = []; // будет заполнен после клонирования
+                var clonesCount = 0;
+    
+                function buildCarousel() {
+                    // Удаляем старые клоны
+                    newsTrack.querySelectorAll('[data-clone]').forEach(function (c) { c.remove(); });
+    
+                    // Клонируем все карточки в начало и конец для бесшовности
+                    clonesCount = totalCards;
+    
+                    // Клоны в конец
+                    for (var i = 0; i < clonesCount; i++) {
+                        var cloneEnd = originalCards[i].cloneNode(true);
+                        cloneEnd.setAttribute('data-clone', 'end');
+                        cloneEnd.removeAttribute('id');
+                        newsTrack.appendChild(cloneEnd);
                     }
-                }
-            }
-
-            // Клонируем карточки для бесшовной прокрутки
-            // Добавляем копии в конец и начало
-            function setupInfiniteScroll() {
-                var vis = getVisCards();
-
-                // Удаляем старые клоны
-                newsTrack.querySelectorAll('.news-card-clone').forEach(function (c) { c.remove(); });
-
-                // Клонируем первые vis карточек в конец
-                for (var i = 0; i < vis && i < totalCards; i++) {
-                    var clone = newsCards[i].cloneNode(true);
-                    clone.classList.add('news-card-clone');
-                    clone.setAttribute('data-clone', 'true');
-                    newsTrack.appendChild(clone);
-                }
-
-                // Привязываем клики к клонам (для модалки новостей)
-                newsTrack.querySelectorAll('.news-card-clone').forEach(function (clone) {
-                    clone.addEventListener('click', function () {
-                        var idx = parseInt(clone.getAttribute('data-news'));
-                        // Триггерим клик на оригинале
-                        var original = newsCards[idx];
-                        if (original) original.click();
+    
+                    // Клоны в начало (вставляем перед первым элементом)
+                    for (var j = totalCards - 1; j >= 0; j--) {
+                        var cloneStart = originalCards[j].cloneNode(true);
+                        cloneStart.setAttribute('data-clone', 'start');
+                        cloneStart.removeAttribute('id');
+                        newsTrack.insertBefore(cloneStart, newsTrack.firstChild);
+                    }
+    
+                    // Собираем все слайды (клоны начала + оригиналы + клоны конца)
+                    allSlides = Array.from(newsTrack.querySelectorAll('.news-card'));
+    
+                    // Привязываем клики на клонах к модалке
+                    allSlides.forEach(function (slide) {
+                        if (slide.getAttribute('data-clone')) {
+                            slide.addEventListener('click', function () {
+                                var idx = parseInt(slide.getAttribute('data-news'));
+                                if (!isNaN(idx) && originalCards[idx]) {
+                                    originalCards[idx].click();
+                                }
+                            });
+                        }
                     });
-                });
-            }
-
-            function slideNext() {
-                var vis = getVisCards();
-                var cardW = 100 / vis;
-
-                curCard++;
-                newsTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)';
-                var offset = curCard * cardW;
-                newsTrack.style.transform = 'translateX(-' + offset + '%)';
-
-                // Если дошли до клонов — после анимации прыгаем на начало без анимации
-                if (curCard >= totalCards) {
-                    setTimeout(function () {
+                }
+    
+                function getCardWidth() {
+                    // Всегда 1 карточка на экран — гарантирует что вся плашка видна
+                    return newsTrack.parentElement.offsetWidth;
+                }
+    
+                function setCardSizes() {
+                    var w = getCardWidth();
+                    allSlides.forEach(function (s) {
+                        s.style.minWidth = w + 'px';
+                        s.style.maxWidth = w + 'px';
+                        s.style.flex = '0 0 ' + w + 'px';
+                    });
+                }
+    
+                function jumpToSlide(realIndex, animate) {
+                    // realIndex: 0..totalCards-1 (индекс оригинальной карточки)
+                    // В массиве allSlides оригиналы начинаются с позиции clonesCount
+                    var targetPos = clonesCount + realIndex;
+                    var w = getCardWidth();
+    
+                    if (animate) {
+                        newsTrack.style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    } else {
                         newsTrack.style.transition = 'none';
-                        curCard = 0;
-                        newsTrack.style.transform = 'translateX(0%)';
+                    }
+    
+                    newsTrack.style.transform = 'translateX(-' + (targetPos * w) + 'px)';
+                    slideIndex = realIndex;
+                    updateDots();
+                }
+    
+                function slideToDirection(dir) {
+                    // dir: 1 (вперёд) или -1 (назад)
+                    if (isAnimating) return;
+                    isAnimating = true;
+    
+                    var w = getCardWidth();
+                    var currentPos = clonesCount + slideIndex;
+                    var nextPos = currentPos + dir;
+    
+                    newsTrack.style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    newsTrack.style.transform = 'translateX(-' + (nextPos * w) + 'px)';
+    
+                    // Вычисляем реальный индекс
+                    var nextReal = ((slideIndex + dir) % totalCards + totalCards) % totalCards;
+    
+                    setTimeout(function () {
+                        // Телепортируемся к оригиналу без анимации
+                        newsTrack.style.transition = 'none';
+                        slideIndex = nextReal;
+                        var realPos = clonesCount + slideIndex;
+                        newsTrack.style.transform = 'translateX(-' + (realPos * w) + 'px)';
                         updateDots();
-                    }, 520);
-                } else {
-                    updateDots();
+                        isAnimating = false;
+                    }, 460);
                 }
-            }
-
-            function slidePrev() {
-                var vis = getVisCards();
-                var cardW = 100 / vis;
-
-                if (curCard <= 0) {
-                    // Прыгаем в конец без анимации, потом анимируем назад
-                    newsTrack.style.transition = 'none';
-                    curCard = totalCards;
-                    var offset = curCard * cardW;
-                    newsTrack.style.transform = 'translateX(-' + offset + '%)';
-
-                    // Форсируем reflow
-                    newsTrack.offsetHeight;
-
-                    curCard = totalCards - 1;
-                    newsTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)';
-                    offset = curCard * cardW;
-                    newsTrack.style.transform = 'translateX(-' + offset + '%)';
-                    updateDots();
-                } else {
-                    curCard--;
-                    newsTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)';
-                    var offset2 = curCard * cardW;
-                    newsTrack.style.transform = 'translateX(-' + offset2 + '%)';
-                    updateDots();
-                }
-            }
-
-            function updateDots() {
-                var normalizedIdx = ((curCard % totalCards) + totalCards) % totalCards;
-                if (newsDots) {
+    
+                function updateDots() {
+                    if (!newsDots) return;
                     var dots = newsDots.querySelectorAll('.news-dot');
                     dots.forEach(function (d, i) {
-                        d.className = 'news-dot' + (i === normalizedIdx ? ' active' : '');
+                        d.className = 'news-dot' + (i === slideIndex ? ' active' : '');
                     });
                 }
-            }
-
-            // Стрелки
-            if (newsLeft) newsLeft.addEventListener('click', slidePrev);
-            if (newsRight) newsRight.addEventListener('click', slideNext);
-
-            // Touch свайп
-            var nTX = 0, nDragging = false;
-            newsTrack.addEventListener('touchstart', function (e) {
-                nTX = e.touches[0].clientX;
-                nDragging = true;
-            });
-            newsTrack.addEventListener('touchend', function (e) {
-                if (!nDragging) return;
-                nDragging = false;
-                var diff = nTX - e.changedTouches[0].clientX;
-                if (diff > 40) slideNext();
-                else if (diff < -40) slidePrev();
-            });
-
-            // Mouse drag
-            var nMX = 0, nMDragging = false;
-            newsTrack.addEventListener('mousedown', function (e) {
-                nMX = e.clientX;
-                nMDragging = true;
-                newsTrack.classList.add('grabbing');
-                e.preventDefault();
-            });
-            document.addEventListener('mouseup', function (e) {
-                if (!nMDragging) return;
-                nMDragging = false;
-                newsTrack.classList.remove('grabbing');
-                var diff = nMX - e.clientX;
-                if (diff > 40) slideNext();
-                else if (diff < -40) slidePrev();
-            });
-
-            // Инициализация
-            function initCarousel() {
-                setupInfiniteScroll();
-                curCard = 0;
-                var vis = getVisCards();
-                var cardW = 100 / vis;
-                newsCards.forEach(function (card) {
-                    card.style.minWidth = cardW + '%';
-                });
-                // Клоны тоже
-                newsTrack.querySelectorAll('.news-card-clone').forEach(function (clone) {
-                    clone.style.minWidth = cardW + '%';
-                });
-                newsTrack.style.transition = 'none';
-                newsTrack.style.transform = 'translateX(0%)';
-
-                // Генерируем точки
-                if (newsDots) {
+    
+                function createDots() {
+                    if (!newsDots) return;
                     newsDots.innerHTML = '';
                     for (var i = 0; i < totalCards; i++) {
                         var dot = document.createElement('button');
-                        dot.className = 'news-dot' + (i === 0 ? ' active' : '');
+                        dot.className = 'news-dot' + (i === slideIndex ? ' active' : '');
                         dot.setAttribute('aria-label', 'Новость ' + (i + 1));
                         (function (idx) {
                             dot.addEventListener('click', function () {
-                                newsTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)';
-                                curCard = idx;
-                                var vis2 = getVisCards();
-                                var cardW2 = 100 / vis2;
-                                newsTrack.style.transform = 'translateX(-' + (curCard * cardW2) + '%)';
-                                updateDots();
+                                if (isAnimating) return;
+                                if (idx === slideIndex) return;
+    
+                                isAnimating = true;
+                                var w = getCardWidth();
+                                var targetPos = clonesCount + idx;
+    
+                                newsTrack.style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                                newsTrack.style.transform = 'translateX(-' + (targetPos * w) + 'px)';
+    
+                                slideIndex = idx;
+    
+                                setTimeout(function () {
+                                    updateDots();
+                                    isAnimating = false;
+                                }, 460);
                             });
                         })(i);
                         newsDots.appendChild(dot);
                     }
                 }
-
-                if (newsLeft) newsLeft.disabled = false;
-                if (newsRight) newsRight.disabled = false;
-            }
-
-            window.addEventListener('resize', function () {
+    
+                function initCarousel() {
+                    buildCarousel();
+                    setCardSizes();
+                    slideIndex = 0;
+                    jumpToSlide(0, false);
+                    createDots();
+    
+                    if (newsLeft) newsLeft.disabled = false;
+                    if (newsRight) newsRight.disabled = false;
+                }
+    
+                // Стрелки
+                if (newsLeft) newsLeft.addEventListener('click', function () { slideToDirection(-1); });
+                if (newsRight) newsRight.addEventListener('click', function () { slideToDirection(1); });
+    
+                // Touch свайп
+                var touchStartX = 0;
+                var touchStartTime = 0;
+                var touchMoved = false;
+    
+                newsTrack.addEventListener('touchstart', function (e) {
+                    if (isAnimating) return;
+                    touchStartX = e.touches[0].clientX;
+                    touchStartTime = Date.now();
+                    touchMoved = false;
+                }, { passive: true });
+    
+                newsTrack.addEventListener('touchmove', function () {
+                    touchMoved = true;
+                }, { passive: true });
+    
+                newsTrack.addEventListener('touchend', function (e) {
+                    if (isAnimating) return;
+                    var diff = touchStartX - e.changedTouches[0].clientX;
+                    var elapsed = Date.now() - touchStartTime;
+    
+                    // Быстрый свайп (< 300ms) или длинный (> 40px)
+                    if (Math.abs(diff) > 40 || (Math.abs(diff) > 20 && elapsed < 300)) {
+                        if (diff > 0) slideToDirection(1);
+                        else slideToDirection(-1);
+                    }
+                });
+    
+                // Mouse drag
+                var mouseStartX = 0;
+                var mouseDragging = false;
+    
+                newsTrack.addEventListener('mousedown', function (e) {
+                    if (isAnimating) return;
+                    mouseStartX = e.clientX;
+                    mouseDragging = true;
+                    newsTrack.classList.add('grabbing');
+                    e.preventDefault();
+                });
+    
+                document.addEventListener('mousemove', function (e) {
+                    if (mouseDragging) e.preventDefault();
+                });
+    
+                document.addEventListener('mouseup', function (e) {
+                    if (!mouseDragging) return;
+                    mouseDragging = false;
+                    newsTrack.classList.remove('grabbing');
+                    if (isAnimating) return;
+    
+                    var diff = mouseStartX - e.clientX;
+                    if (Math.abs(diff) > 40) {
+                        if (diff > 0) slideToDirection(1);
+                        else slideToDirection(-1);
+                    }
+                });
+    
+                // Ресайз — пересчитываем
+                var resizeTimer;
+                window.addEventListener('resize', function () {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(function () {
+                        setCardSizes();
+                        jumpToSlide(slideIndex, false);
+                    }, 150);
+                });
+    
+                // Запуск
                 initCarousel();
-            });
-
-            initCarousel();
+            }
+    
+            // ===== NEWS MODAL =====
+            var newsModal = document.getElementById('newsModal');
+            if (newsModal) {
+                var newsData = [
+                    { title: 'Компания потеряла разработчиков!', image: 'assets/images/news/news-devs.png', body: 'Компании срочно требуются разработчики! Если вы умеете программировать или делать дизайн, присоединяйтесь к нашей команде. Подайте заявку на странице «Стать разработчиком».' },
+                    { title: 'Движок GECKO', image: 'assets/images/news/news-gecko.png', body: 'Движок GECKO будет работать и в браузере, и на ПК. Движок будет поддерживать онлайн. Скоро релиз! Следите за обновлениями в нашем Telegram-канале.' },
+                    { title: 'Мы заботимся о Вас!', image: 'assets/images/news/news-safety.png', body: 'Мы публикуем на сайте только безопасные программы, проверенные модераторами. За безопасность мы отвечаем!' }
+                ];
+    
+                var nMT = document.getElementById('newsModalTitle');
+                var nMB = document.getElementById('newsModalBody');
+                var nMI = document.getElementById('newsModalImage');
+    
+                originalCards.forEach(function (card) {
+                    card.addEventListener('click', function () {
+                        var idx = parseInt(card.getAttribute('data-news'));
+                        var data = newsData[idx];
+                        if (!data) return;
+                        nMT.textContent = data.title;
+                        nMB.textContent = data.body;
+                        nMI.innerHTML = '<img src="' + data.image + '" alt="' + data.title + '">';
+                        newsModal.classList.add('open');
+                        document.body.style.overflow = 'hidden';
+                    });
+                });
+    
+                function closeNM() { newsModal.classList.remove('open'); document.body.style.overflow = ''; }
+                newsModal.querySelector('.news-modal-close').addEventListener('click', closeNM);
+                newsModal.querySelector('.news-modal-overlay').addEventListener('click', closeNM);
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && newsModal.classList.contains('open')) closeNM();
+                });
+            }
         }
 
         // ===== NEWS MODAL (остаётся без изменений) =====
