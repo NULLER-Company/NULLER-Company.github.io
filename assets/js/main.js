@@ -645,6 +645,68 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Запуск
                 initCarousel();
             }
+
+            // ===== АВТОПРОКРУТКА — пауза при наведении =====
+            var autoplayTimer = null;
+            var autoplayDelay = 10000; // 10 секунд
+            var isHovered = false;
+
+            function startAutoplay() {
+                stopAutoplay();
+                autoplayTimer = setInterval(function () {
+                    if (!isHovered && !isAnimating && !document.hidden) {
+                        slideToDirection(1);
+                    }
+                }, autoplayDelay);
+            }
+
+            function stopAutoplay() {
+                if (autoplayTimer) {
+                    clearInterval(autoplayTimer);
+                    autoplayTimer = null;
+                }
+            }
+
+            // Пауза при наведении мыши на карусель
+            var carouselEl = newsTrack.closest('.news-carousel');
+            if (carouselEl) {
+                carouselEl.addEventListener('mouseenter', function () {
+                    isHovered = true;
+                });
+                carouselEl.addEventListener('mouseleave', function () {
+                    isHovered = false;
+                });
+
+                // На мобильных: пауза при касании
+                carouselEl.addEventListener('touchstart', function () {
+                    isHovered = true;
+                }, { passive: true });
+                carouselEl.addEventListener('touchend', function () {
+                    // Возобновляем через 3 секунды после отпускания
+                    setTimeout(function () { isHovered = false; }, 3000);
+                });
+            }
+
+            // Пауза когда вкладка скрыта
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden) {
+                    stopAutoplay();
+                } else {
+                    startAutoplay();
+                }
+            });
+
+            // Сброс таймера после ручной прокрутки
+            var origSlideToDirection = slideToDirection;
+            slideToDirection = function (dir) {
+                origSlideToDirection(dir);
+                // Перезапускаем таймер чтобы после ручного свайпа
+                // следующая автопрокрутка была через полные 10 секунд
+                startAutoplay();
+            };
+
+            // Запускаем
+            startAutoplay();
     
             // ===== NEWS MODAL =====
             var newsModal = document.getElementById('newsModal');
