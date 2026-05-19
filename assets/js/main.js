@@ -792,7 +792,7 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             // Замените YOUR_FORM_ID на ваш ID с formspree.io
-            fetch('https://formspree.io/f/YOUR_FORM_ID', {
+            fetch('https://formspree.io/f/mjgzkpgj', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
