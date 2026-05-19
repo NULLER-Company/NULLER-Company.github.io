@@ -681,42 +681,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // ===== NEWS MODAL (остаётся без изменений) =====
-        var newsModal = document.getElementById('newsModal');
-        if (newsModal) {
-            var newsData = [
-                { title: 'Компания потеряла разработчиков!', image: 'assets/images/news/news-devs.png', body: 'Компании срочно требуются разработчики! Если вы умеете программировать или делать дизайн, присоединяйтесь к нашей команде. Подайте заявку на странице «Стать разработчиком».' },
-                { title: 'Движок GECKO', image: 'assets/images/news/news-gecko.png', body: 'Движок GECKO будет работать и в браузере, и на ПК. Движок будет поддерживать онлайн. Скоро релиз! Следите за обновлениями в нашем Telegram-канале.' },
-                { title: 'Мы заботимся о Вас!', image: 'assets/images/news/news-safety.png', body: 'Мы публикуем на сайте только безопасные программы, проверенные модераторами. За безопасность мы отвечаем!' }
-            ];
-
-            var nMT = document.getElementById('newsModalTitle');
-            var nMB = document.getElementById('newsModalBody');
-            var nMI = document.getElementById('newsModalImage');
-
-            // Привязываем клики к оригинальным карточкам
-            newsCards.forEach(function (card) {
-                card.addEventListener('click', function () {
-                    var idx = parseInt(card.getAttribute('data-news'));
-                    var data = newsData[idx];
-                    if (!data) return;
-                    nMT.textContent = data.title;
-                    nMB.textContent = data.body;
-                    nMI.innerHTML = '<img src="' + data.image + '" alt="' + data.title + '">';
-                    newsModal.classList.add('open');
-                    document.body.style.overflow = 'hidden';
-                });
-            });
-
-            function closeNM() { newsModal.classList.remove('open'); document.body.style.overflow = ''; }
-            newsModal.querySelector('.news-modal-close').addEventListener('click', closeNM);
-            newsModal.querySelector('.news-modal-overlay').addEventListener('click', closeNM);
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape' && newsModal.classList.contains('open')) closeNM();
-            });
-        }
-    }
-
+        
     // ===== TEAM MEMBER MODAL =====
     var memberModal = document.getElementById('memberModal');
     if (memberModal) {
