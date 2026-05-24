@@ -310,27 +310,74 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ===== APP SEARCH =====
+    // ===== APP SEARCH + FILTERS =====
     var searchInput = document.getElementById('searchInput');
-    if (searchInput) {
+    var filterTabs = document.querySelectorAll('.apps-filter-tab');
+    
+    if (searchInput || filterTabs.length) {
         var noRes = document.getElementById('noResults');
         var sTimer;
-        searchInput.addEventListener('input', function () {
-            clearTimeout(sTimer);
-            sTimer = setTimeout(function () {
-                var q = searchInput.value.toLowerCase().trim();
-                var vis = 0;
-                document.querySelectorAll('.app-card').forEach(function (card) {
-                    var n = (card.querySelector('.app-name') || {}).textContent || '';
-                    var d = (card.querySelector('.app-desc') || {}).textContent || '';
-                    var tags = '';
-                    card.querySelectorAll('.app-tag').forEach(function (t) { tags += ' ' + t.textContent; });
-                    var m = n.toLowerCase().includes(q) || d.toLowerCase().includes(q) || tags.toLowerCase().includes(q);
-                    card.style.display = m ? '' : 'none';
-                    if (m) vis++;
-                });
-                if (noRes) noRes.style.display = vis === 0 ? 'block' : 'none';
-            }, 200);
+        var currentFilter = 'all';
+    
+        function applyFilters() {
+            var q = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            var vis = 0;
+            var visibleByCategory = { active: 0, archived: 0, legacy: 0 };
+    
+            document.querySelectorAll('.app-card').forEach(function (card) {
+                var status = card.getAttribute('data-status') || 'active';
+                var n = (card.querySelector('.app-name') || {}).textContent || '';
+                var d = (card.querySelector('.app-desc') || {}).textContent || '';
+                var tags = '';
+                card.querySelectorAll('.app-tag').forEach(function (t) { tags += ' ' + t.textContent; });
+    
+                var matchSearch = q === '' ||
+                    n.toLowerCase().includes(q) ||
+                    d.toLowerCase().includes(q) ||
+                    tags.toLowerCase().includes(q);
+    
+                var matchFilter = currentFilter === 'all' || status === currentFilter;
+    
+                var show = matchSearch && matchFilter;
+                card.style.display = show ? '' : 'none';
+    
+                if (show) {
+                    vis++;
+                    if (visibleByCategory[status] !== undefined) visibleByCategory[status]++;
+                }
+            });
+    
+            // Скрываем пустые категории
+            document.querySelectorAll('.apps-category').forEach(function (cat) {
+                var cName = cat.getAttribute('data-category');
+                var hasVisible = visibleByCategory[cName] > 0;
+    
+                if (currentFilter === 'all') {
+                    cat.classList.toggle('hidden', !hasVisible);
+                } else {
+                    cat.classList.toggle('hidden', cName !== currentFilter || !hasVisible);
+                }
+            });
+    
+            if (noRes) noRes.style.display = vis === 0 ? 'block' : 'none';
+        }
+    
+        // Поиск
+        if (searchInput) {
+            searchInput.addEventListener('input', function () {
+                clearTimeout(sTimer);
+                sTimer = setTimeout(applyFilters, 200);
+            });
+        }
+    
+        // Фильтры
+        filterTabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                filterTabs.forEach(function (t) { t.classList.remove('active'); });
+                tab.classList.add('active');
+                currentFilter = tab.getAttribute('data-filter');
+                applyFilters();
+            });
         });
     }
 
