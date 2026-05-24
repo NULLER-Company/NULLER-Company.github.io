@@ -1636,3 +1636,429 @@ h1, h2, h3, h4, h5, h6 {
     .cta-section, .news-arrow, .news-dots, .anniversary-particles { display: none !important; }
     body { background: white; color: black; }
 }
+
+/* ===== 404 PAGE — РАСШИРЕННЫЙ ===== */
+.error-page {
+    padding: 120px 40px 80px;
+    min-height: calc(100vh - 280px);
+}
+
+.error-glitch-container {
+    position: relative;
+}
+
+.error-code {
+    position: relative;
+    display: inline-block;
+}
+
+.error-code::before,
+.error-code::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.error-code::before {
+    color: var(--green-primary);
+    z-index: -1;
+    animation: glitchTop 3s infinite linear alternate-reverse;
+    text-shadow: 2px 0 var(--green-primary);
+    opacity: 0.7;
+}
+
+.error-code::after {
+    color: var(--red-accent);
+    z-index: -2;
+    animation: glitchBottom 2s infinite linear alternate-reverse;
+    text-shadow: -2px 0 var(--red-accent);
+    opacity: 0.5;
+}
+
+@keyframes glitchTop {
+    0%, 90%, 100% { transform: translate(0, 0); }
+    20% { transform: translate(-3px, -2px); }
+    40% { transform: translate(3px, 2px); }
+    60% { transform: translate(-2px, 1px); }
+    80% { transform: translate(2px, -1px); }
+}
+
+@keyframes glitchBottom {
+    0%, 90%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(2px, 1px); }
+    50% { transform: translate(-2px, -1px); }
+    75% { transform: translate(1px, 2px); }
+}
+
+.error-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+}
+
+.error-btn { min-width: 180px; }
+
+.error-suggestions {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 0 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.error-suggestions-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--green-secondary);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.error-suggestions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.error-suggestion-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 24px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--transition-base);
+    text-align: center;
+}
+
+.error-suggestion-card:hover {
+    border-color: var(--border-active);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-green);
+}
+
+.error-suggestion-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.error-suggestion-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--yellow-primary);
+    letter-spacing: 1px;
+}
+
+.error-suggestion-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1px;
+}
+
+/* ===== JOIN BENEFITS ===== */
+.join-benefits-section {
+    position: relative;
+    z-index: 1;
+    padding: 0 40px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.join-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.join-benefit-card {
+    padding: 24px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-align: center;
+    transition: all var(--transition-base);
+}
+
+.join-benefit-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-green);
+}
+
+.join-benefit-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.join-benefit-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--yellow-primary);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.join-benefit-desc {
+    font-size: 13px;
+    color: var(--text-primary);
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+/* ===== JOIN FORM — ДОПОЛНЕНИЯ ===== */
+.join-form-header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.join-form-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(20px, 3vw, 26px);
+    font-weight: 800;
+    color: var(--yellow-primary);
+    margin: 12px 0 8px;
+    letter-spacing: 1px;
+}
+
+.join-form-subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+.required-mark {
+    color: var(--red-accent);
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+.form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2300cc00' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    background-size: 12px;
+    padding-right: 44px;
+    cursor: pointer;
+}
+
+.form-select option {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 8px;
+}
+
+.form-agreement {
+    margin-bottom: 20px;
+}
+
+.form-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.form-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.form-checkbox-mark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-hover);
+    border-radius: 4px;
+    background: var(--bg-secondary);
+    flex-shrink: 0;
+    transition: all var(--transition-base);
+    position: relative;
+    margin-top: 1px;
+}
+
+.form-checkbox input[type="checkbox"]:checked + .form-checkbox-mark {
+    background: var(--yellow-primary);
+    border-color: var(--yellow-primary);
+}
+
+.form-checkbox input[type="checkbox"]:checked + .form-checkbox-mark::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--bg-primary);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.form-checkbox input[type="checkbox"]:focus-visible + .form-checkbox-mark {
+    outline: 2px solid var(--yellow-primary);
+    outline-offset: 2px;
+}
+
+.form-checkbox-text {
+    font-size: 13px;
+    color: var(--text-primary);
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.join-submit-arrow {
+    transition: transform var(--transition-base);
+    font-size: 18px;
+}
+
+.join-submit:hover .join-submit-arrow {
+    transform: translateX(4px);
+}
+
+.avatar-hint small {
+    display: block;
+    margin-top: 4px;
+    color: var(--text-dim);
+    font-size: 10px;
+}
+
+.join-alt-contact {
+    max-width: 600px;
+    margin: 32px auto 0;
+    text-align: center;
+    padding: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+}
+
+.join-alt-contact p {
+    color: var(--text-primary);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+}
+
+.join-alt-contact-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.join-alt-contact-buttons .btn-secondary {
+    padding: 10px 24px;
+    font-size: 13px;
+    min-height: 40px;
+}
+
+/* ===== DOWNLOAD PAGE — ДОПОЛНЕНИЯ ===== */
+.dl-warning-info {
+    background: rgba(0, 170, 238, 0.04) !important;
+    border-color: rgba(0, 170, 238, 0.20) !important;
+    margin-top: 10px;
+}
+
+.dl-warning-info strong {
+    color: var(--yellow-primary);
+}
+
+.dl-related {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border-color);
+}
+
+.dl-related-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    color: var(--green-secondary);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.dl-related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.dl-related-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: all var(--transition-base);
+}
+
+.dl-related-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-green);
+}
+
+.dl-related-card img {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+}
+
+.dl-related-card span {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--yellow-primary);
+    letter-spacing: 1px;
+}
+
+/* ===== RESPONSIVE — JOIN BENEFITS & 404 ===== */
+@media (max-width: 900px) {
+    .join-benefits-grid { grid-template-columns: 1fr; gap: 12px; }
+    .join-benefits-section { padding: 0 24px 30px; }
+    .error-suggestions-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .join-benefits-section { padding: 0 16px 24px; }
+    .error-page { padding: 100px 16px 60px; }
+    .error-suggestions-grid { grid-template-columns: 1fr; }
+    .error-actions { flex-direction: column; width: 100%; max-width: 280px; margin: 0 auto 40px; }
+    .error-btn { width: 100%; }
+    .form-checkbox { gap: 8px; }
+    .form-checkbox-text { font-size: 12px; }
+}
+
+@media (max-width: 380px) {
+    .join-benefits-section { padding: 0 12px 20px; }
+    .error-page { padding: 90px 12px 50px; }
+}
