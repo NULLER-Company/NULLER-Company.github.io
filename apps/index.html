@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
     <title>Приложения — NULLER Company</title>
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/logo.png">
     <link rel="shortcut icon" href="/assets/images/logo.png">
-    <meta name="theme-color" content="#051a05">
+    <meta name="theme-color" content="#030f03">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
 
     <meta name="description" content="Все приложения NULLER Company — скачать бесплатно для Windows 10/11.">
-    <meta name="keywords" content="NULLER, приложения, скачать, Scream, MinePack, VOZDYHAN">
+    <meta name="keywords" content="NULLER, приложения, скачать, Scream, MinePack, VOZDYHAN, CROSSIX">
     <meta name="author" content="NULLER Company">
     <meta name="robots" content="index, follow">
     <meta name="language" content="Russian">
@@ -33,6 +36,70 @@
     <meta name="twitter:image" content="https://nuller.ru/assets/images/preview.png">
 
     <link rel="canonical" href="https://nuller.ru/apps">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Приложения NULLER Company",
+        "description": "Каталог приложений NULLER Company для Windows",
+        "numberOfItems": 4,
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                    "@type": "SoftwareApplication",
+                    "name": "CROSSIX",
+                    "url": "https://nuller.ru/download_crossix",
+                    "applicationCategory": "GameApplication",
+                    "operatingSystem": "Windows 10, Windows 11",
+                    "softwareVersion": "2.3",
+                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                    "@type": "SoftwareApplication",
+                    "name": "Scream",
+                    "url": "https://nuller.ru/download_scream",
+                    "applicationCategory": "UtilitiesApplication",
+                    "operatingSystem": "Windows 10, Windows 11",
+                    "softwareVersion": "1.3",
+                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                    "@type": "SoftwareApplication",
+                    "name": "MinePack",
+                    "url": "https://nuller.ru/download_minepack",
+                    "applicationCategory": "MultimediaApplication",
+                    "operatingSystem": "Windows 10, Windows 11",
+                    "softwareVersion": "1.2",
+                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 4,
+                "item": {
+                    "@type": "SoftwareApplication",
+                    "name": "VOZDYHAN",
+                    "url": "https://nuller.ru/download_vozdyhan",
+                    "applicationCategory": "UtilitiesApplication",
+                    "operatingSystem": "Windows 10, Windows 11",
+                    "softwareVersion": "1.0",
+                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
+                }
+            }
+        ]
+    }
+    </script>
 </head>
 <body>
 
@@ -65,14 +132,40 @@
         <div class="line-decoration"></div>
         <h1>Наши <span>приложения</span></h1>
         <p>Выберите нужное приложение и перейдите на страницу загрузки</p>
+        <div class="apps-counter-badge">
+            <span class="apps-counter-dot"></span>
+            <span>4 приложения доступно</span>
+        </div>
         <div class="search-bar">
             <span class="search-icon">🔍</span>
-            <input type="text" id="searchInput" placeholder="Поиск приложений...">
+            <input type="text" id="searchInput" placeholder="Поиск приложений..." autocomplete="off">
         </div>
     </div>
 
     <section class="apps-section">
         <div class="apps-grid" id="appsGrid">
+
+            <a href="/download_crossix" class="app-card fade-in" data-new="true">
+                <div class="app-card-badge">NEW</div>
+                <div class="app-card-header">
+                    <div class="app-icon">
+                        <img src="/assets/images/apps/crossix.png" alt="CROSSIX" loading="lazy">
+                    </div>
+                    <div class="app-info">
+                        <div class="app-name">CROSSIX</div>
+                        <div class="app-version">v2.3 • Windows</div>
+                    </div>
+                </div>
+                <div class="app-desc">Программа для кастомных прицелов в играх</div>
+                <div class="app-card-footer">
+                    <div class="app-tags">
+                        <span class="app-tag">gaming tool</span>
+                        <span class="app-tag">бесплатно</span>
+                    </div>
+                    <span class="app-size">45 MB</span>
+                    <span class="app-arrow">→</span>
+                </div>
+            </a>
 
             <a href="/download_scream" class="app-card fade-in">
                 <div class="app-card-header">
@@ -126,10 +219,10 @@
                         <div class="app-version">v1.0 • Windows</div>
                     </div>
                 </div>
-                <div class="app-desc">Программа для призыва Воздухана</div>
+                <div class="app-desc">Шуточная программа для призыва Воздухана</div>
                 <div class="app-card-footer">
                     <div class="app-tags">
-                        <span class="app-tag">мем-приложение</span>
+                        <span class="app-tag">мем</span>
                         <span class="app-tag">бесплатно</span>
                     </div>
                     <span class="app-size">64 MB</span>
@@ -137,29 +230,12 @@
                 </div>
             </a>
 
-            <a href="/download_crossix" class="app-card fade-in">
-                <div class="app-card-header">
-                    <div class="app-icon">
-                        <img src="/assets/images/apps/crossix.png" alt="CROSSIX" loading="lazy">
-                    </div>
-                    <div class="app-info">
-                        <div class="app-name">CROSSIX</div>
-                        <div class="app-version">v2.3 • Windows</div>
-                    </div>
-                </div>
-                <div class="app-desc">Программа для кастомных прицелов в играх</div>
-                <div class="app-card-footer">
-                    <div class="app-tags">
-                        <span class="app-tag">утилита</span>
-                        <span class="app-tag">бесплатно</span>
-                    </div>
-                    <span class="app-size">45 MB</span>
-                    <span class="app-arrow">→</span>
-                </div>
-            </a>
-
         </div>
-        <div id="noResults" class="no-results" style="display:none;">// Ничего не найдено</div>
+        <div id="noResults" class="no-results" style="display:none;">
+            <div class="no-results-icon">∅</div>
+            <div class="no-results-text">// Ничего не найдено</div>
+            <div class="no-results-hint">Попробуйте другой запрос</div>
+        </div>
     </section>
 
     <!-- Footer -->
@@ -173,14 +249,20 @@
                     <div class="footer-brand-text">NULLER</div>
                 </div>
                 <div class="footer-contact">
-                    <a href="mailto:nullercompany@gmail.ru" class="footer-email">nullercompany@gmail.ru</a>
+                    <a href="mailto:nullercompany@gmail.com" class="footer-email">nullercompany@gmail.com</a>
                     <span class="footer-slogan">Разработка игр и приложений</span>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
             <div class="footer-bottom-content">
-                <span class="footer-copy">© 2026 NULLER Company. Все права защищены.</span>
+                <div class="footer-copy-row">
+                    <span class="footer-copy">© 2026 NULLER Company. Все права защищены.</span>
+                    <a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="footer-tg-badge">
+                        <span class="footer-tg-icon">✈</span>
+                        <span>Telegram</span>
+                    </a>
+                </div>
                 <div class="footer-links">
                     <a href="/">Главная</a>
                     <a href="/apps">Приложения</a>
