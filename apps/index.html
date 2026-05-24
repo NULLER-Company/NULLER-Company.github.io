@@ -45,58 +45,10 @@
         "description": "Каталог приложений NULLER Company для Windows",
         "numberOfItems": 4,
         "itemListElement": [
-            {
-                "@type": "ListItem",
-                "position": 1,
-                "item": {
-                    "@type": "SoftwareApplication",
-                    "name": "CROSSIX",
-                    "url": "https://nuller.ru/download_crossix",
-                    "applicationCategory": "GameApplication",
-                    "operatingSystem": "Windows 10, Windows 11",
-                    "softwareVersion": "2.3",
-                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
-                }
-            },
-            {
-                "@type": "ListItem",
-                "position": 2,
-                "item": {
-                    "@type": "SoftwareApplication",
-                    "name": "Scream",
-                    "url": "https://nuller.ru/download_scream",
-                    "applicationCategory": "UtilitiesApplication",
-                    "operatingSystem": "Windows 10, Windows 11",
-                    "softwareVersion": "1.3",
-                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
-                }
-            },
-            {
-                "@type": "ListItem",
-                "position": 3,
-                "item": {
-                    "@type": "SoftwareApplication",
-                    "name": "MinePack",
-                    "url": "https://nuller.ru/download_minepack",
-                    "applicationCategory": "MultimediaApplication",
-                    "operatingSystem": "Windows 10, Windows 11",
-                    "softwareVersion": "1.2",
-                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
-                }
-            },
-            {
-                "@type": "ListItem",
-                "position": 4,
-                "item": {
-                    "@type": "SoftwareApplication",
-                    "name": "VOZDYHAN",
-                    "url": "https://nuller.ru/download_vozdyhan",
-                    "applicationCategory": "UtilitiesApplication",
-                    "operatingSystem": "Windows 10, Windows 11",
-                    "softwareVersion": "1.0",
-                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
-                }
-            }
+            { "@type": "ListItem", "position": 1, "item": { "@type": "SoftwareApplication", "name": "CROSSIX", "url": "https://nuller.ru/download_crossix", "applicationCategory": "GameApplication", "operatingSystem": "Windows 10, Windows 11", "softwareVersion": "2.3", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" } } },
+            { "@type": "ListItem", "position": 2, "item": { "@type": "SoftwareApplication", "name": "Scream", "url": "https://nuller.ru/download_scream", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Windows 10, Windows 11", "softwareVersion": "1.3", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" } } },
+            { "@type": "ListItem", "position": 3, "item": { "@type": "SoftwareApplication", "name": "MinePack", "url": "https://nuller.ru/download_minepack", "applicationCategory": "MultimediaApplication", "operatingSystem": "Windows 10, Windows 11", "softwareVersion": "1.2", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" } } },
+            { "@type": "ListItem", "position": 4, "item": { "@type": "SoftwareApplication", "name": "VOZDYHAN", "url": "https://nuller.ru/download_vozdyhan", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Windows 10, Windows 11", "softwareVersion": "1.0", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" } } }
         ]
     }
     </script>
@@ -140,101 +92,178 @@
             <span class="search-icon">🔍</span>
             <input type="text" id="searchInput" placeholder="Поиск приложений..." autocomplete="off">
         </div>
+
+        <!-- Filter Tabs -->
+        <div class="apps-filter-tabs" role="tablist">
+            <button class="apps-filter-tab active" data-filter="all" role="tab">
+                <span class="apps-filter-icon">∀</span>
+                <span>Все</span>
+                <span class="apps-filter-count">4</span>
+            </button>
+            <button class="apps-filter-tab" data-filter="active" role="tab">
+                <span class="apps-filter-icon">●</span>
+                <span>Активные</span>
+                <span class="apps-filter-count">2</span>
+            </button>
+            <button class="apps-filter-tab" data-filter="archived" role="tab">
+                <span class="apps-filter-icon">✓</span>
+                <span>Завершённые</span>
+                <span class="apps-filter-count">1</span>
+            </button>
+            <button class="apps-filter-tab" data-filter="legacy" role="tab">
+                <span class="apps-filter-icon">◔</span>
+                <span>Устаревшие</span>
+                <span class="apps-filter-count">1</span>
+            </button>
+        </div>
     </div>
 
     <section class="apps-section">
-        <div class="apps-grid" id="appsGrid">
 
-            <a href="/download_crossix" class="app-card fade-in" data-new="true">
-                <div class="app-card-badge">NEW</div>
-                <div class="app-card-header">
-                    <div class="app-icon">
-                        <img src="/assets/images/apps/crossix.png" alt="CROSSIX" loading="lazy">
-                    </div>
-                    <div class="app-info">
-                        <div class="app-name">CROSSIX</div>
-                        <div class="app-version">v2.3 • Windows</div>
-                    </div>
+        <!-- ===== АКТИВНЫЕ ===== -->
+        <div class="apps-category" data-category="active">
+            <div class="apps-category-header fade-in">
+                <div class="apps-category-line"></div>
+                <div class="apps-category-title-block">
+                    <span class="apps-category-status status-active"></span>
+                    <span class="apps-category-label">// ACTIVE</span>
+                    <h2 class="apps-category-title">Активная разработка</h2>
                 </div>
-                <div class="app-desc">Программа для кастомных прицелов в играх</div>
-                <div class="app-card-footer">
-                    <div class="app-tags">
-                        <span class="app-tag">gaming tool</span>
-                        <span class="app-tag">бесплатно</span>
-                    </div>
-                    <span class="app-size">45 MB</span>
-                    <span class="app-arrow">→</span>
-                </div>
-            </a>
+                <p class="apps-category-desc">Эти приложения активно обновляются и поддерживаются</p>
+            </div>
 
-            <a href="/download_scream" class="app-card fade-in">
-                <div class="app-card-header">
-                    <div class="app-icon">
-                        <img src="/assets/images/apps/scream.png" alt="Scream" loading="lazy">
-                    </div>
-                    <div class="app-info">
-                        <div class="app-name">Scream</div>
-                        <div class="app-version">v1.3 • Windows</div>
-                    </div>
-                </div>
-                <div class="app-desc">Программа digital signage</div>
-                <div class="app-card-footer">
-                    <div class="app-tags">
-                        <span class="app-tag">утилита</span>
-                        <span class="app-tag">бесплатно</span>
-                    </div>
-                    <span class="app-size">71 MB</span>
-                    <span class="app-arrow">→</span>
-                </div>
-            </a>
+            <div class="apps-grid">
 
-            <a href="/download_minepack" class="app-card fade-in">
-                <div class="app-card-header">
-                    <div class="app-icon">
-                        <img src="/assets/images/apps/minepack.png" alt="MinePack" loading="lazy">
+                <a href="/download_crossix" class="app-card fade-in" data-status="active" data-new="true">
+                    <div class="app-card-badge">NEW</div>
+                    <div class="app-card-status-badge status-badge-active" title="Активная разработка">●</div>
+                    <div class="app-card-header">
+                        <div class="app-icon">
+                            <img src="/assets/images/apps/crossix.png" alt="CROSSIX" loading="lazy">
+                        </div>
+                        <div class="app-info">
+                            <div class="app-name">CROSSIX</div>
+                            <div class="app-version">v2.3 • Windows</div>
+                        </div>
                     </div>
-                    <div class="app-info">
-                        <div class="app-name">MinePack</div>
-                        <div class="app-version">v1.2 • Windows</div>
+                    <div class="app-desc">Программа для кастомных прицелов в играх</div>
+                    <div class="app-card-footer">
+                        <div class="app-tags">
+                            <span class="app-tag">gaming tool</span>
+                            <span class="app-tag">бесплатно</span>
+                        </div>
+                        <span class="app-size">45 MB</span>
+                        <span class="app-arrow">→</span>
                     </div>
-                </div>
-                <div class="app-desc">Программа для создания ресурспаков Майнкрафт</div>
-                <div class="app-card-footer">
-                    <div class="app-tags">
-                        <span class="app-tag">приложение</span>
-                        <span class="app-tag">бесплатно</span>
-                    </div>
-                    <span class="app-size">47 MB</span>
-                    <span class="app-arrow">→</span>
-                </div>
-            </a>
+                </a>
 
-            <a href="/download_vozdyhan" class="app-card fade-in">
-                <div class="app-card-header">
-                    <div class="app-icon">
-                        <img src="/assets/images/apps/vozdyhan.png" alt="VOZDYHAN" loading="lazy">
+                <a href="/download_minepack" class="app-card fade-in" data-status="active">
+                    <div class="app-card-status-badge status-badge-active" title="Активная разработка">●</div>
+                    <div class="app-card-header">
+                        <div class="app-icon">
+                            <img src="/assets/images/apps/minepack.png" alt="MinePack" loading="lazy">
+                        </div>
+                        <div class="app-info">
+                            <div class="app-name">MinePack</div>
+                            <div class="app-version">v1.2 • Windows</div>
+                        </div>
                     </div>
-                    <div class="app-info">
-                        <div class="app-name">VOZDYHAN</div>
-                        <div class="app-version">v1.0 • Windows</div>
+                    <div class="app-desc">Программа для создания ресурспаков Майнкрафт</div>
+                    <div class="app-card-footer">
+                        <div class="app-tags">
+                            <span class="app-tag">minecraft</span>
+                            <span class="app-tag">бесплатно</span>
+                        </div>
+                        <span class="app-size">47 MB</span>
+                        <span class="app-arrow">→</span>
                     </div>
-                </div>
-                <div class="app-desc">Шуточная программа для призыва Воздухана</div>
-                <div class="app-card-footer">
-                    <div class="app-tags">
-                        <span class="app-tag">мем</span>
-                        <span class="app-tag">бесплатно</span>
-                    </div>
-                    <span class="app-size">64 MB</span>
-                    <span class="app-arrow">→</span>
-                </div>
-            </a>
+                </a>
 
+            </div>
         </div>
+
+        <!-- ===== ЗАВЕРШЁННЫЕ ===== -->
+        <div class="apps-category" data-category="archived">
+            <div class="apps-category-header fade-in">
+                <div class="apps-category-line"></div>
+                <div class="apps-category-title-block">
+                    <span class="apps-category-status status-archived"></span>
+                    <span class="apps-category-label">// ARCHIVED</span>
+                    <h2 class="apps-category-title">Завершённые проекты</h2>
+                </div>
+                <p class="apps-category-desc">Разработка завершена — приложение получило финальный вид и стабильно работает</p>
+            </div>
+
+            <div class="apps-grid">
+
+                <a href="/download_scream" class="app-card fade-in" data-status="archived">
+                    <div class="app-card-status-badge status-badge-archived" title="Завершённый проект">✓</div>
+                    <div class="app-card-header">
+                        <div class="app-icon">
+                            <img src="/assets/images/apps/scream.png" alt="Scream" loading="lazy">
+                        </div>
+                        <div class="app-info">
+                            <div class="app-name">Scream</div>
+                            <div class="app-version">v1.3 • Windows</div>
+                        </div>
+                    </div>
+                    <div class="app-desc">Программа digital signage</div>
+                    <div class="app-card-footer">
+                        <div class="app-tags">
+                            <span class="app-tag">утилита</span>
+                            <span class="app-tag">бесплатно</span>
+                        </div>
+                        <span class="app-size">71 MB</span>
+                        <span class="app-arrow">→</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- ===== УСТАРЕВШИЕ ===== -->
+        <div class="apps-category" data-category="legacy">
+            <div class="apps-category-header fade-in">
+                <div class="apps-category-line"></div>
+                <div class="apps-category-title-block">
+                    <span class="apps-category-status status-legacy"></span>
+                    <span class="apps-category-label">// LEGACY</span>
+                    <h2 class="apps-category-title">Устаревшие версии</h2>
+                </div>
+                <p class="apps-category-desc">Приложение работает, но обновления не планируются в ближайшее время</p>
+            </div>
+
+            <div class="apps-grid">
+
+                <a href="/download_vozdyhan" class="app-card fade-in" data-status="legacy">
+                    <div class="app-card-status-badge status-badge-legacy" title="Устаревшее приложение">◔</div>
+                    <div class="app-card-header">
+                        <div class="app-icon">
+                            <img src="/assets/images/apps/vozdyhan.png" alt="VOZDYHAN" loading="lazy">
+                        </div>
+                        <div class="app-info">
+                            <div class="app-name">VOZDYHAN</div>
+                            <div class="app-version">v1.0 • Windows</div>
+                        </div>
+                    </div>
+                    <div class="app-desc">Шуточная программа для призыва Воздухана</div>
+                    <div class="app-card-footer">
+                        <div class="app-tags">
+                            <span class="app-tag">мем</span>
+                            <span class="app-tag">бесплатно</span>
+                        </div>
+                        <span class="app-size">64 MB</span>
+                        <span class="app-arrow">→</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
         <div id="noResults" class="no-results" style="display:none;">
             <div class="no-results-icon">∅</div>
             <div class="no-results-text">// Ничего не найдено</div>
-            <div class="no-results-hint">Попробуйте другой запрос</div>
+            <div class="no-results-hint">Попробуйте другой запрос или категорию</div>
         </div>
     </section>
 
