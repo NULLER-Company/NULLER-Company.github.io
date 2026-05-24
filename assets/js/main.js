@@ -1,9 +1,9 @@
 // ===== CONSTANTS =====
-var NAMESPACE = 'nuller-company-2024';
+var NAMESPACE = 'nuller-company-2026';
 var API_BASE = 'https://api.counterapi.dev/v1';
 // ⚠️ ЗАМЕНИ на свой реальный Formspree ID!
-var FORMSPREE_JOIN_ID = 'YOUR_FORM_ID';
-var FORMSPREE_WISH_ID = 'YOUR_WISH_FORM_ID';
+var FORMSPREE_JOIN_ID = 'mjgzkpgj';
+var FORMSPREE_WISH_ID = 'mvzybkzy';
 
 document.addEventListener('DOMContentLoaded', function () {
 
