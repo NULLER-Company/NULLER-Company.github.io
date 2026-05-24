@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
     <title>NULLER Company</title>
     <link rel="icon" type="image/png" sizes="32x32" href="assets/images/logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/logo.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/images/logo.png">
     <link rel="shortcut icon" href="assets/images/logo.png">
-    <meta name="theme-color" content="#051a05">
+    <meta name="theme-color" content="#030f03">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
 
@@ -35,7 +38,7 @@
     <meta name="twitter:image" content="https://nuller.ru/assets/images/preview.png">
 
     <link rel="canonical" href="https://nuller.ru/">
-        <!-- Schema.org — для AI и поисковиков -->
+
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -47,7 +50,7 @@
         "image": "https://nuller.ru/assets/images/preview.png",
         "description": "NULLER Company — частная незарегистрированная компания, занимающаяся разработкой игр и приложений. Основана 26 апреля 2026 года.",
         "foundingDate": "2026-04-26",
-        "email": "nullercompany@gmail.ru",
+        "email": "nullercompany@gmail.com",
         "sameAs": [
             "https://t.me/+1vhGt7PhYGo1OThi"
         ],
@@ -111,8 +114,8 @@
         <ul class="nav-links">
             <li><a href="/" class="active">Главная</a></li>
             <li><a href="/apps">Приложения</a></li>
-            <li><a href="#about">О нас</a></li>
-            <li><a href="#team">Команда</a></li>
+            <li><a href="/#about">О нас</a></li>
+            <li><a href="/#team">Команда</a></li>
             <li><a href="/join" class="nav-join">Стать разработчиком</a></li>
             <li><a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="nav-cta">Telegram →</a></li>
         </ul>
@@ -144,11 +147,59 @@
         </div>
     </section>
 
+    <!-- Anniversary Banner -->
+    <section class="anniversary-section fade-in" id="anniversary">
+        <div class="anniversary-banner">
+            <div class="anniversary-glow"></div>
+            <div class="anniversary-content">
+                <div class="anniversary-badge">
+                    <span class="anniversary-badge-icon">🎉</span>
+                    <span>ПРАЗДНИК</span>
+                </div>
+                <h2 class="anniversary-title">NULLER Company — <span>1 месяц!</span></h2>
+                <p class="anniversary-text">26 мая 2026 года нашей компании исполняется ровно месяц! Спасибо, что вы с нами. Мы только начинаем, и впереди ещё много крутых проектов!</p>
+                <div class="anniversary-date">
+                    <div class="anniversary-date-icon">📅</div>
+                    <span>26.05.2026</span>
+                </div>
+            </div>
+            <div class="anniversary-particles">
+                <span class="a-particle">✦</span>
+                <span class="a-particle">✧</span>
+                <span class="a-particle">✦</span>
+                <span class="a-particle">✧</span>
+                <span class="a-particle">✦</span>
+                <span class="a-particle">✧</span>
+            </div>
+        </div>
+
+        <!-- Wish Form -->
+        <div class="wish-form-container fade-in">
+            <div class="wish-header">
+                <h3 class="wish-title">Что вы ждёте от NULLER?</h3>
+                <p class="wish-desc">Напишите своё пожелание или расскажите, чего вы ждёте от нашей компании</p>
+            </div>
+            <form class="wish-form" id="wishForm">
+                <div class="wish-input-group">
+                    <input type="text" name="name" class="form-input wish-name-input" placeholder="Ваше имя (необязательно)" maxlength="50">
+                    <textarea name="wish" class="form-input wish-textarea" placeholder="Ваше пожелание или предложение..." required maxlength="500" rows="3"></textarea>
+                    <input type="hidden" name="_subject" value="Пожелание от пользователя NULLER">
+                    <input type="hidden" name="_template" value="box">
+                </div>
+                <button type="submit" class="btn-primary wish-submit" id="wishSubmit">
+                    <span class="wish-submit-text">Отправить пожелание</span>
+                    <span class="wish-submit-icon">→</span>
+                </button>
+                <div class="form-status" id="wishStatus"></div>
+            </form>
+        </div>
+    </section>
+
     <!-- Stats -->
     <div class="stats-bar fade-in">
         <div class="stats-container">
             <div class="stat-item">
-                <div class="stat-number" data-target="3" data-static="true">0</div>
+                <div class="stat-number" data-target="4" data-static="true">0</div>
                 <div class="stat-label">Проектов</div>
             </div>
             <div class="stat-item">
@@ -174,12 +225,12 @@
             <h2 class="section-title">НОВОСТИ NULLER</h2>
             <p class="section-desc">Новости NULLER обновляются от 1 дня до недели</p>
         </div>
-    
+
         <div class="news-carousel fade-in">
             <button class="news-arrow news-arrow-left" id="newsLeft" aria-label="Назад">‹</button>
             <div class="news-track-wrapper">
                 <div class="news-track" id="newsTrack">
-    
+
                     <div class="news-card" data-news="0">
                         <div class="news-card-inner">
                             <div class="news-card-image">
@@ -189,7 +240,7 @@
                             <p class="news-card-preview">Компании срочно требуются разработчики!</p>
                         </div>
                     </div>
-    
+
                     <div class="news-card" data-news="1">
                         <div class="news-card-inner">
                             <div class="news-card-image">
@@ -199,8 +250,8 @@
                             <p class="news-card-preview">Движок GECKO будет работать и в браузере, и на ПК. Скоро релиз!</p>
                         </div>
                     </div>
-    
-                    <div class="news-card" data-news="5">
+
+                    <div class="news-card" data-news="2">
                         <div class="news-card-inner">
                             <div class="news-card-image">
                                 <img src="assets/images/news/news-safety.png" alt="Безопасность" loading="lazy">
@@ -209,7 +260,7 @@
                             <p class="news-card-preview">Мы публикуем на сайте только безопасные программы.</p>
                         </div>
                     </div>
-    
+
                 </div>
             </div>
             <button class="news-arrow news-arrow-right" id="newsRight" aria-label="Вперёд">›</button>
@@ -344,14 +395,20 @@
                     <div class="footer-brand-text">NULLER</div>
                 </div>
                 <div class="footer-contact">
-                    <a href="mailto:nullercompany@gmail.ru" class="footer-email">nullercompany@gmail.ru</a>
+                    <a href="mailto:nullercompany@gmail.com" class="footer-email">nullercompany@gmail.com</a>
                     <span class="footer-slogan">Разработка игр и приложений</span>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
             <div class="footer-bottom-content">
-                <span class="footer-copy">© 2026 NULLER Company. Все права защищены.</span>
+                <div class="footer-copy-row">
+                    <span class="footer-copy">© 2026 NULLER Company. Все права защищены.</span>
+                    <a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="footer-tg-badge">
+                        <span class="footer-tg-icon">✈</span>
+                        <span>Telegram</span>
+                    </a>
+                </div>
                 <div class="footer-links">
                     <a href="/">Главная</a>
                     <a href="/apps">Приложения</a>
