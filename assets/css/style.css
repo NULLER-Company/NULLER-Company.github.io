@@ -2062,3 +2062,280 @@ h1, h2, h3, h4, h5, h6 {
     .join-benefits-section { padding: 0 12px 20px; }
     .error-page { padding: 90px 12px 50px; }
 }
+
+/* ===== APPS FILTER TABS ===== */
+.apps-filter-tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 700px;
+    margin: 24px auto 0;
+    padding: 0 10px;
+}
+
+.apps-filter-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-transform: uppercase;
+}
+
+.apps-filter-tab:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-hover);
+    color: var(--yellow-primary);
+}
+
+.apps-filter-tab.active {
+    background: rgba(255, 235, 59, 0.10);
+    border-color: var(--yellow-primary);
+    color: var(--yellow-primary);
+    box-shadow: var(--glow-yellow);
+}
+
+.apps-filter-icon {
+    font-size: 14px;
+    line-height: 1;
+}
+
+.apps-filter-tab[data-filter="active"] .apps-filter-icon {
+    color: #00ff66;
+    animation: pulse 2s infinite;
+}
+
+.apps-filter-tab[data-filter="archived"] .apps-filter-icon {
+    color: #00aaff;
+}
+
+.apps-filter-tab[data-filter="legacy"] .apps-filter-icon {
+    color: #ff9933;
+}
+
+.apps-filter-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    background: rgba(0, 255, 0, 0.08);
+    border-radius: 11px;
+    font-size: 11px;
+    color: var(--green-secondary);
+    font-weight: 700;
+}
+
+.apps-filter-tab.active .apps-filter-count {
+    background: rgba(255, 235, 59, 0.20);
+    color: var(--yellow-primary);
+}
+
+/* ===== APPS CATEGORY ===== */
+.apps-category {
+    max-width: 1100px;
+    margin: 0 auto 60px;
+    padding: 0;
+}
+
+.apps-category:last-of-type {
+    margin-bottom: 0;
+}
+
+.apps-category-header {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.apps-category-line {
+    width: 40px;
+    height: 2px;
+    background: var(--border-hover);
+    margin: 0 auto 16px;
+    border-radius: 2px;
+}
+
+.apps-category-title-block {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.apps-category-status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.status-active {
+    background: #00ff66;
+    box-shadow: 0 0 12px #00ff66;
+    animation: pulse 2s infinite;
+}
+
+.status-archived {
+    background: #00aaff;
+    box-shadow: 0 0 12px #00aaff;
+}
+
+.status-legacy {
+    background: #ff9933;
+    box-shadow: 0 0 12px #ff9933;
+}
+
+.apps-category-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--green-secondary);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.apps-category-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(20px, 3vw, 26px);
+    font-weight: 800;
+    color: var(--yellow-primary);
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.apps-category-desc {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    max-width: 500px;
+    margin: 0 auto;
+    letter-spacing: 1px;
+    line-height: 1.5;
+}
+
+/* Скрытая категория */
+.apps-category.hidden {
+    display: none;
+}
+
+/* ===== APP CARD STATUS BADGE ===== */
+.app-card {
+    position: relative;
+}
+
+.app-card-status-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    z-index: 2;
+    transition: all var(--transition-base);
+}
+
+.status-badge-active {
+    background: rgba(0, 255, 102, 0.15);
+    color: #00ff66;
+    border: 1px solid rgba(0, 255, 102, 0.40);
+    box-shadow: 0 0 8px rgba(0, 255, 102, 0.30);
+}
+
+.status-badge-archived {
+    background: rgba(0, 170, 255, 0.15);
+    color: #00aaff;
+    border: 1px solid rgba(0, 170, 255, 0.40);
+    box-shadow: 0 0 8px rgba(0, 170, 255, 0.30);
+}
+
+.status-badge-legacy {
+    background: rgba(255, 153, 51, 0.15);
+    color: #ff9933;
+    border: 1px solid rgba(255, 153, 51, 0.40);
+    box-shadow: 0 0 8px rgba(255, 153, 51, 0.30);
+}
+
+/* Бейдж NEW (CROSSIX) теперь слева, чтобы не пересекался со статусом */
+.app-card-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: auto;
+}
+
+/* Карточки устаревших — слегка приглушены */
+.app-card[data-status="legacy"] {
+    opacity: 0.92;
+}
+
+.app-card[data-status="legacy"]:hover {
+    opacity: 1;
+}
+
+/* Карточки завершённых — с лёгким голубым оттенком */
+.app-card[data-status="archived"] {
+    border-color: rgba(0, 170, 255, 0.10);
+}
+
+.app-card[data-status="archived"]:hover {
+    border-color: rgba(0, 170, 255, 0.30);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    .apps-filter-tabs {
+        gap: 6px;
+        padding: 0 16px;
+    }
+    .apps-filter-tab {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+    .apps-filter-tab span:not(.apps-filter-icon):not(.apps-filter-count) {
+        font-size: 11px;
+    }
+    .apps-category {
+        margin-bottom: 40px;
+    }
+    .apps-category-title-block {
+        gap: 8px;
+    }
+    .app-card-status-badge {
+        top: 12px;
+        right: 12px;
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
+    }
+    .app-card-badge {
+        top: 12px;
+        left: 12px;
+    }
+}
+
+@media (max-width: 380px) {
+    .apps-filter-tab {
+        padding: 7px 10px;
+    }
+    .apps-filter-tab span:not(.apps-filter-icon):not(.apps-filter-count) {
+        display: none;
+    }
+}
