@@ -975,3 +975,132 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
+/* ===== MANGO CLICKER COUNTDOWN ===== */
+(function () {
+    'use strict';
+
+    // 28.05.2026 00:00:00 по Москве (UTC+3)
+    // В UTC это 27.05.2026 21:00:00
+    const RELEASE_UTC = Date.UTC(2026, 4, 27, 21, 0, 0, 0);
+
+    const elDays = document.getElementById('mangoDays');
+    const elHours = document.getElementById('mangoHours');
+    const elMinutes = document.getElementById('mangoMinutes');
+    const elSeconds = document.getElementById('mangoSeconds');
+    const elTimerSection = document.getElementById('mangoTimerSection');
+    const elReleased = document.getElementById('mangoReleased');
+    const elConfetti = document.getElementById('mangoConfetti');
+    const elBtn = document.getElementById('mangoBtn');
+
+    if (
+        !elDays || !elHours || !elMinutes || !elSeconds ||
+        !elTimerSection || !elReleased || !elConfetti
+    ) {
+        return;
+    }
+
+    let isReleased = false;
+
+    function pad(n) {
+        return String(n).padStart(2, '0');
+    }
+
+    function updateTimer() {
+        const now = Date.now();
+        const diff = RELEASE_UTC - now;
+
+        if (diff <= 0) {
+            showReleased();
+            return;
+        }
+
+        const totalSeconds = Math.floor(diff / 1000);
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        elDays.textContent = pad(days);
+        elHours.textContent = pad(hours);
+        elMinutes.textContent = pad(minutes);
+        elSeconds.textContent = pad(seconds);
+
+        setTimeout(updateTimer, 1000 - (Date.now() % 1000));
+    }
+
+    function showReleased() {
+        if (isReleased) return;
+        isReleased = true;
+
+        elTimerSection.style.display = 'none';
+        elReleased.style.display = 'block';
+
+        if (elBtn) {
+            elBtn.style.pointerEvents = 'auto';
+            elBtn.removeAttribute('data-locked');
+            elBtn.removeAttribute('aria-disabled');
+            elBtn.removeAttribute('tabindex');
+        }
+
+        spawnConfetti();
+    }
+
+    function spawnConfetti() {
+        const colors = ['#ff9500', '#ffb800', '#ff6a00', '#ffd700', '#ff4500', '#ffffff', '#ffe066', '#ff8c00'];
+        const shapes = ['circle', 'rect'];
+        const count = 80;
+
+        for (let i = 0; i < count; i++) {
+            const piece = document.createElement('div');
+            piece.className = 'mango-confetti-piece';
+
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+            const left = Math.random() * 100;
+            const size = Math.random() * 8 + 5;
+            const duration = Math.random() * 2 + 2;
+            const delay = Math.random() * 1.5;
+
+            piece.style.left = left + '%';
+            piece.style.width = size + 'px';
+            piece.style.height = size + 'px';
+            piece.style.backgroundColor = color;
+            piece.style.borderRadius = shape === 'circle' ? '50%' : '2px';
+            piece.style.animationDuration = duration + 's';
+            piece.style.animationDelay = delay + 's';
+
+            elConfetti.appendChild(piece);
+        }
+
+        setTimeout(function () {
+            elConfetti.innerHTML = '';
+        }, 5000);
+    }
+
+    if (elBtn) {
+        elBtn.setAttribute('data-locked', 'true');
+        elBtn.setAttribute('aria-disabled', 'true');
+        elBtn.setAttribute('tabindex', '-1');
+        elBtn.style.pointerEvents = 'none';
+
+        elBtn.addEventListener('click', function (e) {
+            if (!isReleased) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        });
+    }
+
+    setInterval(function () {
+        if (!isReleased) {
+            elReleased.style.display = 'none';
+            elTimerSection.style.display = '';
+            if (elBtn) {
+                elBtn.style.pointerEvents = 'none';
+            }
+        }
+    }, 2000);
+
+    updateTimer();
+})();
