@@ -1,97 +1,287 @@
 // ===== CONSTANTS =====
 var NAMESPACE = 'nuller-company-2026';
 var API_BASE = 'https://api.counterapi.dev/v1';
-// ⚠️ ЗАМЕНИ на свой реальный Formspree ID!
 var FORMSPREE_JOIN_ID = 'mjgzkpgj';
 var FORMSPREE_WISH_ID = 'mvzybkzy';
 
 document.addEventListener('DOMContentLoaded', function () {
 
     var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // ===== MATRIX RAIN =====
-    var canvas = document.getElementById('matrixCanvas');
-    if (canvas) {
-        var ctx = canvas.getContext('2d');
-        var chars = 'NULLER01アカサタナハマヤラワ{}[]<>/\\';
-        var fontSize = window.innerWidth < 600 ? 11 : 14;
-        var drops = [];
-        var matrixAnimId;
-        var lastMatrixTime = 0;
-        var matrixInterval = isTouch ? 80 : 50;
+    // ===== HEXAGON BACKGROUND =====
+    var hexCanvas = document.getElementById('hexBg');
+    if (hexCanvas) {
+        var ctx = hexCanvas.getContext('2d');
+        var hexSize = 40;
+        var hexGap = 4;
+        var cols, rows;
+        var hexGrid = [];
+        var pulses = [];
+        var hexAnimId;
+        var lastHexTime = 0;
+        var hexInterval = isTouch ? 50 : 30;
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            drops = Array(Math.ceil(canvas.width / fontSize)).fill(1);
+        // Hex geometry
+        var hexW = hexSize * 2;
+        var hexH = Math.sqrt(3) * hexSize;
+
+        function resizeHexCanvas() {
+            hexCanvas.width = window.innerWidth;
+            hexCanvas.height = window.innerHeight;
+            cols = Math.ceil(hexCanvas.width / (hexW * 0.75)) + 2;
+            rows = Math.ceil(hexCanvas.height / hexH) + 2;
+            buildHexGrid();
         }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
 
-        function drawMatrix(timestamp) {
-            if (timestamp - lastMatrixTime >= matrixInterval) {
-                lastMatrixTime = timestamp;
-                ctx.fillStyle = 'rgba(3, 15, 3, 0.06)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#00ff00';
-                ctx.font = fontSize + 'px "Share Tech Mono", monospace';
-                for (var i = 0; i < drops.length; i++) {
-                    var text = chars[Math.floor(Math.random() * chars.length)];
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                    drops[i]++;
+        function buildHexGrid() {
+            hexGrid = [];
+            for (var r = -1; r < rows; r++) {
+                for (var c = -1; c < cols; c++) {
+                    var x = c * (hexW * 0.75 + hexGap);
+                    var y = r * (hexH + hexGap);
+                    if (c % 2 === 1) y += (hexH + hexGap) / 2;
+
+                    hexGrid.push({
+                        x: x,
+                        y: y,
+                        brightness: 0,
+                        targetBrightness: 0,
+                        pulsePhase: Math.random() * Math.PI * 2,
+                        edgeProgress: -1, // -1 means no edge animation
+                        edgeSpeed: 0
+                    });
                 }
             }
-            matrixAnimId = requestAnimationFrame(drawMatrix);
         }
+
+        function drawHexagon(cx, cy, size) {
+            ctx.beginPath();
+            for (var i = 0; i < 6; i++) {
+                var angle = (Math.PI / 3) * i - Math.PI / 6;
+                var px = cx + size * Math.cos(angle);
+                var py = cy + size * Math.sin(angle);
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+        }
+
+        function getHexEdgePoint(cx, cy, size, progress) {
+            // progress 0..6 maps to edges of hexagon
+            var edgeIndex = Math.floor(progress) % 6;
+            var t = progress - Math.floor(progress);
+            var a1 = (Math.PI / 3) * edgeIndex - Math.PI / 6;
+            var a2 = (Math.PI / 3) * ((edgeIndex + 1) % 6) - Math.PI / 6;
+            return {
+                x: cx + size * (Math.cos(a1) * (1 - t) + Math.cos(a2) * t),
+                y: cy + size * (Math.sin(a1) * (1 - t) + Math.sin(a2) * t)
+            };
+        }
+
+        // Spawn pulses periodically
+        function spawnPulse() {
+            if (hexGrid.length === 0) return;
+            var idx = Math.floor(Math.random() * hexGrid.length);
+            var hex = hexGrid[idx];
+            hex.targetBrightness = 0.4 + Math.random() * 0.4;
+            hex.edgeProgress = 0;
+            hex.edgeSpeed = 0.03 + Math.random() * 0.04;
+
+            // Radial pulse wave
+            pulses.push({
+                cx: hex.x,
+                cy: hex.y,
+                radius: 0,
+                maxRadius: 150 + Math.random() * 200,
+                speed: 1.5 + Math.random() * 2,
+                strength: 0.2 + Math.random() * 0.3,
+                alive: true
+            });
+        }
+
+        var spawnTimer = 0;
+
+        function drawHexBackground(timestamp) {
+            if (prefersReducedMotion) {
+                // Static hexagons
+                ctx.clearRect(0, 0, hexCanvas.width, hexCanvas.height);
+                for (var i = 0; i < hexGrid.length; i++) {
+                    var h = hexGrid[i];
+                    drawHexagon(h.x, h.y, hexSize - 1);
+                    ctx.strokeStyle = 'rgba(0, 240, 255, 0.06)';
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+                return;
+            }
+
+            if (timestamp - lastHexTime < hexInterval) {
+                hexAnimId = requestAnimationFrame(drawHexBackground);
+                return;
+            }
+            lastHexTime = timestamp;
+
+            ctx.clearRect(0, 0, hexCanvas.width, hexCanvas.height);
+
+            var time = timestamp * 0.001;
+
+            // Spawn pulses
+            spawnTimer++;
+            if (spawnTimer > (isTouch ? 80 : 40)) {
+                spawnPulse();
+                spawnTimer = 0;
+            }
+
+            // Update pulses
+            for (var p = pulses.length - 1; p >= 0; p--) {
+                var pulse = pulses[p];
+                pulse.radius += pulse.speed;
+                if (pulse.radius > pulse.maxRadius) {
+                    pulses.splice(p, 1);
+                }
+            }
+
+            // Draw hexagons
+            for (var i = 0; i < hexGrid.length; i++) {
+                var h = hexGrid[i];
+
+                // Check pulse influence
+                for (var p = 0; p < pulses.length; p++) {
+                    var pulse = pulses[p];
+                    var dx = h.x - pulse.cx;
+                    var dy = h.y - pulse.cy;
+                    var dist = Math.sqrt(dx * dx + dy * dy);
+                    var ringDist = Math.abs(dist - pulse.radius);
+
+                    if (ringDist < 30) {
+                        var influence = (1 - ringDist / 30) * pulse.strength;
+                        h.targetBrightness = Math.max(h.targetBrightness, influence);
+                        if (h.edgeProgress < 0 && influence > 0.15) {
+                            h.edgeProgress = 0;
+                            h.edgeSpeed = 0.04 + Math.random() * 0.03;
+                        }
+                    }
+                }
+
+                // Smooth brightness
+                h.brightness += (h.targetBrightness - h.brightness) * 0.08;
+                h.targetBrightness *= 0.97;
+
+                if (h.brightness < 0.005) h.brightness = 0;
+
+                // Base subtle animation
+                var basePulse = Math.sin(time * 0.5 + h.pulsePhase) * 0.5 + 0.5;
+                var baseAlpha = 0.02 + basePulse * 0.015;
+
+                // Draw hex fill
+                drawHexagon(h.x, h.y, hexSize - 1);
+                if (h.brightness > 0.01) {
+                    var fillAlpha = h.brightness * 0.08;
+                    ctx.fillStyle = 'rgba(0, 240, 255, ' + fillAlpha + ')';
+                    ctx.fill();
+                }
+
+                // Draw hex border
+                drawHexagon(h.x, h.y, hexSize - 1);
+                var borderAlpha = baseAlpha + h.brightness * 0.3;
+                ctx.strokeStyle = 'rgba(0, 240, 255, ' + borderAlpha.toFixed(3) + ')';
+                ctx.lineWidth = 0.5 + h.brightness;
+                ctx.stroke();
+
+                // Edge running light
+                if (h.edgeProgress >= 0) {
+                    h.edgeProgress += h.edgeSpeed;
+
+                    if (h.edgeProgress < 6) {
+                        // Draw glowing dot running along edge
+                        var trailLength = 1.2;
+                        var steps = 8;
+                        for (var s = 0; s < steps; s++) {
+                            var prog = h.edgeProgress - (s * trailLength / steps);
+                            if (prog < 0) continue;
+                            var pt = getHexEdgePoint(h.x, h.y, hexSize - 1, prog % 6);
+                            var alpha = (1 - s / steps) * (0.5 + h.brightness * 0.5);
+
+                            // Cyan glow
+                            ctx.beginPath();
+                            ctx.arc(pt.x, pt.y, 2.5 - s * 0.2, 0, Math.PI * 2);
+                            ctx.fillStyle = 'rgba(0, 240, 255, ' + (alpha * 0.8).toFixed(3) + ')';
+                            ctx.fill();
+
+                            // Bigger soft glow on first point
+                            if (s === 0) {
+                                ctx.beginPath();
+                                ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
+                                ctx.fillStyle = 'rgba(0, 240, 255, ' + (alpha * 0.15).toFixed(3) + ')';
+                                ctx.fill();
+                            }
+                        }
+                    } else {
+                        h.edgeProgress = -1;
+                    }
+                }
+            }
+
+            hexAnimId = requestAnimationFrame(drawHexBackground);
+        }
+
+        resizeHexCanvas();
+        window.addEventListener('resize', function () {
+            resizeHexCanvas();
+        });
 
         document.addEventListener('visibilitychange', function () {
-            if (document.hidden) cancelAnimationFrame(matrixAnimId);
-            else matrixAnimId = requestAnimationFrame(drawMatrix);
+            if (document.hidden) cancelAnimationFrame(hexAnimId);
+            else hexAnimId = requestAnimationFrame(drawHexBackground);
         });
-        matrixAnimId = requestAnimationFrame(drawMatrix);
+
+        hexAnimId = requestAnimationFrame(drawHexBackground);
+
+        // Mouse interaction — spawn pulse near cursor
+        if (!isTouch) {
+            document.addEventListener('mousemove', function (e) {
+                for (var i = 0; i < hexGrid.length; i++) {
+                    var h = hexGrid[i];
+                    var dx = h.x - e.clientX;
+                    var dy = h.y - e.clientY;
+                    var dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 100) {
+                        var influence = (1 - dist / 100) * 0.3;
+                        h.targetBrightness = Math.max(h.targetBrightness, influence);
+                        if (dist < 50 && h.edgeProgress < 0 && Math.random() > 0.92) {
+                            h.edgeProgress = 0;
+                            h.edgeSpeed = 0.05 + Math.random() * 0.03;
+                        }
+                    }
+                }
+            });
+        }
     }
 
-    // ===== PARTICLES =====
-    var particlesEl = document.getElementById('particles');
-    if (particlesEl) {
-        var count = isTouch ? 12 : 25;
-        for (var i = 0; i < count; i++) {
+    // ===== AMBIENT PARTICLES =====
+    var ambientEl = document.getElementById('ambientParticles');
+    if (ambientEl && !prefersReducedMotion) {
+        var pCount = isTouch ? 10 : 20;
+        var colors = [
+            'rgba(0, 240, 255, 0.4)',
+            'rgba(168, 85, 247, 0.3)',
+            'rgba(14, 165, 233, 0.3)',
+            'rgba(0, 240, 255, 0.2)'
+        ];
+        for (var i = 0; i < pCount; i++) {
             var p = document.createElement('div');
-            p.className = 'particle';
+            p.className = 'ambient-particle';
             p.style.left = Math.random() * 100 + '%';
-            p.style.animationDelay = (Math.random() * 8) + 's';
-            p.style.animationDuration = (6 + Math.random() * 6) + 's';
-            var size = (1 + Math.random() * 2) + 'px';
-            p.style.width = size; p.style.height = size;
-            particlesEl.appendChild(p);
+            p.style.animationDelay = (Math.random() * 10) + 's';
+            p.style.animationDuration = (8 + Math.random() * 8) + 's';
+            var size = (1 + Math.random() * 3) + 'px';
+            p.style.width = size;
+            p.style.height = size;
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            p.style.boxShadow = '0 0 6px ' + colors[Math.floor(Math.random() * colors.length)];
+            ambientEl.appendChild(p);
         }
-    }
-
-    // ===== CURSOR GLOW =====
-    if (!isTouch) {
-        var cursorGlow = document.querySelector('.cursor-glow');
-        if (!cursorGlow) {
-            cursorGlow = document.createElement('div');
-            cursorGlow.className = 'cursor-glow';
-            document.body.appendChild(cursorGlow);
-        }
-        var mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-        var glowX = mouseX, glowY = mouseY, glowVis = false;
-
-        document.addEventListener('mousemove', function (e) {
-            mouseX = e.clientX; mouseY = e.clientY;
-            if (!glowVis) { cursorGlow.classList.add('active'); glowVis = true; }
-        });
-        document.addEventListener('mouseleave', function () { cursorGlow.classList.remove('active'); glowVis = false; });
-        document.addEventListener('mouseenter', function () { cursorGlow.classList.add('active'); glowVis = true; });
-
-        (function animGlow() {
-            glowX += (mouseX - glowX) * 0.18;
-            glowY += (mouseY - glowY) * 0.18;
-            cursorGlow.style.transform = 'translate3d(' + glowX + 'px,' + glowY + 'px,0) translate(-50%,-50%)';
-            requestAnimationFrame(animGlow);
-        })();
     }
 
     // ===== NAVBAR =====
@@ -126,19 +316,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ===== TYPING EFFECT =====
     var typingEl = document.getElementById('typingText');
-    if (typingEl) {
+    if (typingEl && !prefersReducedMotion) {
         var phrases = [
             'Инициализация системы...',
-            'Загрузка...',
-            'Соединение с сервером...',
-            'Вход разрешён!',
-            'Добро пожаловать!'
+            'Hexagon Event активирован...',
+            'Загрузка модулей...',
+            'Соединение установлено.',
+            'Добро пожаловать в NULLER!'
         ];
         var pIdx = 0, cIdx = 0, isDel = false;
 
         function typeEffect() {
             var current = phrases[pIdx];
-
             if (!isDel) {
                 cIdx++;
                 var html = '';
@@ -151,7 +340,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
                 typingEl.innerHTML = html;
-
                 if (cIdx >= current.length) {
                     setTimeout(function () { isDel = true; typeEffect(); }, 2000);
                     return;
@@ -165,7 +353,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     html2 += '<span style="display:inline-block">' + ch2 + '</span>';
                 }
                 typingEl.innerHTML = html2;
-
                 if (cIdx <= 0) {
                     isDel = false;
                     pIdx = (pIdx + 1) % phrases.length;
@@ -176,6 +363,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
         setTimeout(typeEffect, 800);
+    } else if (typingEl) {
+        typingEl.textContent = 'Добро пожаловать в NULLER!';
     }
 
     // ===== FADE IN =====
@@ -206,179 +395,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }, { threshold: 0.5 });
         statics.forEach(function (c) { cObs.observe(c); });
-    }
-
-    // ===== COUNTER API =====
-    function counterReq(action, key) {
-        var url = action ? API_BASE + '/' + NAMESPACE + '/' + key + '/' + action
-                         : API_BASE + '/' + NAMESPACE + '/' + key;
-        return fetch(url).then(function (r) { return r.json(); })
-            .then(function (d) { return d.count || 0; })
-            .catch(function () { return null; });
-    }
-
-    function animNum(el, from, to) {
-        if (from === to) { el.textContent = to; return; }
-        var steps = 30, sv = (to - from) / steps, st = 1000 / steps, cur = from, s = 0;
-        var ti = setInterval(function () {
-            s++; cur += sv;
-            if (s >= steps) { el.textContent = to; clearInterval(ti); }
-            else el.textContent = Math.floor(cur);
-        }, st);
-    }
-
-    // ===== USERS PER MINUTE =====
-    var usersEl = document.getElementById('usersPerMinute');
-    if (usersEl) {
-        var lastSlot = null;
-
-        function getMinuteRandom() {
-            var minute = Math.floor(Date.now() / 60000);
-            return (minute * 9301 + 49297) % 5 + 1;
-        }
-
-        function updateUsers() {
-            var curMin = Math.floor(Date.now() / 60000);
-            var slot = curMin % 2;
-            var slotKey = 'users-slot-' + slot;
-
-            if (lastSlot !== slot) {
-                lastSlot = slot;
-                counterReq('up', slotKey);
-            }
-
-            counterReq('', slotKey).then(function (realCount) {
-                if (realCount === null) realCount = 0;
-                var bonus = getMinuteRandom();
-                var total = realCount + bonus;
-                animNum(usersEl, parseInt(usersEl.textContent) || 0, total);
-            });
-        }
-
-        updateUsers();
-        setInterval(updateUsers, 10000);
-    }
-
-    // ===== TOTAL DOWNLOADS =====
-    var dlEl = document.getElementById('totalDownloads');
-    if (dlEl) {
-        function updateDL() {
-            counterReq('', 'total-downloads').then(function (c) {
-                if (c !== null) animNum(dlEl, parseInt(dlEl.textContent) || 0, c);
-            });
-        }
-        updateDL();
-        setInterval(updateDL, 15000);
-    }
-
-    // ===== DOWNLOAD BUTTON =====
-    var dlBtn = document.getElementById('downloadBtn');
-    if (dlBtn) {
-        dlBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            if (this.dataset.loading === 'true') return;
-
-            var url = this.getAttribute('href');
-            var app = this.getAttribute('data-app') || 'unknown';
-            var btn = this;
-
-            if (!url || url === '#' || url.indexOf('ВАШ_ID') !== -1) {
-                alert('Файл ещё не загружен. Попробуйте позже.');
-                return;
-            }
-
-            btn.dataset.loading = 'true';
-            var orig = btn.innerHTML;
-
-            // Открываем в новой вкладке — пользователь остаётся на сайте
-            window.open(url, '_blank');
-
-            // Счётчик
-            fetch(API_BASE + '/' + NAMESPACE + '/total-downloads/up').catch(function () {});
-            fetch(API_BASE + '/' + NAMESPACE + '/download-' + app + '/up').catch(function () {});
-
-            btn.innerHTML = '✓ Скачивание начато!';
-            btn.style.background = '#009900';
-            btn.style.color = '#fff';
-
-            setTimeout(function () {
-                btn.innerHTML = orig;
-                btn.style.background = '';
-                btn.style.color = '';
-                delete btn.dataset.loading;
-            }, 4000);
-        });
-    }
-
-    // ===== APP SEARCH + FILTERS =====
-    var searchInput = document.getElementById('searchInput');
-    var filterTabs = document.querySelectorAll('.apps-filter-tab');
-    
-    if (searchInput || filterTabs.length) {
-        var noRes = document.getElementById('noResults');
-        var sTimer;
-        var currentFilter = 'all';
-    
-        function applyFilters() {
-            var q = searchInput ? searchInput.value.toLowerCase().trim() : '';
-            var vis = 0;
-            var visibleByCategory = { active: 0, archived: 0, legacy: 0 };
-    
-            document.querySelectorAll('.app-card').forEach(function (card) {
-                var status = card.getAttribute('data-status') || 'active';
-                var n = (card.querySelector('.app-name') || {}).textContent || '';
-                var d = (card.querySelector('.app-desc') || {}).textContent || '';
-                var tags = '';
-                card.querySelectorAll('.app-tag').forEach(function (t) { tags += ' ' + t.textContent; });
-    
-                var matchSearch = q === '' ||
-                    n.toLowerCase().includes(q) ||
-                    d.toLowerCase().includes(q) ||
-                    tags.toLowerCase().includes(q);
-    
-                var matchFilter = currentFilter === 'all' || status === currentFilter;
-    
-                var show = matchSearch && matchFilter;
-                card.style.display = show ? '' : 'none';
-    
-                if (show) {
-                    vis++;
-                    if (visibleByCategory[status] !== undefined) visibleByCategory[status]++;
-                }
-            });
-    
-            // Скрываем пустые категории
-            document.querySelectorAll('.apps-category').forEach(function (cat) {
-                var cName = cat.getAttribute('data-category');
-                var hasVisible = visibleByCategory[cName] > 0;
-    
-                if (currentFilter === 'all') {
-                    cat.classList.toggle('hidden', !hasVisible);
-                } else {
-                    cat.classList.toggle('hidden', cName !== currentFilter || !hasVisible);
-                }
-            });
-    
-            if (noRes) noRes.style.display = vis === 0 ? 'block' : 'none';
-        }
-    
-        // Поиск
-        if (searchInput) {
-            searchInput.addEventListener('input', function () {
-                clearTimeout(sTimer);
-                sTimer = setTimeout(applyFilters, 200);
-            });
-        }
-    
-        // Фильтры
-        filterTabs.forEach(function (tab) {
-            tab.addEventListener('click', function () {
-                filterTabs.forEach(function (t) { t.classList.remove('active'); });
-                tab.classList.add('active');
-                currentFilter = tab.getAttribute('data-filter');
-                applyFilters();
-            });
-        });
     }
 
     // ===== UNIVERSAL IMAGE MODAL =====
@@ -431,13 +447,6 @@ document.addEventListener('DOMContentLoaded', function () {
     imgModal.addEventListener('click', closeImageModal);
     imgModalImg.addEventListener('click', function (e) { e.stopPropagation(); });
 
-    var imgTouchX = 0;
-    imgModal.addEventListener('touchstart', function (e) { imgTouchX = e.touches[0].clientX; }, { passive: true });
-    imgModal.addEventListener('touchend', function (e) {
-        var diff = imgTouchX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) { imgModalIdx += diff > 0 ? 1 : -1; showImageModal(); }
-    });
-
     document.addEventListener('keydown', function (e) {
         if (!imgModal.classList.contains('open')) return;
         if (e.key === 'ArrowRight') { imgModalIdx++; showImageModal(); }
@@ -445,26 +454,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.key === 'Escape') closeImageModal();
     });
 
-    // Screenshots
-    var screenshots = document.querySelectorAll('.screenshot');
-    if (screenshots.length) {
-        var ssSources = [];
-        screenshots.forEach(function (s) { ssSources.push(s.getAttribute('href')); });
-        screenshots.forEach(function (s, idx) {
-            s.addEventListener('click', function (e) {
-                e.preventDefault();
-                openImageModal(ssSources, idx);
-            });
-        });
-    }
-
     // ===== NEWS CAROUSEL =====
     var newsTrack = document.getElementById('newsTrack');
     var newsDots = document.getElementById('newsDots');
     var newsLeft = document.getElementById('newsLeft');
     var newsRight = document.getElementById('newsRight');
 
-    // These need to be accessible for autoplay
     var slideToDirection = null;
     var isAnimating = false;
 
@@ -490,7 +485,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     var cloneEnd = originalCards[i].cloneNode(true);
                     cloneEnd.setAttribute('data-clone', 'end');
                     cloneEnd.setAttribute('aria-hidden', 'true');
-                    cloneEnd.removeAttribute('id');
                     newsTrack.appendChild(cloneEnd);
                 }
 
@@ -498,7 +492,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     var cloneStart = originalCards[j].cloneNode(true);
                     cloneStart.setAttribute('data-clone', 'start');
                     cloneStart.setAttribute('aria-hidden', 'true');
-                    cloneStart.removeAttribute('id');
                     newsTrack.insertBefore(cloneStart, newsTrack.firstChild);
                 }
 
@@ -508,7 +501,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (slide.getAttribute('data-clone')) {
                         slide.addEventListener('click', function () {
                             var newsIdx = parseInt(slide.getAttribute('data-news'));
-                            // Find matching original card
                             for (var k = 0; k < originalCards.length; k++) {
                                 if (parseInt(originalCards[k].getAttribute('data-news')) === newsIdx) {
                                     originalCards[k].click();
@@ -536,13 +528,11 @@ document.addEventListener('DOMContentLoaded', function () {
             function jumpToSlide(realIndex, animate) {
                 var targetPos = clonesCount + realIndex;
                 var w = getCardWidth();
-
                 if (animate) {
                     newsTrack.style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                 } else {
                     newsTrack.style.transition = 'none';
                 }
-
                 newsTrack.style.transform = 'translateX(-' + (targetPos * w) + 'px)';
                 slideIndex = realIndex;
                 updateDots();
@@ -551,7 +541,6 @@ document.addEventListener('DOMContentLoaded', function () {
             slideToDirection = function (dir) {
                 if (isAnimating) return;
                 isAnimating = true;
-
                 var w = getCardWidth();
                 var currentPos = clonesCount + slideIndex;
                 var nextPos = currentPos + dir;
@@ -592,11 +581,9 @@ document.addEventListener('DOMContentLoaded', function () {
                             isAnimating = true;
                             var w = getCardWidth();
                             var targetPos = clonesCount + idx;
-
                             newsTrack.style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                             newsTrack.style.transform = 'translateX(-' + (targetPos * w) + 'px)';
                             slideIndex = idx;
-
                             setTimeout(function () {
                                 updateDots();
                                 isAnimating = false;
@@ -613,8 +600,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 slideIndex = 0;
                 jumpToSlide(0, false);
                 createDots();
-                if (newsLeft) newsLeft.disabled = false;
-                if (newsRight) newsRight.disabled = false;
             }
 
             if (newsLeft) newsLeft.addEventListener('click', function () { if (slideToDirection) slideToDirection(-1); });
@@ -622,28 +607,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Touch swipe
             var touchStartX = 0;
-            var touchStartTime = 0;
-
             newsTrack.addEventListener('touchstart', function (e) {
                 if (isAnimating) return;
                 touchStartX = e.touches[0].clientX;
-                touchStartTime = Date.now();
             }, { passive: true });
 
             newsTrack.addEventListener('touchend', function (e) {
                 if (isAnimating) return;
                 var diff = touchStartX - e.changedTouches[0].clientX;
-                var elapsed = Date.now() - touchStartTime;
-
-                if (Math.abs(diff) > 40 || (Math.abs(diff) > 20 && elapsed < 300)) {
+                if (Math.abs(diff) > 40) {
                     if (slideToDirection) slideToDirection(diff > 0 ? 1 : -1);
                 }
             });
 
             // Mouse drag
-            var mouseStartX = 0;
-            var mouseDragging = false;
-
+            var mouseStartX = 0, mouseDragging = false;
             newsTrack.addEventListener('mousedown', function (e) {
                 if (isAnimating) return;
                 mouseStartX = e.clientX;
@@ -652,23 +630,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.preventDefault();
             });
 
-            document.addEventListener('mousemove', function (e) {
-                if (mouseDragging) e.preventDefault();
-            });
-
             document.addEventListener('mouseup', function (e) {
                 if (!mouseDragging) return;
                 mouseDragging = false;
                 newsTrack.classList.remove('grabbing');
                 if (isAnimating) return;
-
                 var diff = mouseStartX - e.clientX;
                 if (Math.abs(diff) > 40) {
                     if (slideToDirection) slideToDirection(diff > 0 ? 1 : -1);
                 }
             });
 
-            // Resize
             var resizeTimer;
             window.addEventListener('resize', function () {
                 clearTimeout(resizeTimer);
@@ -680,7 +652,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             initCarousel();
 
-            // ===== AUTOPLAY =====
+            // Autoplay
             var autoplayTimer = null;
             var autoplayDelay = 10000;
             var isHovered = false;
@@ -695,20 +667,14 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             function stopAutoplay() {
-                if (autoplayTimer) {
-                    clearInterval(autoplayTimer);
-                    autoplayTimer = null;
-                }
+                if (autoplayTimer) clearInterval(autoplayTimer);
+                autoplayTimer = null;
             }
 
             var carouselEl = newsTrack.closest('.news-carousel');
             if (carouselEl) {
                 carouselEl.addEventListener('mouseenter', function () { isHovered = true; });
                 carouselEl.addEventListener('mouseleave', function () { isHovered = false; });
-                carouselEl.addEventListener('touchstart', function () { isHovered = true; }, { passive: true });
-                carouselEl.addEventListener('touchend', function () {
-                    setTimeout(function () { isHovered = false; }, 3000);
-                });
             }
 
             document.addEventListener('visibilitychange', function () {
@@ -745,7 +711,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             });
 
-            function closeNM() { newsModal.classList.remove('open'); document.body.style.overflow = ''; }
+            function closeNM() {
+                newsModal.classList.remove('open');
+                document.body.style.overflow = '';
+            }
             newsModal.querySelector('.news-modal-close').addEventListener('click', closeNM);
             newsModal.querySelector('.news-modal-overlay').addEventListener('click', closeNM);
             document.addEventListener('keydown', function (e) {
@@ -800,7 +769,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     mC.style.background = '';
                 } else {
                     mC.innerHTML = '';
-                    mC.style.background = 'linear-gradient(135deg, #020a02, #0a2a0a)';
+                    mC.style.background = 'linear-gradient(135deg, #0a1128, rgba(0,240,255,0.05))';
                 }
 
                 mG.innerHTML = '';
@@ -822,7 +791,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     data.socials.forEach(function (s) {
                         var a = document.createElement('a');
                         a.className = 'member-social-link';
-                        a.href = s.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+                        a.href = s.url;
+                        a.target = '_blank';
+                        a.rel = 'noopener noreferrer';
                         a.textContent = s.name;
                         mS.appendChild(a);
                     });
@@ -833,7 +804,10 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        function closeMM() { memberModal.classList.remove('open'); document.body.style.overflow = ''; }
+        function closeMM() {
+            memberModal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
         memberModal.querySelector('.member-modal-close').addEventListener('click', closeMM);
         memberModal.querySelector('.member-modal-overlay').addEventListener('click', closeMM);
         document.addEventListener('keydown', function (e) {
@@ -841,51 +815,108 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ===== WISH FORM =====
-    var wishForm = document.getElementById('wishForm');
-    if (wishForm) {
-        var wishStatus = document.getElementById('wishStatus');
-        var wishSubmit = document.getElementById('wishSubmit');
-
-        wishForm.addEventListener('submit', function (e) {
+    // ===== DOWNLOAD BUTTON (for other pages) =====
+    var dlBtn = document.getElementById('downloadBtn');
+    if (dlBtn) {
+        dlBtn.addEventListener('click', function (e) {
             e.preventDefault();
-            if (wishSubmit.dataset.loading === 'true') return;
-            wishSubmit.dataset.loading = 'true';
-            wishSubmit.querySelector('.wish-submit-text').textContent = 'Отправка...';
-            wishSubmit.style.opacity = '0.7';
+            if (this.dataset.loading === 'true') return;
+            var url = this.getAttribute('href');
+            var app = this.getAttribute('data-app') || 'unknown';
+            var btn = this;
 
-            var fd = {
-                name: (wishForm.querySelector('[name="name"]') || {}).value || 'Аноним',
-                wish: (wishForm.querySelector('[name="wish"]') || {}).value || '',
-                _subject: 'Пожелание от пользователя NULLER',
-                timestamp: new Date().toISOString()
-            };
+            if (!url || url === '#') {
+                alert('Файл ещё не загружен. Попробуйте позже.');
+                return;
+            }
 
-            fetch('https://formspree.io/f/' + FORMSPREE_WISH_ID, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(fd)
-            })
-            .then(function (r) {
-                if (r.ok) {
-                    wishStatus.textContent = '✓ Спасибо за пожелание! Мы обязательно прочитаем.';
-                    wishStatus.className = 'form-status success';
-                    wishForm.reset();
-                } else throw new Error('err');
-            })
-            .catch(function () {
-                wishStatus.textContent = '⚠ Ошибка. Попробуйте позже или напишите в Telegram.';
-                wishStatus.className = 'form-status error';
-            })
-            .finally(function () {
-                wishSubmit.querySelector('.wish-submit-text').textContent = 'Отправить пожелание';
-                wishSubmit.style.opacity = '';
-                delete wishSubmit.dataset.loading;
+            btn.dataset.loading = 'true';
+            var orig = btn.innerHTML;
+            window.open(url, '_blank');
+
+            fetch(API_BASE + '/' + NAMESPACE + '/total-downloads/up').catch(function () {});
+            fetch(API_BASE + '/' + NAMESPACE + '/download-' + app + '/up').catch(function () {});
+
+            btn.innerHTML = '✓ Скачивание начато!';
+            btn.style.background = 'linear-gradient(135deg, #00cc88, #00aa66)';
+            btn.style.color = '#fff';
+
+            setTimeout(function () {
+                btn.innerHTML = orig;
+                btn.style.background = '';
+                btn.style.color = '';
+                delete btn.dataset.loading;
+            }, 4000);
+        });
+    }
+
+    // ===== APP SEARCH + FILTERS (for apps page) =====
+    var searchInput = document.getElementById('searchInput');
+    var filterTabs = document.querySelectorAll('.apps-filter-tab');
+
+    if (searchInput || filterTabs.length) {
+        var noRes = document.getElementById('noResults');
+        var sTimer;
+        var currentFilter = 'all';
+
+        function applyFilters() {
+            var q = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            var vis = 0;
+            var visibleByCategory = { active: 0, archived: 0, legacy: 0 };
+
+            document.querySelectorAll('.app-card').forEach(function (card) {
+                var status = card.getAttribute('data-status') || 'active';
+                var n = (card.querySelector('.app-name') || {}).textContent || '';
+                var d = (card.querySelector('.app-desc') || {}).textContent || '';
+                var tags = '';
+                card.querySelectorAll('.app-tag').forEach(function (t) { tags += ' ' + t.textContent; });
+
+                var matchSearch = q === '' ||
+                    n.toLowerCase().includes(q) ||
+                    d.toLowerCase().includes(q) ||
+                    tags.toLowerCase().includes(q);
+
+                var matchFilter = currentFilter === 'all' || status === currentFilter;
+                var show = matchSearch && matchFilter;
+                card.style.display = show ? '' : 'none';
+
+                if (show) {
+                    vis++;
+                    if (visibleByCategory[status] !== undefined) visibleByCategory[status]++;
+                }
+            });
+
+            document.querySelectorAll('.apps-category').forEach(function (cat) {
+                var cName = cat.getAttribute('data-category');
+                var hasVisible = visibleByCategory[cName] > 0;
+                if (currentFilter === 'all') {
+                    cat.classList.toggle('hidden', !hasVisible);
+                } else {
+                    cat.classList.toggle('hidden', cName !== currentFilter || !hasVisible);
+                }
+            });
+
+            if (noRes) noRes.style.display = vis === 0 ? 'block' : 'none';
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function () {
+                clearTimeout(sTimer);
+                sTimer = setTimeout(applyFilters, 200);
+            });
+        }
+
+        filterTabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                filterTabs.forEach(function (t) { t.classList.remove('active'); });
+                tab.classList.add('active');
+                currentFilter = tab.getAttribute('data-filter');
+                applyFilters();
             });
         });
     }
 
-    // ===== JOIN FORM =====
+    // ===== JOIN FORM (for join page) =====
     var joinForm = document.getElementById('joinForm');
     if (joinForm) {
         var avUp = document.getElementById('avatarUpload');
@@ -899,12 +930,10 @@ document.addEventListener('DOMContentLoaded', function () {
             avIn.addEventListener('change', function () {
                 var file = this.files[0];
                 if (!file) return;
-                // Проверка типа
                 if (!file.type.startsWith('image/')) {
                     alert('Пожалуйста, выберите изображение.');
                     return;
                 }
-                // Проверка размера (макс 5 MB)
                 if (file.size > 5 * 1024 * 1024) {
                     alert('Файл слишком большой. Максимум 5 MB.');
                     this.value = '';
@@ -912,7 +941,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    avIm.src = e.target.result; avIm.style.display = 'block';
+                    avIm.src = e.target.result;
+                    avIm.style.display = 'block';
                     if (avPh) avPh.style.display = 'none';
                     avPr.classList.add('has-image');
                 };
@@ -949,7 +979,8 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             fetch('https://formspree.io/f/' + FORMSPREE_JOIN_ID, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(fd)
             })
             .then(function (r) {
@@ -969,138 +1000,10 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .finally(function () {
                 jSub.textContent = 'Отправить заявку';
-                jSub.style.opacity = ''; delete jSub.dataset.loading;
+                jSub.style.opacity = '';
+                delete jSub.dataset.loading;
             });
         });
     }
 
 });
-/* ===== MANGO CLICKER COUNTDOWN ===== */
-(function () {
-    'use strict';
-
-    // 28.05.2026 00:00:00 по Москве (UTC+3)
-    // В UTC это 27.05.2026 21:00:00
-    const RELEASE_UTC = Date.UTC(2026, 4, 27, 21, 0, 0, 0);
-
-    const elDays = document.getElementById('mangoDays');
-    const elHours = document.getElementById('mangoHours');
-    const elMinutes = document.getElementById('mangoMinutes');
-    const elSeconds = document.getElementById('mangoSeconds');
-    const elTimerSection = document.getElementById('mangoTimerSection');
-    const elReleased = document.getElementById('mangoReleased');
-    const elConfetti = document.getElementById('mangoConfetti');
-    const elBtn = document.getElementById('mangoBtn');
-
-    if (
-        !elDays || !elHours || !elMinutes || !elSeconds ||
-        !elTimerSection || !elReleased || !elConfetti
-    ) {
-        return;
-    }
-
-    let isReleased = false;
-
-    function pad(n) {
-        return String(n).padStart(2, '0');
-    }
-
-    function updateTimer() {
-        const now = Date.now();
-        const diff = RELEASE_UTC - now;
-
-        if (diff <= 0) {
-            showReleased();
-            return;
-        }
-
-        const totalSeconds = Math.floor(diff / 1000);
-        const days = Math.floor(totalSeconds / 86400);
-        const hours = Math.floor((totalSeconds % 86400) / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-
-        elDays.textContent = pad(days);
-        elHours.textContent = pad(hours);
-        elMinutes.textContent = pad(minutes);
-        elSeconds.textContent = pad(seconds);
-
-        setTimeout(updateTimer, 1000 - (Date.now() % 1000));
-    }
-
-    function showReleased() {
-        if (isReleased) return;
-        isReleased = true;
-
-        elTimerSection.style.display = 'none';
-        elReleased.style.display = 'block';
-
-        if (elBtn) {
-            elBtn.style.pointerEvents = 'auto';
-            elBtn.removeAttribute('data-locked');
-            elBtn.removeAttribute('aria-disabled');
-            elBtn.removeAttribute('tabindex');
-        }
-
-        spawnConfetti();
-    }
-
-    function spawnConfetti() {
-        const colors = ['#ff9500', '#ffb800', '#ff6a00', '#ffd700', '#ff4500', '#ffffff', '#ffe066', '#ff8c00'];
-        const shapes = ['circle', 'rect'];
-        const count = 80;
-
-        for (let i = 0; i < count; i++) {
-            const piece = document.createElement('div');
-            piece.className = 'mango-confetti-piece';
-
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            const shape = shapes[Math.floor(Math.random() * shapes.length)];
-            const left = Math.random() * 100;
-            const size = Math.random() * 8 + 5;
-            const duration = Math.random() * 2 + 2;
-            const delay = Math.random() * 1.5;
-
-            piece.style.left = left + '%';
-            piece.style.width = size + 'px';
-            piece.style.height = size + 'px';
-            piece.style.backgroundColor = color;
-            piece.style.borderRadius = shape === 'circle' ? '50%' : '2px';
-            piece.style.animationDuration = duration + 's';
-            piece.style.animationDelay = delay + 's';
-
-            elConfetti.appendChild(piece);
-        }
-
-        setTimeout(function () {
-            elConfetti.innerHTML = '';
-        }, 5000);
-    }
-
-    if (elBtn) {
-        elBtn.setAttribute('data-locked', 'true');
-        elBtn.setAttribute('aria-disabled', 'true');
-        elBtn.setAttribute('tabindex', '-1');
-        elBtn.style.pointerEvents = 'none';
-
-        elBtn.addEventListener('click', function (e) {
-            if (!isReleased) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            }
-        });
-    }
-
-    setInterval(function () {
-        if (!isReleased) {
-            elReleased.style.display = 'none';
-            elTimerSection.style.display = '';
-            if (elBtn) {
-                elBtn.style.pointerEvents = 'none';
-            }
-        }
-    }, 2000);
-
-    updateTimer();
-})();
