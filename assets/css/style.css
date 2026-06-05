@@ -2744,3 +2744,66 @@ h1, h2, h3, h4, h5, h6 {
     .cta-section, .news-arrow, .news-dots, .anniversary-particles { display: none !important; }
     body { background: white; color: black; }
 }
+/* ===== HEXAGON BACKGROUND — DIMMED ===== */
+#hexBg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.45; /* приглушаем фон, чтобы не мешал тексту */
+}
+
+/* Слой затемнения поверх фона, чтобы текст читался лучше */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(2, 10, 20, 0.4) 0%,
+        rgba(2, 10, 20, 0.7) 100%
+    );
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Весь контент должен быть выше фона */
+.navbar,
+.hero,
+.section,
+.cta-section,
+.stats-bar,
+.page-header,
+.apps-section,
+.breadcrumb,
+.download-page,
+.join-section,
+.join-benefits-section,
+.error-page,
+.anniversary-section,
+.mango-promo,
+.footer,
+main {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== FIX: убираем лишний верхний отступ на внутренних страницах ===== */
+/* Если на странице нет .hero, контент не должен прилипать к навбару */
+body > .breadcrumb:first-of-type,
+body > .page-header:first-of-type,
+body > main > .breadcrumb:first-of-type,
+body > main > .page-header:first-of-type {
+    padding-top: 110px;
+}
+
+/* На страницах без hero (apps, join, download, 404) — нормальный отступ под фикс. навбар */
+.apps-section:first-child,
+.join-section:first-child,
+.download-page:first-child,
+.error-page:first-child {
+    padding-top: 130px;
+}
