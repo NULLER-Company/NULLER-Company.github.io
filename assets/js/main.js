@@ -1,6 +1,7 @@
 // ===== CONSTANTS =====
 var NAMESPACE = 'nuller-company-2026';
 var API_BASE = 'https://api.counterapi.dev/v1';
+// ⚠️ ЗАМЕНИ на свой реальный Formspree ID!
 var FORMSPREE_JOIN_ID = 'mjgzkpgj';
 var FORMSPREE_WISH_ID = 'mvzybkzy';
 
@@ -9,265 +10,244 @@ document.addEventListener('DOMContentLoaded', function () {
     var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // ===== HEXAGON BACKGROUND =====
+    // ===== HEXAGON BACKGROUND (3D tiles with green-cyan glowing seams) =====
     var hexCanvas = document.getElementById('hexBg');
     if (hexCanvas) {
-        var ctx = hexCanvas.getContext('2d');
-        var hexSize = 40;
-        var hexGap = 4;
-        var cols, rows;
-        var hexGrid = [];
-        var pulses = [];
+        var ctx = hexCanvas.getContext('2d', { alpha: false });
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        var hexRadius = isTouch ? 38 : 46;
+        var gapSize = 6;
+        var hexagons = [];
         var hexAnimId;
-        var lastHexTime = 0;
-        var hexInterval = isTouch ? 50 : 30;
+        var mouseX = -9999, mouseY = -9999;
+        var hexTime = 0;
 
-        // Hex geometry
-        var hexW = hexSize * 2;
-        var hexH = Math.sqrt(3) * hexSize;
-
-        function resizeHexCanvas() {
-            hexCanvas.width = window.innerWidth;
-            hexCanvas.height = window.innerHeight;
-            cols = Math.ceil(hexCanvas.width / (hexW * 0.75)) + 2;
-            rows = Math.ceil(hexCanvas.height / hexH) + 2;
-            buildHexGrid();
+        function getHexDims(r) {
+            return {
+                w: r * 2,
+                horizSpacing: r * 1.5,
+                vertSpacing: Math.sqrt(3) * r
+            };
         }
 
-        function buildHexGrid() {
-            hexGrid = [];
-            for (var r = -1; r < rows; r++) {
-                for (var c = -1; c < cols; c++) {
-                    var x = c * (hexW * 0.75 + hexGap);
-                    var y = r * (hexH + hexGap);
-                    if (c % 2 === 1) y += (hexH + hexGap) / 2;
+        function resizeHexCanvas() {
+            var w = window.innerWidth;
+            var h = window.innerHeight;
+            hexCanvas.width = w * dpr;
+            hexCanvas.height = h * dpr;
+            hexCanvas.style.width = w + 'px';
+            hexCanvas.style.height = h + 'px';
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            buildHexGrid(w, h);
+        }
 
-                    hexGrid.push({
+        function buildHexGrid(w, h) {
+            hexagons = [];
+            var d = getHexDims(hexRadius);
+            var cols = Math.ceil(w / d.horizSpacing) + 2;
+            var rows = Math.ceil(h / d.vertSpacing) + 2;
+
+            for (var col = -1; col < cols; col++) {
+                for (var row = -1; row < rows; row++) {
+                    var x = col * d.horizSpacing;
+                    var y = row * d.vertSpacing + (col % 2 === 1 ? d.vertSpacing / 2 : 0);
+
+                    hexagons.push({
                         x: x,
                         y: y,
-                        brightness: 0,
-                        targetBrightness: 0,
-                        pulsePhase: Math.random() * Math.PI * 2,
-                        edgeProgress: -1, // -1 means no edge animation
-                        edgeSpeed: 0
+                        glowPhase: Math.random() * Math.PI * 2,
+                        glowSpeed: 0.3 + Math.random() * 0.5,
+                        baseGlow: 0.15 + Math.random() * 0.35,
+                        colorMix: Math.random(), // 0 = green, 1 = cyan
+                        pulse: 0
                     });
                 }
             }
         }
 
-        function drawHexagon(cx, cy, size) {
+        function hexPath(cx, cy, r) {
             ctx.beginPath();
             for (var i = 0; i < 6; i++) {
-                var angle = (Math.PI / 3) * i - Math.PI / 6;
-                var px = cx + size * Math.cos(angle);
-                var py = cy + size * Math.sin(angle);
+                var angle = (Math.PI / 3) * i;
+                var px = cx + r * Math.cos(angle);
+                var py = cy + r * Math.sin(angle);
                 if (i === 0) ctx.moveTo(px, py);
                 else ctx.lineTo(px, py);
             }
             ctx.closePath();
         }
 
-        function getHexEdgePoint(cx, cy, size, progress) {
-            // progress 0..6 maps to edges of hexagon
-            var edgeIndex = Math.floor(progress) % 6;
-            var t = progress - Math.floor(progress);
-            var a1 = (Math.PI / 3) * edgeIndex - Math.PI / 6;
-            var a2 = (Math.PI / 3) * ((edgeIndex + 1) % 6) - Math.PI / 6;
-            return {
-                x: cx + size * (Math.cos(a1) * (1 - t) + Math.cos(a2) * t),
-                y: cy + size * (Math.sin(a1) * (1 - t) + Math.sin(a2) * t)
-            };
+        // Цвет: смесь зелёного и голубого в зависимости от colorMix
+        function getGlowColor(mix, alpha) {
+            // green: 0, 255, 170    cyan: 0, 212, 255
+            var r = 0;
+            var g = Math.round(255 * (1 - mix) + 212 * mix);
+            var b = Math.round(170 * (1 - mix) + 255 * mix);
+            return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha.toFixed(3) + ')';
         }
 
-        // Spawn pulses periodically
-        function spawnPulse() {
-            if (hexGrid.length === 0) return;
-            var idx = Math.floor(Math.random() * hexGrid.length);
-            var hex = hexGrid[idx];
-            hex.targetBrightness = 0.4 + Math.random() * 0.4;
-            hex.edgeProgress = 0;
-            hex.edgeSpeed = 0.03 + Math.random() * 0.04;
+        function drawHexBackground() {
+            var w = hexCanvas.width / dpr;
+            var h = hexCanvas.height / dpr;
 
-            // Radial pulse wave
-            pulses.push({
-                cx: hex.x,
-                cy: hex.y,
-                radius: 0,
-                maxRadius: 150 + Math.random() * 200,
-                speed: 1.5 + Math.random() * 2,
-                strength: 0.2 + Math.random() * 0.3,
-                alive: true
-            });
-        }
+            ctx.fillStyle = '#020a14';
+            ctx.fillRect(0, 0, w, h);
 
-        var spawnTimer = 0;
+            hexTime += 0.016;
+            var innerR = hexRadius - gapSize / 2;
 
-        function drawHexBackground(timestamp) {
-            if (prefersReducedMotion) {
-                // Static hexagons
-                ctx.clearRect(0, 0, hexCanvas.width, hexCanvas.height);
-                for (var i = 0; i < hexGrid.length; i++) {
-                    var h = hexGrid[i];
-                    drawHexagon(h.x, h.y, hexSize - 1);
-                    ctx.strokeStyle = 'rgba(0, 240, 255, 0.06)';
-                    ctx.lineWidth = 0.5;
+            // === 1: свечение под плитками ===
+            for (var i = 0; i < hexagons.length; i++) {
+                var hex = hexagons[i];
+                var glowWave = Math.sin(hexTime * hex.glowSpeed + hex.glowPhase) * 0.5 + 0.5;
+                var intensity = hex.baseGlow + glowWave * 0.4 + hex.pulse;
+
+                var dx = hex.x - mouseX;
+                var dy = hex.y - mouseY;
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 250) {
+                    intensity += (1 - dist / 250) * 0.6;
+                }
+                intensity = Math.min(intensity, 1.2);
+
+                if (intensity > 0.2) {
+                    var glow = ctx.createRadialGradient(
+                        hex.x, hex.y, 0,
+                        hex.x, hex.y, hexRadius * 1.4
+                    );
+                    var a = intensity * 0.5;
+                    glow.addColorStop(0, getGlowColor(hex.colorMix, a * 0.8));
+                    glow.addColorStop(0.5, getGlowColor(hex.colorMix, a * 0.35));
+                    glow.addColorStop(1, getGlowColor(hex.colorMix, 0));
+                    ctx.fillStyle = glow;
+                    ctx.fillRect(
+                        hex.x - hexRadius * 1.5,
+                        hex.y - hexRadius * 1.5,
+                        hexRadius * 3,
+                        hexRadius * 3
+                    );
+                }
+
+                hex.pulse *= 0.94;
+            }
+
+            // === 2: яркие линии в швах ===
+            for (var i = 0; i < hexagons.length; i++) {
+                var hex = hexagons[i];
+                var glowWave = Math.sin(hexTime * hex.glowSpeed + hex.glowPhase) * 0.5 + 0.5;
+                var intensity = hex.baseGlow + glowWave * 0.4 + hex.pulse;
+
+                var dx = hex.x - mouseX;
+                var dy = hex.y - mouseY;
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 250) {
+                    intensity += (1 - dist / 250) * 0.6;
+                }
+                intensity = Math.min(intensity, 1.2);
+
+                if (intensity > 0.3) {
+                    hexPath(hex.x, hex.y, hexRadius - 1);
+                    ctx.strokeStyle = getGlowColor(hex.colorMix, intensity * 0.6);
+                    ctx.lineWidth = 1.5;
                     ctx.stroke();
                 }
-                return;
             }
 
-            if (timestamp - lastHexTime < hexInterval) {
-                hexAnimId = requestAnimationFrame(drawHexBackground);
-                return;
-            }
-            lastHexTime = timestamp;
+            // === 3: тёмные плитки сверху ===
+            for (var i = 0; i < hexagons.length; i++) {
+                var hex = hexagons[i];
 
-            ctx.clearRect(0, 0, hexCanvas.width, hexCanvas.height);
+                var tileGrad = ctx.createLinearGradient(
+                    hex.x, hex.y - innerR,
+                    hex.x, hex.y + innerR
+                );
+                tileGrad.addColorStop(0, '#0c2030');
+                tileGrad.addColorStop(0.5, '#08151f');
+                tileGrad.addColorStop(1, '#050d14');
 
-            var time = timestamp * 0.001;
+                hexPath(hex.x, hex.y, innerR);
+                ctx.fillStyle = tileGrad;
+                ctx.fill();
 
-            // Spawn pulses
-            spawnTimer++;
-            if (spawnTimer > (isTouch ? 80 : 40)) {
-                spawnPulse();
-                spawnTimer = 0;
-            }
-
-            // Update pulses
-            for (var p = pulses.length - 1; p >= 0; p--) {
-                var pulse = pulses[p];
-                pulse.radius += pulse.speed;
-                if (pulse.radius > pulse.maxRadius) {
-                    pulses.splice(p, 1);
-                }
-            }
-
-            // Draw hexagons
-            for (var i = 0; i < hexGrid.length; i++) {
-                var h = hexGrid[i];
-
-                // Check pulse influence
-                for (var p = 0; p < pulses.length; p++) {
-                    var pulse = pulses[p];
-                    var dx = h.x - pulse.cx;
-                    var dy = h.y - pulse.cy;
-                    var dist = Math.sqrt(dx * dx + dy * dy);
-                    var ringDist = Math.abs(dist - pulse.radius);
-
-                    if (ringDist < 30) {
-                        var influence = (1 - ringDist / 30) * pulse.strength;
-                        h.targetBrightness = Math.max(h.targetBrightness, influence);
-                        if (h.edgeProgress < 0 && influence > 0.15) {
-                            h.edgeProgress = 0;
-                            h.edgeSpeed = 0.04 + Math.random() * 0.03;
-                        }
-                    }
-                }
-
-                // Smooth brightness
-                h.brightness += (h.targetBrightness - h.brightness) * 0.08;
-                h.targetBrightness *= 0.97;
-
-                if (h.brightness < 0.005) h.brightness = 0;
-
-                // Base subtle animation
-                var basePulse = Math.sin(time * 0.5 + h.pulsePhase) * 0.5 + 0.5;
-                var baseAlpha = 0.02 + basePulse * 0.015;
-
-                // Draw hex fill
-                drawHexagon(h.x, h.y, hexSize - 1);
-                if (h.brightness > 0.01) {
-                    var fillAlpha = h.brightness * 0.08;
-                    ctx.fillStyle = 'rgba(0, 240, 255, ' + fillAlpha + ')';
-                    ctx.fill();
-                }
-
-                // Draw hex border
-                drawHexagon(h.x, h.y, hexSize - 1);
-                var borderAlpha = baseAlpha + h.brightness * 0.3;
-                ctx.strokeStyle = 'rgba(0, 240, 255, ' + borderAlpha.toFixed(3) + ')';
-                ctx.lineWidth = 0.5 + h.brightness;
+                hexPath(hex.x, hex.y, innerR);
+                ctx.strokeStyle = 'rgba(20, 50, 70, 0.4)';
+                ctx.lineWidth = 1;
                 ctx.stroke();
 
-                // Edge running light
-                if (h.edgeProgress >= 0) {
-                    h.edgeProgress += h.edgeSpeed;
-
-                    if (h.edgeProgress < 6) {
-                        // Draw glowing dot running along edge
-                        var trailLength = 1.2;
-                        var steps = 8;
-                        for (var s = 0; s < steps; s++) {
-                            var prog = h.edgeProgress - (s * trailLength / steps);
-                            if (prog < 0) continue;
-                            var pt = getHexEdgePoint(h.x, h.y, hexSize - 1, prog % 6);
-                            var alpha = (1 - s / steps) * (0.5 + h.brightness * 0.5);
-
-                            // Cyan glow
-                            ctx.beginPath();
-                            ctx.arc(pt.x, pt.y, 2.5 - s * 0.2, 0, Math.PI * 2);
-                            ctx.fillStyle = 'rgba(0, 240, 255, ' + (alpha * 0.8).toFixed(3) + ')';
-                            ctx.fill();
-
-                            // Bigger soft glow on first point
-                            if (s === 0) {
-                                ctx.beginPath();
-                                ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
-                                ctx.fillStyle = 'rgba(0, 240, 255, ' + (alpha * 0.15).toFixed(3) + ')';
-                                ctx.fill();
-                            }
-                        }
-                    } else {
-                        h.edgeProgress = -1;
-                    }
-                }
+                // Блик сверху для 3D
+                ctx.save();
+                hexPath(hex.x, hex.y, innerR);
+                ctx.clip();
+                var bevel = ctx.createLinearGradient(
+                    hex.x, hex.y - innerR,
+                    hex.x, hex.y - innerR * 0.3
+                );
+                bevel.addColorStop(0, 'rgba(60, 130, 130, 0.15)');
+                bevel.addColorStop(1, 'rgba(60, 130, 130, 0)');
+                ctx.fillStyle = bevel;
+                ctx.fillRect(hex.x - innerR, hex.y - innerR, innerR * 2, innerR);
+                ctx.restore();
             }
 
             hexAnimId = requestAnimationFrame(drawHexBackground);
         }
 
         resizeHexCanvas();
+
+        var rTimer;
         window.addEventListener('resize', function () {
-            resizeHexCanvas();
+            clearTimeout(rTimer);
+            rTimer = setTimeout(resizeHexCanvas, 150);
         });
 
         document.addEventListener('visibilitychange', function () {
-            if (document.hidden) cancelAnimationFrame(hexAnimId);
-            else hexAnimId = requestAnimationFrame(drawHexBackground);
+            if (document.hidden) {
+                cancelAnimationFrame(hexAnimId);
+            } else {
+                hexAnimId = requestAnimationFrame(drawHexBackground);
+            }
         });
 
-        hexAnimId = requestAnimationFrame(drawHexBackground);
-
-        // Mouse interaction — spawn pulse near cursor
         if (!isTouch) {
             document.addEventListener('mousemove', function (e) {
-                for (var i = 0; i < hexGrid.length; i++) {
-                    var h = hexGrid[i];
-                    var dx = h.x - e.clientX;
-                    var dy = h.y - e.clientY;
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+            document.addEventListener('mouseleave', function () {
+                mouseX = -9999;
+                mouseY = -9999;
+            });
+            document.addEventListener('click', function (e) {
+                for (var i = 0; i < hexagons.length; i++) {
+                    var hex = hexagons[i];
+                    var dx = hex.x - e.clientX;
+                    var dy = hex.y - e.clientY;
                     var dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 100) {
-                        var influence = (1 - dist / 100) * 0.3;
-                        h.targetBrightness = Math.max(h.targetBrightness, influence);
-                        if (dist < 50 && h.edgeProgress < 0 && Math.random() > 0.92) {
-                            h.edgeProgress = 0;
-                            h.edgeSpeed = 0.05 + Math.random() * 0.03;
-                        }
+                    if (dist < 300) {
+                        hex.pulse += (1 - dist / 300) * 1.2;
                     }
                 }
             });
+        }
+
+        if (prefersReducedMotion) {
+            cancelAnimationFrame(hexAnimId);
+            drawHexBackground();
+            cancelAnimationFrame(hexAnimId);
+        } else {
+            hexAnimId = requestAnimationFrame(drawHexBackground);
         }
     }
 
     // ===== AMBIENT PARTICLES =====
     var ambientEl = document.getElementById('ambientParticles');
     if (ambientEl && !prefersReducedMotion) {
-        var pCount = isTouch ? 10 : 20;
-        var colors = [
-            'rgba(0, 240, 255, 0.4)',
-            'rgba(168, 85, 247, 0.3)',
-            'rgba(14, 165, 233, 0.3)',
-            'rgba(0, 240, 255, 0.2)'
+        var pCount = isTouch ? 10 : 18;
+        var pColors = [
+            'rgba(0, 255, 170, 0.5)',
+            'rgba(0, 212, 255, 0.4)',
+            'rgba(0, 255, 213, 0.4)'
         ];
         for (var i = 0; i < pCount; i++) {
             var p = document.createElement('div');
@@ -278,8 +258,9 @@ document.addEventListener('DOMContentLoaded', function () {
             var size = (1 + Math.random() * 3) + 'px';
             p.style.width = size;
             p.style.height = size;
-            p.style.background = colors[Math.floor(Math.random() * colors.length)];
-            p.style.boxShadow = '0 0 6px ' + colors[Math.floor(Math.random() * colors.length)];
+            var color = pColors[Math.floor(Math.random() * pColors.length)];
+            p.style.background = color;
+            p.style.boxShadow = '0 0 6px ' + color;
             ambientEl.appendChild(p);
         }
     }
@@ -328,6 +309,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function typeEffect() {
             var current = phrases[pIdx];
+
             if (!isDel) {
                 cIdx++;
                 var html = '';
@@ -340,6 +322,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
                 typingEl.innerHTML = html;
+
                 if (cIdx >= current.length) {
                     setTimeout(function () { isDel = true; typeEffect(); }, 2000);
                     return;
@@ -353,6 +336,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     html2 += '<span style="display:inline-block">' + ch2 + '</span>';
                 }
                 typingEl.innerHTML = html2;
+
                 if (cIdx <= 0) {
                     isDel = false;
                     pIdx = (pIdx + 1) % phrases.length;
@@ -395,6 +379,111 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }, { threshold: 0.5 });
         statics.forEach(function (c) { cObs.observe(c); });
+    }
+
+    // ===== DOWNLOAD BUTTON =====
+    var dlBtn = document.getElementById('downloadBtn');
+    if (dlBtn) {
+        dlBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (this.dataset.loading === 'true') return;
+
+            var url = this.getAttribute('href');
+            var app = this.getAttribute('data-app') || 'unknown';
+            var btn = this;
+
+            if (!url || url === '#' || url.indexOf('ВАШ_ID') !== -1) {
+                alert('Файл ещё не загружен. Попробуйте позже.');
+                return;
+            }
+
+            btn.dataset.loading = 'true';
+            var orig = btn.innerHTML;
+
+            window.open(url, '_blank');
+
+            fetch(API_BASE + '/' + NAMESPACE + '/total-downloads/up').catch(function () {});
+            fetch(API_BASE + '/' + NAMESPACE + '/download-' + app + '/up').catch(function () {});
+
+            btn.innerHTML = '✓ Скачивание начато!';
+            btn.style.background = 'linear-gradient(135deg, #00ffaa, #00d490)';
+            btn.style.color = '#020a14';
+
+            setTimeout(function () {
+                btn.innerHTML = orig;
+                btn.style.background = '';
+                btn.style.color = '';
+                delete btn.dataset.loading;
+            }, 4000);
+        });
+    }
+
+    // ===== APP SEARCH + FILTERS =====
+    var searchInput = document.getElementById('searchInput');
+    var filterTabs = document.querySelectorAll('.apps-filter-tab');
+
+    if (searchInput || filterTabs.length) {
+        var noRes = document.getElementById('noResults');
+        var sTimer;
+        var currentFilter = 'all';
+
+        function applyFilters() {
+            var q = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            var vis = 0;
+            var visibleByCategory = { active: 0, archived: 0, legacy: 0 };
+
+            document.querySelectorAll('.app-card').forEach(function (card) {
+                var status = card.getAttribute('data-status') || 'active';
+                var n = (card.querySelector('.app-name') || {}).textContent || '';
+                var d = (card.querySelector('.app-desc') || {}).textContent || '';
+                var tags = '';
+                card.querySelectorAll('.app-tag').forEach(function (t) { tags += ' ' + t.textContent; });
+
+                var matchSearch = q === '' ||
+                    n.toLowerCase().includes(q) ||
+                    d.toLowerCase().includes(q) ||
+                    tags.toLowerCase().includes(q);
+
+                var matchFilter = currentFilter === 'all' || status === currentFilter;
+
+                var show = matchSearch && matchFilter;
+                card.style.display = show ? '' : 'none';
+
+                if (show) {
+                    vis++;
+                    if (visibleByCategory[status] !== undefined) visibleByCategory[status]++;
+                }
+            });
+
+            document.querySelectorAll('.apps-category').forEach(function (cat) {
+                var cName = cat.getAttribute('data-category');
+                var hasVisible = visibleByCategory[cName] > 0;
+
+                if (currentFilter === 'all') {
+                    cat.classList.toggle('hidden', !hasVisible);
+                } else {
+                    cat.classList.toggle('hidden', cName !== currentFilter || !hasVisible);
+                }
+            });
+
+            if (noRes) noRes.style.display = vis === 0 ? 'block' : 'none';
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function () {
+                clearTimeout(sTimer);
+                sTimer = setTimeout(applyFilters, 200);
+            });
+        }
+
+        filterTabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                filterTabs.forEach(function (t) { t.classList.remove('active'); });
+                tab.classList.add('active');
+                currentFilter = tab.getAttribute('data-filter');
+                applyFilters();
+            });
+        });
     }
 
     // ===== UNIVERSAL IMAGE MODAL =====
@@ -447,12 +536,32 @@ document.addEventListener('DOMContentLoaded', function () {
     imgModal.addEventListener('click', closeImageModal);
     imgModalImg.addEventListener('click', function (e) { e.stopPropagation(); });
 
+    var imgTouchX = 0;
+    imgModal.addEventListener('touchstart', function (e) { imgTouchX = e.touches[0].clientX; }, { passive: true });
+    imgModal.addEventListener('touchend', function (e) {
+        var diff = imgTouchX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) { imgModalIdx += diff > 0 ? 1 : -1; showImageModal(); }
+    });
+
     document.addEventListener('keydown', function (e) {
         if (!imgModal.classList.contains('open')) return;
         if (e.key === 'ArrowRight') { imgModalIdx++; showImageModal(); }
         if (e.key === 'ArrowLeft') { imgModalIdx--; showImageModal(); }
         if (e.key === 'Escape') closeImageModal();
     });
+
+    // Screenshots
+    var screenshots = document.querySelectorAll('.screenshot');
+    if (screenshots.length) {
+        var ssSources = [];
+        screenshots.forEach(function (s) { ssSources.push(s.getAttribute('href')); });
+        screenshots.forEach(function (s, idx) {
+            s.addEventListener('click', function (e) {
+                e.preventDefault();
+                openImageModal(ssSources, idx);
+            });
+        });
+    }
 
     // ===== NEWS CAROUSEL =====
     var newsTrack = document.getElementById('newsTrack');
@@ -485,6 +594,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     var cloneEnd = originalCards[i].cloneNode(true);
                     cloneEnd.setAttribute('data-clone', 'end');
                     cloneEnd.setAttribute('aria-hidden', 'true');
+                    cloneEnd.removeAttribute('id');
                     newsTrack.appendChild(cloneEnd);
                 }
 
@@ -492,6 +602,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     var cloneStart = originalCards[j].cloneNode(true);
                     cloneStart.setAttribute('data-clone', 'start');
                     cloneStart.setAttribute('aria-hidden', 'true');
+                    cloneStart.removeAttribute('id');
                     newsTrack.insertBefore(cloneStart, newsTrack.firstChild);
                 }
 
@@ -528,11 +639,13 @@ document.addEventListener('DOMContentLoaded', function () {
             function jumpToSlide(realIndex, animate) {
                 var targetPos = clonesCount + realIndex;
                 var w = getCardWidth();
+
                 if (animate) {
                     newsTrack.style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                 } else {
                     newsTrack.style.transition = 'none';
                 }
+
                 newsTrack.style.transform = 'translateX(-' + (targetPos * w) + 'px)';
                 slideIndex = realIndex;
                 updateDots();
@@ -541,6 +654,7 @@ document.addEventListener('DOMContentLoaded', function () {
             slideToDirection = function (dir) {
                 if (isAnimating) return;
                 isAnimating = true;
+
                 var w = getCardWidth();
                 var currentPos = clonesCount + slideIndex;
                 var nextPos = currentPos + dir;
@@ -581,9 +695,11 @@ document.addEventListener('DOMContentLoaded', function () {
                             isAnimating = true;
                             var w = getCardWidth();
                             var targetPos = clonesCount + idx;
+
                             newsTrack.style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                             newsTrack.style.transform = 'translateX(-' + (targetPos * w) + 'px)';
                             slideIndex = idx;
+
                             setTimeout(function () {
                                 updateDots();
                                 isAnimating = false;
@@ -600,6 +716,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 slideIndex = 0;
                 jumpToSlide(0, false);
                 createDots();
+                if (newsLeft) newsLeft.disabled = false;
+                if (newsRight) newsRight.disabled = false;
             }
 
             if (newsLeft) newsLeft.addEventListener('click', function () { if (slideToDirection) slideToDirection(-1); });
@@ -607,21 +725,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Touch swipe
             var touchStartX = 0;
+            var touchStartTime = 0;
+
             newsTrack.addEventListener('touchstart', function (e) {
                 if (isAnimating) return;
                 touchStartX = e.touches[0].clientX;
+                touchStartTime = Date.now();
             }, { passive: true });
 
             newsTrack.addEventListener('touchend', function (e) {
                 if (isAnimating) return;
                 var diff = touchStartX - e.changedTouches[0].clientX;
-                if (Math.abs(diff) > 40) {
+                var elapsed = Date.now() - touchStartTime;
+
+                if (Math.abs(diff) > 40 || (Math.abs(diff) > 20 && elapsed < 300)) {
                     if (slideToDirection) slideToDirection(diff > 0 ? 1 : -1);
                 }
             });
 
             // Mouse drag
-            var mouseStartX = 0, mouseDragging = false;
+            var mouseStartX = 0;
+            var mouseDragging = false;
+
             newsTrack.addEventListener('mousedown', function (e) {
                 if (isAnimating) return;
                 mouseStartX = e.clientX;
@@ -630,17 +755,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.preventDefault();
             });
 
+            document.addEventListener('mousemove', function (e) {
+                if (mouseDragging) e.preventDefault();
+            });
+
             document.addEventListener('mouseup', function (e) {
                 if (!mouseDragging) return;
                 mouseDragging = false;
                 newsTrack.classList.remove('grabbing');
                 if (isAnimating) return;
+
                 var diff = mouseStartX - e.clientX;
                 if (Math.abs(diff) > 40) {
                     if (slideToDirection) slideToDirection(diff > 0 ? 1 : -1);
                 }
             });
 
+            // Resize
             var resizeTimer;
             window.addEventListener('resize', function () {
                 clearTimeout(resizeTimer);
@@ -652,7 +783,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             initCarousel();
 
-            // Autoplay
+            // ===== AUTOPLAY =====
             var autoplayTimer = null;
             var autoplayDelay = 10000;
             var isHovered = false;
@@ -667,14 +798,20 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             function stopAutoplay() {
-                if (autoplayTimer) clearInterval(autoplayTimer);
-                autoplayTimer = null;
+                if (autoplayTimer) {
+                    clearInterval(autoplayTimer);
+                    autoplayTimer = null;
+                }
             }
 
             var carouselEl = newsTrack.closest('.news-carousel');
             if (carouselEl) {
                 carouselEl.addEventListener('mouseenter', function () { isHovered = true; });
                 carouselEl.addEventListener('mouseleave', function () { isHovered = false; });
+                carouselEl.addEventListener('touchstart', function () { isHovered = true; }, { passive: true });
+                carouselEl.addEventListener('touchend', function () {
+                    setTimeout(function () { isHovered = false; }, 3000);
+                });
             }
 
             document.addEventListener('visibilitychange', function () {
@@ -711,10 +848,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             });
 
-            function closeNM() {
-                newsModal.classList.remove('open');
-                document.body.style.overflow = '';
-            }
+            function closeNM() { newsModal.classList.remove('open'); document.body.style.overflow = ''; }
             newsModal.querySelector('.news-modal-close').addEventListener('click', closeNM);
             newsModal.querySelector('.news-modal-overlay').addEventListener('click', closeNM);
             document.addEventListener('keydown', function (e) {
@@ -769,7 +903,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     mC.style.background = '';
                 } else {
                     mC.innerHTML = '';
-                    mC.style.background = 'linear-gradient(135deg, #0a1128, rgba(0,240,255,0.05))';
+                    mC.style.background = 'linear-gradient(135deg, #02101e, #0a2434)';
                 }
 
                 mG.innerHTML = '';
@@ -791,9 +925,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     data.socials.forEach(function (s) {
                         var a = document.createElement('a');
                         a.className = 'member-social-link';
-                        a.href = s.url;
-                        a.target = '_blank';
-                        a.rel = 'noopener noreferrer';
+                        a.href = s.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
                         a.textContent = s.name;
                         mS.appendChild(a);
                     });
@@ -804,10 +936,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        function closeMM() {
-            memberModal.classList.remove('open');
-            document.body.style.overflow = '';
-        }
+        function closeMM() { memberModal.classList.remove('open'); document.body.style.overflow = ''; }
         memberModal.querySelector('.member-modal-close').addEventListener('click', closeMM);
         memberModal.querySelector('.member-modal-overlay').addEventListener('click', closeMM);
         document.addEventListener('keydown', function (e) {
@@ -815,108 +944,51 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ===== DOWNLOAD BUTTON (for other pages) =====
-    var dlBtn = document.getElementById('downloadBtn');
-    if (dlBtn) {
-        dlBtn.addEventListener('click', function (e) {
+    // ===== WISH FORM =====
+    var wishForm = document.getElementById('wishForm');
+    if (wishForm) {
+        var wishStatus = document.getElementById('wishStatus');
+        var wishSubmit = document.getElementById('wishSubmit');
+
+        wishForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            if (this.dataset.loading === 'true') return;
-            var url = this.getAttribute('href');
-            var app = this.getAttribute('data-app') || 'unknown';
-            var btn = this;
+            if (wishSubmit.dataset.loading === 'true') return;
+            wishSubmit.dataset.loading = 'true';
+            wishSubmit.querySelector('.wish-submit-text').textContent = 'Отправка...';
+            wishSubmit.style.opacity = '0.7';
 
-            if (!url || url === '#') {
-                alert('Файл ещё не загружен. Попробуйте позже.');
-                return;
-            }
+            var fd = {
+                name: (wishForm.querySelector('[name="name"]') || {}).value || 'Аноним',
+                wish: (wishForm.querySelector('[name="wish"]') || {}).value || '',
+                _subject: 'Пожелание от пользователя NULLER',
+                timestamp: new Date().toISOString()
+            };
 
-            btn.dataset.loading = 'true';
-            var orig = btn.innerHTML;
-            window.open(url, '_blank');
-
-            fetch(API_BASE + '/' + NAMESPACE + '/total-downloads/up').catch(function () {});
-            fetch(API_BASE + '/' + NAMESPACE + '/download-' + app + '/up').catch(function () {});
-
-            btn.innerHTML = '✓ Скачивание начато!';
-            btn.style.background = 'linear-gradient(135deg, #00cc88, #00aa66)';
-            btn.style.color = '#fff';
-
-            setTimeout(function () {
-                btn.innerHTML = orig;
-                btn.style.background = '';
-                btn.style.color = '';
-                delete btn.dataset.loading;
-            }, 4000);
-        });
-    }
-
-    // ===== APP SEARCH + FILTERS (for apps page) =====
-    var searchInput = document.getElementById('searchInput');
-    var filterTabs = document.querySelectorAll('.apps-filter-tab');
-
-    if (searchInput || filterTabs.length) {
-        var noRes = document.getElementById('noResults');
-        var sTimer;
-        var currentFilter = 'all';
-
-        function applyFilters() {
-            var q = searchInput ? searchInput.value.toLowerCase().trim() : '';
-            var vis = 0;
-            var visibleByCategory = { active: 0, archived: 0, legacy: 0 };
-
-            document.querySelectorAll('.app-card').forEach(function (card) {
-                var status = card.getAttribute('data-status') || 'active';
-                var n = (card.querySelector('.app-name') || {}).textContent || '';
-                var d = (card.querySelector('.app-desc') || {}).textContent || '';
-                var tags = '';
-                card.querySelectorAll('.app-tag').forEach(function (t) { tags += ' ' + t.textContent; });
-
-                var matchSearch = q === '' ||
-                    n.toLowerCase().includes(q) ||
-                    d.toLowerCase().includes(q) ||
-                    tags.toLowerCase().includes(q);
-
-                var matchFilter = currentFilter === 'all' || status === currentFilter;
-                var show = matchSearch && matchFilter;
-                card.style.display = show ? '' : 'none';
-
-                if (show) {
-                    vis++;
-                    if (visibleByCategory[status] !== undefined) visibleByCategory[status]++;
-                }
-            });
-
-            document.querySelectorAll('.apps-category').forEach(function (cat) {
-                var cName = cat.getAttribute('data-category');
-                var hasVisible = visibleByCategory[cName] > 0;
-                if (currentFilter === 'all') {
-                    cat.classList.toggle('hidden', !hasVisible);
-                } else {
-                    cat.classList.toggle('hidden', cName !== currentFilter || !hasVisible);
-                }
-            });
-
-            if (noRes) noRes.style.display = vis === 0 ? 'block' : 'none';
-        }
-
-        if (searchInput) {
-            searchInput.addEventListener('input', function () {
-                clearTimeout(sTimer);
-                sTimer = setTimeout(applyFilters, 200);
-            });
-        }
-
-        filterTabs.forEach(function (tab) {
-            tab.addEventListener('click', function () {
-                filterTabs.forEach(function (t) { t.classList.remove('active'); });
-                tab.classList.add('active');
-                currentFilter = tab.getAttribute('data-filter');
-                applyFilters();
+            fetch('https://formspree.io/f/' + FORMSPREE_WISH_ID, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(fd)
+            })
+            .then(function (r) {
+                if (r.ok) {
+                    wishStatus.textContent = '✓ Спасибо за пожелание! Мы обязательно прочитаем.';
+                    wishStatus.className = 'form-status success';
+                    wishForm.reset();
+                } else throw new Error('err');
+            })
+            .catch(function () {
+                wishStatus.textContent = '⚠ Ошибка. Попробуйте позже или напишите в Telegram.';
+                wishStatus.className = 'form-status error';
+            })
+            .finally(function () {
+                wishSubmit.querySelector('.wish-submit-text').textContent = 'Отправить пожелание';
+                wishSubmit.style.opacity = '';
+                delete wishSubmit.dataset.loading;
             });
         });
     }
 
-    // ===== JOIN FORM (for join page) =====
+    // ===== JOIN FORM =====
     var joinForm = document.getElementById('joinForm');
     if (joinForm) {
         var avUp = document.getElementById('avatarUpload');
@@ -941,8 +1013,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    avIm.src = e.target.result;
-                    avIm.style.display = 'block';
+                    avIm.src = e.target.result; avIm.style.display = 'block';
                     if (avPh) avPh.style.display = 'none';
                     avPr.classList.add('has-image');
                 };
@@ -979,8 +1050,7 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             fetch('https://formspree.io/f/' + FORMSPREE_JOIN_ID, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(fd)
             })
             .then(function (r) {
@@ -1000,10 +1070,138 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .finally(function () {
                 jSub.textContent = 'Отправить заявку';
-                jSub.style.opacity = '';
-                delete jSub.dataset.loading;
+                jSub.style.opacity = ''; delete jSub.dataset.loading;
             });
         });
     }
 
 });
+
+/* ===== MANGO CLICKER COUNTDOWN ===== */
+(function () {
+    'use strict';
+
+    // 28.05.2026 00:00:00 по Москве (UTC+3)
+    var RELEASE_UTC = Date.UTC(2026, 4, 27, 21, 0, 0, 0);
+
+    var elDays = document.getElementById('mangoDays');
+    var elHours = document.getElementById('mangoHours');
+    var elMinutes = document.getElementById('mangoMinutes');
+    var elSeconds = document.getElementById('mangoSeconds');
+    var elTimerSection = document.getElementById('mangoTimerSection');
+    var elReleased = document.getElementById('mangoReleased');
+    var elConfetti = document.getElementById('mangoConfetti');
+    var elBtn = document.getElementById('mangoBtn');
+
+    if (
+        !elDays || !elHours || !elMinutes || !elSeconds ||
+        !elTimerSection || !elReleased || !elConfetti
+    ) {
+        return;
+    }
+
+    var isReleased = false;
+
+    function pad(n) {
+        return String(n).padStart(2, '0');
+    }
+
+    function updateTimer() {
+        var now = Date.now();
+        var diff = RELEASE_UTC - now;
+
+        if (diff <= 0) {
+            showReleased();
+            return;
+        }
+
+        var totalSeconds = Math.floor(diff / 1000);
+        var days = Math.floor(totalSeconds / 86400);
+        var hours = Math.floor((totalSeconds % 86400) / 3600);
+        var minutes = Math.floor((totalSeconds % 3600) / 60);
+        var seconds = totalSeconds % 60;
+
+        elDays.textContent = pad(days);
+        elHours.textContent = pad(hours);
+        elMinutes.textContent = pad(minutes);
+        elSeconds.textContent = pad(seconds);
+
+        setTimeout(updateTimer, 1000 - (Date.now() % 1000));
+    }
+
+    function showReleased() {
+        if (isReleased) return;
+        isReleased = true;
+
+        elTimerSection.style.display = 'none';
+        elReleased.style.display = 'block';
+
+        if (elBtn) {
+            elBtn.style.pointerEvents = 'auto';
+            elBtn.removeAttribute('data-locked');
+            elBtn.removeAttribute('aria-disabled');
+            elBtn.removeAttribute('tabindex');
+        }
+
+        spawnConfetti();
+    }
+
+    function spawnConfetti() {
+        var colors = ['#00ffaa', '#00d4ff', '#00ffd5', '#00e0bb', '#ffffff', '#6acca8', '#00d490'];
+        var shapes = ['circle', 'rect'];
+        var count = 80;
+
+        for (var i = 0; i < count; i++) {
+            var piece = document.createElement('div');
+            piece.className = 'mango-confetti-piece';
+
+            var color = colors[Math.floor(Math.random() * colors.length)];
+            var shape = shapes[Math.floor(Math.random() * shapes.length)];
+            var left = Math.random() * 100;
+            var size = Math.random() * 8 + 5;
+            var duration = Math.random() * 2 + 2;
+            var delay = Math.random() * 1.5;
+
+            piece.style.left = left + '%';
+            piece.style.width = size + 'px';
+            piece.style.height = size + 'px';
+            piece.style.backgroundColor = color;
+            piece.style.borderRadius = shape === 'circle' ? '50%' : '2px';
+            piece.style.animationDuration = duration + 's';
+            piece.style.animationDelay = delay + 's';
+
+            elConfetti.appendChild(piece);
+        }
+
+        setTimeout(function () {
+            elConfetti.innerHTML = '';
+        }, 5000);
+    }
+
+    if (elBtn) {
+        elBtn.setAttribute('data-locked', 'true');
+        elBtn.setAttribute('aria-disabled', 'true');
+        elBtn.setAttribute('tabindex', '-1');
+        elBtn.style.pointerEvents = 'none';
+
+        elBtn.addEventListener('click', function (e) {
+            if (!isReleased) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        });
+    }
+
+    setInterval(function () {
+        if (!isReleased) {
+            elReleased.style.display = 'none';
+            elTimerSection.style.display = '';
+            if (elBtn) {
+                elBtn.style.pointerEvents = 'none';
+            }
+        }
+    }, 2000);
+
+    updateTimer();
+})();
