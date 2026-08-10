@@ -3,261 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no">
-    <title>Приложения — NULLER Company</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/logo.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/logo.png">
-    <link rel="shortcut icon" href="/assets/images/logo.png">
-    <meta name="theme-color" content="#020a14">
+    <title>Игры и приложения — NULLER Studio</title>
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    <meta name="theme-color" content="#000000">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
-
-    <meta name="description" content="Все приложения NULLER Company — скачать бесплатно для Windows 10/11.">
-    <meta name="keywords" content="NULLER, приложения, скачать, Scream, MinePack, VOZDYHAN, CROSSIX, Custom Timer">
-    <meta name="author" content="NULLER Company">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="Russian">
-    <meta http-equiv="content-language" content="ru">
-
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Приложения — NULLER Company">
-    <meta property="og:description" content="Скачать приложения NULLER Company бесплатно для Windows.">
-    <meta property="og:image" content="https://nuller.ru/assets/images/preview.png">
-    <meta property="og:url" content="https://nuller.ru/apps">
-    <meta property="og:site_name" content="NULLER Company">
-    <meta property="og:locale" content="ru_RU">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Приложения — NULLER Company">
-    <meta name="twitter:description" content="Скачать приложения NULLER Company">
-    <meta name="twitter:image" content="https://nuller.ru/assets/images/preview.png">
-
+    <meta name="description" content="Игры и приложения NULLER Studio — скачать бесплатно для Windows.">
     <link rel="canonical" href="https://nuller.ru/apps">
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        "name": "Приложения NULLER Company",
-        "description": "Каталог приложений NULLER Company для Windows",
-        "numberOfItems": 5,
-        "itemListElement": [
-            {
-                "@type": "ListItem",
-                "position": 1,
-                "item": {
-                    "@type": "SoftwareApplication",
-                    "name": "CROSSIX",
-                    "url": "https://nuller.ru/download_crossix",
-                    "applicationCategory": "GameApplication",
-                    "operatingSystem": "Windows 10, Windows 11",
-                    "softwareVersion": "2.3",
-                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
-                }
-            },
-            {
-                "@type": "ListItem",
-                "position": 2,
-                "item": {
-                    "@type": "SoftwareApplication",
-                    "name": "CustomTimer",
-                    "url": "https://nuller.ru/download_custom_timer",
-                    "applicationCategory": "MultimediaApplication",
-                    "operatingSystem": "Windows 10, Windows 11",
-                    "softwareVersion": "1.2",
-                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
-                }
-            },
-            {
-                "@type": "ListItem",
-                "position": 3,
-                "item": {
-                    "@type": "SoftwareApplication",
-                    "name": "Scream",
-                    "url": "https://nuller.ru/download_scream",
-                    "applicationCategory": "UtilitiesApplication",
-                    "operatingSystem": "Windows 10, Windows 11",
-                    "softwareVersion": "1.3",
-                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
-                }
-            },
-            {
-                "@type": "ListItem",
-                "position": 4,
-                "item": {
-                    "@type": "SoftwareApplication",
-                    "name": "MinePack",
-                    "url": "https://nuller.ru/download_minepack",
-                    "applicationCategory": "MultimediaApplication",
-                    "operatingSystem": "Windows 10, Windows 11",
-                    "softwareVersion": "1.2",
-                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
-                }
-            },
-            {
-                "@type": "ListItem",
-                "position": 5,
-                "item": {
-                    "@type": "SoftwareApplication",
-                    "name": "VOZDYHAN",
-                    "url": "https://nuller.ru/download_vozdyhan",
-                    "applicationCategory": "UtilitiesApplication",
-                    "operatingSystem": "Windows 10, Windows 11",
-                    "softwareVersion": "1.0",
-                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
-                }
-            }
-        ]
-    }
-    </script>
 </head>
 <body>
 
-    <canvas id="hexBg"></canvas>
-    <div class="ambient-particles" id="ambientParticles"></div>
+    <canvas class="bg-canvas"></canvas>
+    <div class="bg-grain"></div>
 
     <nav class="navbar" id="navbar">
-        <a href="/" class="nav-logo">
-            <div class="nav-logo-icon">
-                <img src="/assets/images/logo.png" alt="NULLER">
-            </div>
-            <div class="nav-logo-text"><span>NULLER</span></div>
-        </a>
-        <ul class="nav-links">
-            <li><a href="/">Главная</a></li>
-            <li><a href="/apps" class="active">Приложения</a></li>
-            <li><a href="/#about">О нас</a></li>
-            <li><a href="/#team">Команда</a></li>
-            <li><a href="/join" class="nav-join">Стать разработчиком</a></li>
-            <li><a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="nav-cta">Telegram →</a></li>
-        </ul>
-        <button class="mobile-toggle" id="mobileToggle" aria-label="Меню">
-            <span></span><span></span><span></span>
-        </button>
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">
+                <div class="nav-logo-icon"><img src="/assets/images/logo.png" alt="NULLER Studio"></div>
+                <div class="nav-logo-text"><b>NULLER</b><small>Studio</small></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Главная</a></li>
+                <li><a href="/apps" class="active">Игры</a></li>
+                <li><a href="/#about">О студии</a></li>
+                <li><a href="/#team">Команда</a></li>
+                <li><a href="/join" class="nav-join">Присоединиться</a></li>
+                <li><a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="nav-cta">Telegram</a></li>
+            </ul>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
     </nav>
 
     <div class="page-header">
-        <div class="section-label">// Каталог</div>
-        <div class="line-decoration"></div>
-        <h1>Наши <span>приложения</span></h1>
-        <p>Выберите нужное приложение и перейдите на страницу загрузки</p>
-        <div class="apps-counter-badge">
-            <span class="apps-counter-dot"></span>
-            <span>5 приложений доступно</span>
-        </div>
+        <div class="section-tag">// Каталог</div>
+        <h1>Игры и <span>приложения</span></h1>
+        <p>Все проекты студии доступны для бесплатной загрузки</p>
+        <div class="page-counter">● 5 проектов доступно</div>
         <div class="search-bar">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="searchInput" placeholder="Поиск приложений..." autocomplete="off">
+            <span class="search-icon">⌕</span>
+            <input type="text" id="searchInput" placeholder="Поиск проектов..." autocomplete="off">
         </div>
     </div>
 
     <section class="apps-section">
         <div class="apps-grid" id="appsGrid">
 
-            <a href="/download_crossix" class="app-card fade-in" data-new="true">
-                <div class="app-card-badge">NEW</div>
-                <div class="app-card-header">
-                    <div class="app-icon">
-                        <img src="/assets/images/apps/crossix.png" alt="CROSSIX" loading="lazy">
-                    </div>
+            <a href="/download_crossix" class="app-card reveal">
+                <div class="app-badge">NEW</div>
+                <div class="app-head">
+                    <div class="app-icon"><img src="/assets/images/apps/crossix.png" alt="CROSSIX" loading="lazy"></div>
                     <div class="app-info">
                         <div class="app-name">CROSSIX</div>
-                        <div class="app-version">v2.3 • Windows</div>
+                        <div class="app-version">v2.3 · Windows</div>
                     </div>
                 </div>
-                <div class="app-desc">Программа для кастомных прицелов в играх</div>
-                <div class="app-card-footer">
+                <p class="app-desc">Кастомный прицел для любых игр с полной настройкой</p>
+                <div class="app-foot">
                     <div class="app-tags">
-                        <span class="app-tag">gaming tool</span>
-                        <span class="app-tag">бесплатно</span>
+                        <span class="app-tag">gaming</span>
+                        <span class="app-tag">free</span>
                     </div>
                     <span class="app-size">45 MB</span>
                     <span class="app-arrow">→</span>
                 </div>
             </a>
 
-            <a href="/download_custom_timer" class="app-card fade-in" data-new="true">
-                <div class="app-card-badge">NEW</div>
-                <div class="app-card-header">
-                    <div class="app-icon">
-                        <img src="/assets/images/apps/CustomTimer.png" alt="Custom Timer" loading="lazy">
-                    </div>
+            <a href="/download_custom_timer" class="app-card reveal">
+                <div class="app-badge">NEW</div>
+                <div class="app-head">
+                    <div class="app-icon"><img src="/assets/images/apps/CustomTimer.png" alt="CustomTimer" loading="lazy"></div>
                     <div class="app-info">
-                        <div class="app-name">Custom Timer</div>
-                        <div class="app-version">v1.2 • Windows</div>
+                        <div class="app-name">CustomTimer</div>
+                        <div class="app-version">v1.2 · Windows</div>
                     </div>
                 </div>
-                <div class="app-desc">Таймер для измерения времени</div>
-                <div class="app-card-footer">
+                <p class="app-desc">Универсальный таймер для работы и отдыха</p>
+                <div class="app-foot">
                     <div class="app-tags">
-                        <span class="app-tag">приложение</span>
-                        <span class="app-tag">бесплатно</span>
+                        <span class="app-tag">tool</span>
+                        <span class="app-tag">free</span>
                     </div>
                     <span class="app-size">67 MB</span>
                     <span class="app-arrow">→</span>
                 </div>
             </a>
 
-            <a href="/download_scream" class="app-card fade-in">
-                <div class="app-card-header">
-                    <div class="app-icon">
-                        <img src="/assets/images/apps/scream.png" alt="Scream" loading="lazy">
-                    </div>
+            <a href="/download_scream" class="app-card reveal">
+                <div class="app-head">
+                    <div class="app-icon"><img src="/assets/images/apps/scream.png" alt="Scream" loading="lazy"></div>
                     <div class="app-info">
                         <div class="app-name">Scream</div>
-                        <div class="app-version">v1.3 • Windows</div>
+                        <div class="app-version">v1.3 · Windows</div>
                     </div>
                 </div>
-                <div class="app-desc">Программа digital signage</div>
-                <div class="app-card-footer">
+                <p class="app-desc">Digital signage — показ медиа в киоск-режиме</p>
+                <div class="app-foot">
                     <div class="app-tags">
-                        <span class="app-tag">утилита</span>
-                        <span class="app-tag">бесплатно</span>
+                        <span class="app-tag">utility</span>
+                        <span class="app-tag">free</span>
                     </div>
                     <span class="app-size">71 MB</span>
                     <span class="app-arrow">→</span>
                 </div>
             </a>
 
-            <a href="/download_minepack" class="app-card fade-in">
-                <div class="app-card-header">
-                    <div class="app-icon">
-                        <img src="/assets/images/apps/minepack.png" alt="MinePack" loading="lazy">
-                    </div>
+            <a href="/download_minepack" class="app-card reveal">
+                <div class="app-head">
+                    <div class="app-icon"><img src="/assets/images/apps/minepack.png" alt="MinePack" loading="lazy"></div>
                     <div class="app-info">
                         <div class="app-name">MinePack</div>
-                        <div class="app-version">v1.2 • Windows</div>
+                        <div class="app-version">v1.2 · Windows</div>
                     </div>
                 </div>
-                <div class="app-desc">Программа для создания ресурспаков Майнкрафт</div>
-                <div class="app-card-footer">
+                <p class="app-desc">Редактор ресурспаков для Minecraft Java Edition</p>
+                <div class="app-foot">
                     <div class="app-tags">
-                        <span class="app-tag">приложение</span>
-                        <span class="app-tag">бесплатно</span>
+                        <span class="app-tag">minecraft</span>
+                        <span class="app-tag">free</span>
                     </div>
                     <span class="app-size">47 MB</span>
                     <span class="app-arrow">→</span>
                 </div>
             </a>
 
-            <a href="/download_vozdyhan" class="app-card fade-in">
-                <div class="app-card-header">
-                    <div class="app-icon">
-                        <img src="/assets/images/apps/vozdyhan.png" alt="VOZDYHAN" loading="lazy">
-                    </div>
+            <a href="/download_vozdyhan" class="app-card reveal">
+                <div class="app-head">
+                    <div class="app-icon"><img src="/assets/images/apps/vozdyhan.png" alt="VOZDYHAN" loading="lazy"></div>
                     <div class="app-info">
                         <div class="app-name">VOZDYHAN</div>
-                        <div class="app-version">v1.0 • Windows</div>
+                        <div class="app-version">v1.0 · Windows</div>
                     </div>
                 </div>
-                <div class="app-desc">Шуточная программа для призыва Воздухана</div>
-                <div class="app-card-footer">
+                <p class="app-desc">Шуточная программа для управления вентиляторами</p>
+                <div class="app-foot">
                     <div class="app-tags">
-                        <span class="app-tag">мем</span>
-                        <span class="app-tag">бесплатно</span>
+                        <span class="app-tag">fun</span>
+                        <span class="app-tag">free</span>
                     </div>
                     <span class="app-size">64 MB</span>
                     <span class="app-arrow">→</span>
@@ -265,42 +150,32 @@
             </a>
 
         </div>
+
         <div id="noResults" class="no-results" style="display:none;">
             <div class="no-results-icon">∅</div>
-            <div class="no-results-text">// Ничего не найдено</div>
+            <div class="no-results-text">Ничего не найдено</div>
             <div class="no-results-hint">Попробуйте другой запрос</div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
-        <div class="footer-top">
-            <div class="footer-top-content">
-                <div class="footer-brand">
-                    <div class="footer-brand-icon">
-                        <img src="/assets/images/logo.png" alt="NULLER">
-                    </div>
-                    <div class="footer-brand-text">NULLER</div>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand-block">
+                    <div class="footer-logo"><img src="/assets/images/logo.png" alt="NULLER Studio"></div>
+                    <div class="footer-name">NULLER<small>Studio</small></div>
                 </div>
                 <div class="footer-contact">
                     <a href="mailto:nullercompany@gmail.com" class="footer-email">nullercompany@gmail.com</a>
-                    <span class="footer-slogan">Hexagon Event 2026</span>
+                    <span class="footer-slogan">Играм быть · 2026</span>
                 </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <div class="footer-bottom-content">
-                <div class="footer-copy-row">
-                    <span class="footer-copy">© 2026 NULLER Company. Все права защищены.</span>
-                    <a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="footer-tg-badge">
-                        <span class="footer-tg-icon">✈</span>
-                        <span>Telegram</span>
-                    </a>
-                </div>
+            <div class="footer-bottom">
+                <span class="footer-copy">© 2026 NULLER Studio. Все права защищены.</span>
                 <div class="footer-links">
                     <a href="/">Главная</a>
-                    <a href="/apps">Приложения</a>
-                    <a href="/join">Стать разработчиком</a>
+                    <a href="/apps">Игры</a>
+                    <a href="/join">Присоединиться</a>
                     <a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer">Telegram</a>
                 </div>
             </div>
