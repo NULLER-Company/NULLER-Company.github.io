@@ -3,141 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no">
-    <title>Скачать CROSSIX v2.3 — NULLER Company</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/logo.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/logo.png">
-    <link rel="shortcut icon" href="/assets/images/logo.png">
-    <meta name="theme-color" content="#020a14">
+    <title>CROSSIX v2.3 — NULLER Studio</title>
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    <meta name="theme-color" content="#000000">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
-
-    <meta name="description" content="Скачать CROSSIX v2.3 — Gaming Crosshair Tool от NULLER Company. Кастомный прицел для любых игр. Бесплатно для Windows 10/11.">
-    <meta name="keywords" content="NULLER, CROSSIX, скачать, прицел, crosshair, gaming tool, CS2, Valorant, бесплатно, Windows">
-    <meta name="author" content="NULLER Company">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="Russian">
-    <meta http-equiv="content-language" content="ru">
-
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Скачать CROSSIX v2.3 — NULLER Company">
-    <meta property="og:description" content="Скачать CROSSIX — Gaming Crosshair Tool от NULLER Company. Кастомный прицел для любых игр.">
-    <meta property="og:image" content="https://nuller.ru/assets/images/apps/crossix.png">
-    <meta property="og:url" content="https://nuller.ru/download_crossix">
-    <meta property="og:site_name" content="NULLER Company">
-    <meta property="og:locale" content="ru_RU">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Скачать CROSSIX v2.3 — NULLER Company">
-    <meta name="twitter:description" content="Скачать CROSSIX от NULLER Company">
-    <meta name="twitter:image" content="https://nuller.ru/assets/images/apps/crossix.png">
-
+    <meta name="description" content="Скачать CROSSIX v2.3 от NULLER Studio — прицел для игр.">
     <link rel="canonical" href="https://nuller.ru/download_crossix">
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "CROSSIX",
-        "operatingSystem": "Windows 10, Windows 11",
-        "applicationCategory": "GameApplication",
-        "softwareVersion": "2.3",
-        "fileSize": "45 MB",
-        "datePublished": "2026-05-22",
-        "description": "Gaming Crosshair Tool от NULLER Company. Кастомный прицел поверх любых игр с полной кастомизацией.",
-        "publisher": {
-            "@type": "Organization",
-            "name": "NULLER Company",
-            "url": "https://nuller.ru"
-        },
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "RUB",
-            "availability": "https://schema.org/InStock"
-        },
-        "url": "https://nuller.ru/download_crossix",
-        "inLanguage": "ru"
-    }
-    </script>
 </head>
 <body>
 
-    <canvas id="hexBg"></canvas>
-    <div class="ambient-particles" id="ambientParticles"></div>
+    <canvas class="bg-canvas"></canvas>
 
     <nav class="navbar" id="navbar">
-        <a href="/" class="nav-logo">
-            <div class="nav-logo-icon"><img src="/assets/images/logo.png" alt="NULLER"></div>
-            <div class="nav-logo-text"><span>NULLER</span></div>
-        </a>
-        <ul class="nav-links">
-            <li><a href="/">Главная</a></li>
-            <li><a href="/apps" class="active">Приложения</a></li>
-            <li><a href="/#about">О нас</a></li>
-            <li><a href="/#team">Команда</a></li>
-            <li><a href="/join" class="nav-join">Стать разработчиком</a></li>
-            <li><a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="nav-cta">Telegram →</a></li>
-        </ul>
-        <button class="mobile-toggle" id="mobileToggle" aria-label="Меню"><span></span><span></span><span></span></button>
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">
+                <div class="nav-logo-icon"><img src="/assets/images/logo.png" alt="NULLER Studio"></div>
+                <div class="nav-logo-text"><b>NULLER</b><small>Studio</small></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Главная</a></li>
+                <li><a href="/apps" class="active">Игры</a></li>
+                <li><a href="/#about">О студии</a></li>
+                <li><a href="/#team">Команда</a></li>
+                <li><a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="nav-cta">Telegram</a></li>
+            </ul>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
     </nav>
 
-    <div class="breadcrumb fade-in">
-        <a href="/">Главная</a><span>/</span><a href="/apps">Приложения</a><span>/</span><span class="current">CROSSIX</span>
+    <div class="breadcrumb">
+        <a href="/">Главная</a><span>/</span><a href="/apps">Игры</a><span>/</span><span class="current">CROSSIX</span>
     </div>
 
     <div class="download-page">
-        <a href="/apps" class="back-link fade-in">← Назад к приложениям</a>
+        <a href="/apps" class="back-link">← Назад к каталогу</a>
 
-        <div class="dl-header fade-in">
+        <div class="dl-header reveal">
             <div class="dl-icon"><img src="/assets/images/apps/crossix.png" alt="CROSSIX"></div>
             <div class="dl-info">
                 <h1 class="dl-name">CROSSIX</h1>
-                <div class="dl-version">v2.3 • Stable Release</div>
-                <p class="dl-short-desc">CROSSIX — это Gaming Crosshair Tool от NULLER Company. Программа создаёт кастомный прицел поверх любых приложений и игр, включая полноэкранные.</p>
+                <div class="dl-version">v2.3 · Stable Release</div>
+                <p class="dl-short-desc">Gaming Crosshair Tool от NULLER Studio. Кастомный прицел поверх любых игр с полной настройкой.</p>
                 <div class="dl-meta">
-                    <div class="dl-meta-item">📦 Размер: <span class="val">45 MB</span></div>
-                    <div class="dl-meta-item">💻 Платформа: <span class="val">Windows 10/11</span></div>
-                    <div class="dl-meta-item">📅 Обновлено: <span class="val">22.05.2026</span></div>
+                    <div class="dl-meta-item">Размер: <span class="val">45 MB</span></div>
+                    <div class="dl-meta-item">Платформа: <span class="val">Windows 10/11</span></div>
+                    <div class="dl-meta-item">Обновлено: <span class="val">22.05.2026</span></div>
                 </div>
             </div>
         </div>
 
-        <div class="dl-button-section fade-in">
+        <div class="dl-button-section reveal">
             <a href="https://drive.google.com/uc?export=download&id=1F46yYzw-1Pu5fjKBT6T-HG1Spow1uLD4"
                class="dl-button"
                id="downloadBtn"
                data-app="CROSSIX">
                 <span class="dl-button-icon">↓</span>
-                Скачать приложение
+                Скачать
             </a>
-            <p class="dl-size">Размер файла: 45 MB • Формат: .exe</p>
+            <p class="dl-size">45 MB · .exe</p>
             <div class="dl-warning">
-                <span>⚠️</span>
-                <span>Скачивайте приложения только с официального сайта NULLER Company или через ТГ бота. Приложение полностью безопасно.</span>
+                <span>⚠</span>
+                <span>Скачивайте приложения только с официального сайта NULLER Studio. Приложение полностью безопасно.</span>
             </div>
         </div>
 
-        <div class="dl-section fade-in">
+        <div class="dl-section reveal">
             <h2 class="dl-section-title">Описание</h2>
             <div class="dl-section-content">
-                <p>CROSSIX — это мощный инструмент для геймеров, который позволяет накладывать кастомный прицел поверх любых игр и приложений. Прицел отображается даже в полноэкранном режиме и не мешает игровому процессу.</p>
-                <p>Программа поддерживает <strong>6 стилей прицела</strong>: Classic, Cross, Circle, Circle + Cross, Dot и Custom Image. Вы можете выбрать готовый пресет под популярную игру или создать свой уникальный прицел.</p>
-                <p>Полная кастомизация: длина линий, толщина, разрыв, цвет, непрозрачность, центральная точка, обводка, T-стиль. Все настройки применяются в реальном времени.</p>
-                <p>Интерфейс выполнен в кибер-стиле с анимацией нейронной сети. Удобно, красиво и эффективно!</p>
+                <p>CROSSIX — мощный инструмент для геймеров. Накладывает кастомный прицел поверх любых игр и приложений, включая полноэкранные.</p>
+                <p>Поддерживает <strong>6 стилей прицела</strong>: Classic, Cross, Circle, Circle + Cross, Dot и Custom Image. Готовые пресеты под популярные игры.</p>
+                <p>Полная кастомизация: длина, толщина, разрыв, цвет, обводка. Все настройки применяются в реальном времени.</p>
             </div>
         </div>
 
-        <div class="screenshots">
-            <a href="/assets/images/screenshots/crossix-1.png" class="screenshot"><img src="/assets/images/screenshots/crossix-1.png" alt="CROSSIX — Скриншот 1" loading="lazy"></a>
-            <a href="/assets/images/screenshots/crossix-2.png" class="screenshot"><img src="/assets/images/screenshots/crossix-2.png" alt="CROSSIX — Скриншот 2" loading="lazy"></a>
-            <a href="/assets/images/screenshots/crossix-3.png" class="screenshot"><img src="/assets/images/screenshots/crossix-3.png" alt="CROSSIX — Скриншот 3" loading="lazy"></a>
+        <div class="screenshots reveal">
+            <a href="/assets/images/screenshots/crossix-1.png" class="screenshot"><img src="/assets/images/screenshots/crossix-1.png" alt="Скриншот 1" loading="lazy"></a>
+            <a href="/assets/images/screenshots/crossix-2.png" class="screenshot"><img src="/assets/images/screenshots/crossix-2.png" alt="Скриншот 2" loading="lazy"></a>
+            <a href="/assets/images/screenshots/crossix-3.png" class="screenshot"><img src="/assets/images/screenshots/crossix-3.png" alt="Скриншот 3" loading="lazy"></a>
         </div>
 
-        <div class="dl-section fade-in">
+        <div class="dl-section reveal">
             <h2 class="dl-section-title">Информация</h2>
             <table class="info-table">
                 <tr><td>Версия</td><td>2.3</td></tr>
@@ -145,76 +94,61 @@
                 <tr><td>Платформа</td><td>Windows 10 / 11 (64-bit)</td></tr>
                 <tr><td>Язык</td><td>Русский</td></tr>
                 <tr><td>Лицензия</td><td>Бесплатно</td></tr>
-                <tr><td>Разработчик</td><td>NULLER Company</td></tr>
+                <tr><td>Разработчик</td><td>NULLER Studio</td></tr>
                 <tr><td>Категория</td><td>Gaming Tool</td></tr>
-                <tr><td>Последнее обновление</td><td>22.05.2026</td></tr>
+                <tr><td>Обновлено</td><td>22.05.2026</td></tr>
             </table>
         </div>
 
-        <div class="dl-section fade-in">
-            <h2 class="dl-section-title">Инструкция по установке</h2>
+        <div class="dl-section reveal">
+            <h2 class="dl-section-title">Установка</h2>
             <div class="steps">
                 <div class="step">
                     <div class="step-number"></div>
                     <div class="step-content">
                         <h4>Скачайте файл</h4>
-                        <p>Нажмите кнопку «Скачать» и сохраните файл на ваш компьютер.</p>
+                        <p>Нажмите кнопку «Скачать» выше.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number"></div>
                     <div class="step-content">
                         <h4>Запустите установщик</h4>
-                        <p>Откройте скачанный файл. Если появится предупреждение Windows, нажмите «Подробнее» → «Выполнить в любом случае».</p>
+                        <p>Если появится SmartScreen — «Подробнее» → «Выполнить в любом случае».</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number"></div>
                     <div class="step-content">
                         <h4>Следуйте инструкции</h4>
-                        <p>Выберите папку для установки и следуйте указаниям мастера установки.</p>
+                        <p>Выберите папку и завершите установку.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number"></div>
                     <div class="step-content">
-                        <h4>Готово!</h4>
-                        <p>Приложение установлено. Запустите его через ярлык на рабочем столе и призовите Воздухана!</p>
+                        <h4>Готово</h4>
+                        <p>Запускайте через ярлык на рабочем столе.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="dl-section fade-in">
-            <h2 class="dl-section-title">Системные требования</h2>
-            <table class="info-table">
-                <tr><td>ОС</td><td>Windows 10 / 11 (64-bit)</td></tr>
-                <tr><td>Процессор</td><td>Любой современный x64</td></tr>
-                <tr><td>ОЗУ</td><td>2 GB минимум</td></tr>
-                <tr><td>Видеокарта</td><td>Поддержка DirectX 9 или выше</td></tr>
-                <tr><td>Место на диске</td><td>200 MB</td></tr>
-            </table>
-        </div>
-
-        <div class="dl-section fade-in">
-            <h2 class="dl-section-title">Список изменений</h2>
+        <div class="dl-section reveal">
+            <h2 class="dl-section-title">Что нового</h2>
             <div class="dl-section-content">
                 <div class="code-block">v2.3 (22.05.2026)
 + Первый стабильный релиз
 + 6 стилей прицела
-+ 9 готовых пресетов для популярных игр
-+ Загрузка кастомного PNG-изображения
-+ Полная кастомизация в стиле CS2
-+ Применение изменений в реальном времени
-+ Кибер-интерфейс с анимацией нейронов
-+ Прицел поверх полноэкранных игр
-+ Self-contained сборка (без установки .NET)
-+ Установщик с пользовательским соглашением</div>
++ 9 готовых пресетов
++ Загрузка кастомных PNG
++ Полная кастомизация
++ Real-time применение</div>
             </div>
         </div>
 
-        <div class="dl-related fade-in">
-            <h3 class="dl-related-title">// Другие наши приложения</h3>
+        <div class="dl-related reveal">
+            <h3 class="dl-related-title">Другие проекты студии</h3>
             <div class="dl-related-grid">
                 <a href="/download_scream" class="dl-related-card">
                     <img src="/assets/images/apps/scream.png" alt="Scream" loading="lazy">
@@ -232,36 +166,23 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
-        <div class="footer-top">
-            <div class="footer-top-content">
-                <div class="footer-brand">
-                    <div class="footer-brand-icon">
-                        <img src="/assets/images/logo.png" alt="NULLER">
-                    </div>
-                    <div class="footer-brand-text">NULLER</div>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand-block">
+                    <div class="footer-logo"><img src="/assets/images/logo.png" alt="NULLER Studio"></div>
+                    <div class="footer-name">NULLER<small>Studio</small></div>
                 </div>
                 <div class="footer-contact">
                     <a href="mailto:nullercompany@gmail.com" class="footer-email">nullercompany@gmail.com</a>
-                    <span class="footer-slogan">Hexagon Event 2026</span>
+                    <span class="footer-slogan">Играм быть · 2026</span>
                 </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <div class="footer-bottom-content">
-                <div class="footer-copy-row">
-                    <span class="footer-copy">© 2026 NULLER Company. Все права защищены.</span>
-                    <a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="footer-tg-badge">
-                        <span class="footer-tg-icon">✈</span>
-                        <span>Telegram</span>
-                    </a>
-                </div>
+            <div class="footer-bottom">
+                <span class="footer-copy">© 2026 NULLER Studio.</span>
                 <div class="footer-links">
                     <a href="/">Главная</a>
-                    <a href="/apps">Приложения</a>
-                    <a href="/join">Стать разработчиком</a>
-                    <a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer">Telegram</a>
+                    <a href="/apps">Игры</a>
                 </div>
             </div>
         </div>
