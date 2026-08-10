@@ -14,12 +14,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
 
-    <meta name="description" content="NULLER Studio — независимая игровая студия. Создаём игры и разрабатываем собственный движок GECKO.">
-    <meta name="keywords" content="NULLER, NULLER Studio, игровая студия, инди игры, GECKO, разработка игр">
+    <meta name="description" content="NULLER Studio — независимая игровая студия. Создаём игры и приложения.">
+    <meta name="keywords" content="NULLER, NULLER Studio, игровая студия, инди игры, разработка игр">
     <meta name="author" content="NULLER Studio">
     <meta property="og:type" content="website">
     <meta property="og:title" content="NULLER Studio — Играм быть!">
-    <meta property="og:description" content="Независимая игровая студия. Создаём игры и движок GECKO.">
+    <meta property="og:description" content="Независимая игровая студия. Создаём игры и приложения.">
     <meta property="og:image" content="https://nuller.ru/assets/images/preview.png">
     <meta property="og:url" content="https://nuller.ru/">
     <link rel="canonical" href="https://nuller.ru/">
@@ -32,7 +32,7 @@
         "alternateName": ["NULLER", "Nuller Studio"],
         "url": "https://nuller.ru",
         "logo": "https://nuller.ru/assets/images/logo.png",
-        "description": "NULLER Studio — независимая игровая студия. Разработка игр и движка GECKO.",
+        "description": "NULLER Studio — независимая игровая студия. Разработка игр и приложений.",
         "foundingDate": "2026-04-26",
         "email": "nullercompany@gmail.com",
         "sameAs": ["https://t.me/+1vhGt7PhYGo1OThi"],
@@ -43,7 +43,6 @@
 <body>
 
     <canvas class="bg-canvas"></canvas>
-    <div class="bg-grain"></div>
 
     <nav class="navbar" id="navbar">
         <div class="nav-inner">
@@ -59,7 +58,6 @@
                 <li><a href="/apps">Игры</a></li>
                 <li><a href="#about">О студии</a></li>
                 <li><a href="#team">Команда</a></li>
-                <li><a href="/join" class="nav-join">Присоединиться</a></li>
                 <li><a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="nav-cta">Telegram</a></li>
             </ul>
             <button class="mobile-toggle" id="mobileToggle" aria-label="Меню">
@@ -95,7 +93,7 @@
     </section>
 
     <section class="stats">
-        <div class="stats-grid">
+        <div class="stats-grid stats-grid-2">
             <div class="stat">
                 <div class="stat-num" data-target="5">0</div>
                 <div class="stat-label">Проектов</div>
@@ -103,10 +101,6 @@
             <div class="stat">
                 <div class="stat-num" data-target="2">0</div>
                 <div class="stat-label">Разработчиков</div>
-            </div>
-            <div class="stat">
-                <div class="stat-num" data-target="1">0</div>
-                <div class="stat-label">Движок GECKO</div>
             </div>
         </div>
     </section>
@@ -124,26 +118,15 @@
                     <div class="news-card" data-news="0">
                         <div class="news-card-inner">
                             <div class="news-card-image">
-                                <img src="assets/images/news/news-devs.png" alt="Требуются разработчики" loading="lazy">
+                                <img src="assets/images/news/news-devs.png" alt="Новости студии" loading="lazy">
                             </div>
                             <div class="news-card-body">
-                                <h3 class="news-card-title">Требуются разработчики!</h3>
-                                <p class="news-card-preview">NULLER Studio ищет талантливых разработчиков и геймдизайнеров.</p>
+                                <h3 class="news-card-title">NULLER Studio запущена!</h3>
+                                <p class="news-card-preview">Мы официально стартуем как независимая игровая студия.</p>
                             </div>
                         </div>
                     </div>
                     <div class="news-card" data-news="1">
-                        <div class="news-card-inner">
-                            <div class="news-card-image">
-                                <img src="assets/images/news/news-gecko.png" alt="Движок GECKO" loading="lazy">
-                            </div>
-                            <div class="news-card-body">
-                                <h3 class="news-card-title">Движок GECKO</h3>
-                                <p class="news-card-preview">Наш собственный движок для игр в браузере и на ПК. Скоро релиз!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="news-card" data-news="2">
                         <div class="news-card-inner">
                             <div class="news-card-image">
                                 <img src="assets/images/news/news-safety.png" alt="Безопасность" loading="lazy">
@@ -178,7 +161,7 @@
         <div class="section-header reveal">
             <div class="section-tag">// О студии</div>
             <h2 class="section-title">NULLER Studio</h2>
-            <p class="section-desc">Независимая игровая студия — разрабатываем игры и собственные технологии</p>
+            <p class="section-desc">Независимая игровая студия — разрабатываем игры и приложения</p>
         </div>
 
         <div class="about-grid reveal">
@@ -195,7 +178,7 @@
                     </div>
                     <div class="about-row">
                         <span class="about-row-label">Фокус</span>
-                        <span class="about-row-value">Игры и движок</span>
+                        <span class="about-row-value">Игры и приложения</span>
                     </div>
                     <div class="about-row">
                         <span class="about-row-label">Статус</span>
@@ -204,13 +187,12 @@
                 </div>
             </div>
             <div class="about-card about-text">
-                <p>NULLER Studio — независимая творческая команда, специализирующаяся на разработке игр и собственных технологий.</p>
-                <p>Мы создаём проекты с душой — от небольших утилит до полноценных игр на нашем собственном движке <strong style="color:var(--green)">GECKO</strong>.</p>
+                <p>NULLER Studio — независимая творческая команда, специализирующаяся на разработке игр и приложений.</p>
+                <p>Мы создаём проекты с душой — от небольших утилит до полноценных игр. Каждый проект — с любовью к деталям.</p>
                 <p>Все приложения на сайте безопасны и проверены нашей командой.</p>
                 <div class="about-tags">
                     <span class="about-tag">#NULLER</span>
                     <span class="about-tag">#Studio</span>
-                    <span class="about-tag">#GECKO</span>
                     <span class="about-tag">#Инди</span>
                     <span class="about-tag">#Играм_быть</span>
                 </div>
@@ -235,11 +217,6 @@
                 <div class="team-avatar"><img src="assets/images/redmik03.png" alt="redmik03" loading="lazy"></div>
                 <div class="team-name">redmik03</div>
                 <div class="team-role">Рекламист</div>
-            </div>
-            <div class="team-card reveal empty">
-                <div class="team-avatar">?</div>
-                <div class="team-name">Свободно</div>
-                <div class="team-role">Ждём тебя</div>
             </div>
         </div>
     </section>
@@ -290,7 +267,6 @@
                 <div class="footer-links">
                     <a href="/">Главная</a>
                     <a href="/apps">Игры</a>
-                    <a href="/join">Присоединиться</a>
                     <a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer">Telegram</a>
                 </div>
             </div>
