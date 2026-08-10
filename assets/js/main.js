@@ -6,14 +6,14 @@ document.addEventListener('DOMContentLoaded', function () {
     var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
-    // ===== BACKGROUND — subtle animated gradient orbs =====
+    // ===== BACKGROUND — smooth gradient blobs =====
     var bgCanvas = document.querySelector('.bg-canvas');
     if (bgCanvas && !prefersReducedMotion) {
         var ctx = bgCanvas.getContext('2d');
         var dpr = Math.min(window.devicePixelRatio || 1, 2);
-        var orbs = [];
+        var blobs = [];
         var w, h, animId;
-
+    
         function resize() {
             w = window.innerWidth;
             h = window.innerHeight;
@@ -23,67 +23,65 @@ document.addEventListener('DOMContentLoaded', function () {
             bgCanvas.style.height = h + 'px';
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
-
-        function initOrbs() {
-            orbs = [];
-            var count = isTouch ? 3 : 5;
+    
+        function initBlobs() {
+            blobs = [];
+            var count = isTouch ? 2 : 3;
             for (var i = 0; i < count; i++) {
-                orbs.push({
+                blobs.push({
                     x: Math.random() * w,
                     y: Math.random() * h,
-                    r: 200 + Math.random() * 300,
-                    vx: (Math.random() - 0.5) * 0.3,
-                    vy: (Math.random() - 0.5) * 0.3,
-                    hue: 120 + Math.random() * 20
+                    r: 400 + Math.random() * 300,
+                    vx: (Math.random() - 0.5) * 0.15,
+                    vy: (Math.random() - 0.5) * 0.15
                 });
             }
         }
-
+    
         function drawBg() {
+            // Полностью очищаем — чтобы не было артефактов
             ctx.clearRect(0, 0, w, h);
-            ctx.globalCompositeOperation = 'lighter';
-
-            for (var i = 0; i < orbs.length; i++) {
-                var o = orbs[i];
-                o.x += o.vx;
-                o.y += o.vy;
-
-                if (o.x < -o.r) o.x = w + o.r;
-                if (o.x > w + o.r) o.x = -o.r;
-                if (o.y < -o.r) o.y = h + o.r;
-                if (o.y > h + o.r) o.y = -o.r;
-
-                var grad = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r);
-                grad.addColorStop(0, 'rgba(57, 255, 20, 0.08)');
-                grad.addColorStop(0.5, 'rgba(57, 255, 20, 0.02)');
+    
+            for (var i = 0; i < blobs.length; i++) {
+                var b = blobs[i];
+                b.x += b.vx;
+                b.y += b.vy;
+    
+                if (b.x < -b.r) b.x = w + b.r;
+                if (b.x > w + b.r) b.x = -b.r;
+                if (b.y < -b.r) b.y = h + b.r;
+                if (b.y > h + b.r) b.y = -b.r;
+    
+                var grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+                grad.addColorStop(0, 'rgba(57, 255, 20, 0.06)');
+                grad.addColorStop(0.4, 'rgba(57, 255, 20, 0.02)');
                 grad.addColorStop(1, 'rgba(57, 255, 20, 0)');
                 ctx.fillStyle = grad;
-                ctx.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
+                ctx.fillRect(b.x - b.r, b.y - b.r, b.r * 2, b.r * 2);
             }
-
-            ctx.globalCompositeOperation = 'source-over';
+    
             animId = requestAnimationFrame(drawBg);
         }
-
+    
         resize();
-        initOrbs();
+        initBlobs();
         drawBg();
-
+    
         var rTimer;
         window.addEventListener('resize', function () {
             clearTimeout(rTimer);
             rTimer = setTimeout(function () {
                 resize();
-                initOrbs();
+                initBlobs();
             }, 200);
         });
-
+    
         document.addEventListener('visibilitychange', function () {
             if (document.hidden) cancelAnimationFrame(animId);
             else animId = requestAnimationFrame(drawBg);
         });
     }
-
+    
     // ===== NAVBAR SCROLL =====
     var navbar = document.getElementById('navbar');
     if (navbar) {
