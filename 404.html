@@ -3,69 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 — Страница не найдена | NULLER Company</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/logo.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/logo.png">
-    <link rel="shortcut icon" href="/assets/images/logo.png">
-    <meta name="theme-color" content="#020a14">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>404 — NULLER Studio</title>
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    <meta name="theme-color" content="#000000">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body>
 
-    <canvas id="hexBg"></canvas>
-    <div class="ambient-particles" id="ambientParticles"></div>
+    <canvas class="bg-canvas"></canvas>
+    <div class="bg-grain"></div>
 
     <nav class="navbar" id="navbar">
-        <a href="/" class="nav-logo">
-            <div class="nav-logo-icon"><img src="/assets/images/logo.png" alt="NULLER"></div>
-            <div class="nav-logo-text"><span>NULLER</span></div>
-        </a>
-        <ul class="nav-links">
-            <li><a href="/">Главная</a></li>
-            <li><a href="/apps">Приложения</a></li>
-            <li><a href="/#about">О нас</a></li>
-            <li><a href="/#team">Команда</a></li>
-            <li><a href="/join" class="nav-join">Стать разработчиком</a></li>
-            <li><a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="nav-cta">Telegram →</a></li>
-        </ul>
-        <button class="mobile-toggle" id="mobileToggle" aria-label="Меню"><span></span><span></span><span></span></button>
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">
+                <div class="nav-logo-icon"><img src="/assets/images/logo.png" alt="NULLER Studio"></div>
+                <div class="nav-logo-text"><b>NULLER</b><small>Studio</small></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Главная</a></li>
+                <li><a href="/apps">Игры</a></li>
+                <li><a href="/#about">О студии</a></li>
+                <li><a href="/#team">Команда</a></li>
+                <li><a href="/join" class="nav-join">Присоединиться</a></li>
+                <li><a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer" class="nav-cta">Telegram</a></li>
+            </ul>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
     </nav>
 
     <div class="error-page">
-        <div class="section-label">// ERROR</div>
-        <h1 class="error-code" data-text="404">404</h1>
-        <p class="error-text">Страница не найдена</p>
-        <p class="error-desc">Запрашиваемая страница не существует или была удалена.</p>
-        <a href="/" class="btn-primary error-btn">← На главную</a>
+        <div class="error-tag">// Error</div>
+        <div class="error-code">404</div>
+        <h1 class="error-text">Страница не найдена</h1>
+        <p class="error-desc">Кажется, эта страница исчезла в null-пространстве. Возможно, она была перемещена или удалена.</p>
+        <a href="/" class="btn-primary">На главную <span class="btn-arrow">→</span></a>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
-        <div class="footer-top">
-            <div class="footer-top-content">
-                <div class="footer-brand">
-                    <div class="footer-brand-icon">
-                        <img src="/assets/images/logo.png" alt="NULLER">
-                    </div>
-                    <div class="footer-brand-text">NULLER</div>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand-block">
+                    <div class="footer-logo"><img src="/assets/images/logo.png" alt="NULLER Studio"></div>
+                    <div class="footer-name">NULLER<small>Studio</small></div>
                 </div>
                 <div class="footer-contact">
-                    <a href="mailto:nullercompany@gmail.ru" class="footer-email">nullercompany@gmail.ru</a>
-                    <span class="footer-slogan">Hexagon Event 2026</span>
+                    <a href="mailto:nullercompany@gmail.com" class="footer-email">nullercompany@gmail.com</a>
+                    <span class="footer-slogan">Играм быть · 2026</span>
                 </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <div class="footer-bottom-content">
-                <span class="footer-copy">© 2026 NULLER Company. Все права защищены.</span>
+            <div class="footer-bottom">
+                <span class="footer-copy">© 2026 NULLER Studio.</span>
                 <div class="footer-links">
                     <a href="/">Главная</a>
-                    <a href="/apps">Приложения</a>
-                    <a href="/join">Стать разработчиком</a>
-                    <a href="https://t.me/+1vhGt7PhYGo1OThi" target="_blank" rel="noopener noreferrer">Telegram</a>
+                    <a href="/apps">Игры</a>
+                    <a href="/join">Присоединиться</a>
                 </div>
             </div>
         </div>
